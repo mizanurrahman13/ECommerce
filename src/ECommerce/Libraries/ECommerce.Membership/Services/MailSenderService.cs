@@ -1,6 +1,7 @@
 ﻿using DevSkill.Http.Emails.Services;
 using DevSkill.Http.Utilities;
 using ECommerce.Membership.BusinessObjects;
+using ECommerce.Membership.Templates;
 
 namespace ECommerce.Membership.Services
 {
@@ -32,10 +33,10 @@ namespace ECommerce.Membership.Services
             var verificationLink = _urlService.GenerateAbsoluteUrl("Account", "ConfirmEmail",
                 new { userName = user.UserName, code = verificationCode, area = "" });
 
-            //var accountConfirmationEmail = new AccountConfirmationMailTemplate(verificationLink);
-            //var emailBody = accountConfirmationEmail.TransformText();
+            var accountConfirmationEmail = new AccountConfirmationMailTemplate(verificationLink);
+            var emailBody = accountConfirmationEmail.TransformText();
 
-            await _queuedEmailService.SendSingleEmailAsync(user.UserName, user.Email, confirmationEmailSubject, "");
+            await _queuedEmailService.SendSingleEmailAsync(user.UserName, user.Email, confirmationEmailSubject, emailBody);
         }
     }
 }

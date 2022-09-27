@@ -13,7 +13,6 @@ using ECommerce.Membership.Services;
 using DevSkill.Http.Emails;
 using ECommerce.Infrastructure;
 using ECommerce.Membership;
-using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +43,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
 builder.Services.AddDbContext<EmailMessagingContext>(options =>
     options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services
@@ -56,6 +56,7 @@ builder.Services
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
