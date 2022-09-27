@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F092215A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Web", "Applications\ECommerce.Web\ECommerce.Web.csproj", "{D346B6CC-4D72-4D5C-9310-DE4D3E4B811C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Infrastructure", "Libraries\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj", "{245FAA36-436D-431A-B8ED-02E5CCD2848E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,12 +23,17 @@ Global
 		{D346B6CC-4D72-4D5C-9310-DE4D3E4B811C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D346B6CC-4D72-4D5C-9310-DE4D3E4B811C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D346B6CC-4D72-4D5C-9310-DE4D3E4B811C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{245FAA36-436D-431A-B8ED-02E5CCD2848E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{245FAA36-436D-431A-B8ED-02E5CCD2848E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{245FAA36-436D-431A-B8ED-02E5CCD2848E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{245FAA36-436D-431A-B8ED-02E5CCD2848E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D346B6CC-4D72-4D5C-9310-DE4D3E4B811C} = {FEE3E3D0-C3EA-4272-94C7-B86365A102FE}
+		{245FAA36-436D-431A-B8ED-02E5CCD2848E} = {B03562C7-9CCC-4B8A-A063-B849291708F9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB20C647-B10B-4E32-BBA9-273860E11C30}
