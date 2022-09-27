@@ -59,6 +59,40 @@ namespace ECommerce.Web.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> ConfirmEmail(string userName, string code)
+        {
+            var model = _lifetimeScope.Resolve<ConfirmEmailModel>();
+            var registerModel = _lifetimeScope.Resolve<RegisterModel>();
+
+            if (userName == null || code == null)
+            {
+                model.StatusMessage = "User not found!";
+                model.IsSuccess = false;
+
+                return View(model);
+            }
+
+            try
+            {
+                var result = await registerModel.ConfirmEmailAsync(userName, code);
+                model.StatusMessage = result.Succeeded ? "Your account has been verified successfully." : "Account verification failed. Please try again.";
+                model.IsSuccess = result.Succeeded ? true : false;
+
+                await registerModel.SignInAsync(userName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            return View(model);
+        }
+
         public IActionResult Index()
         {
             return View();

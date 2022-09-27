@@ -1,0 +1,24 @@
+﻿@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+<div class="card text-center" style="margin-top:100px">
+    <div class="card-body">
+        @{
+            if (@Model.IsSuccess == true)
+            {
+                <p class="fs-4 fw-bold fst-italic">
+                    @Model.StatusMessage
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Go to Home</a>
+                </p>
+            }
+            else
+            {
+                <p class="fs-4 fw-bold fst-italic"> @Model.StatusMessage</p>
+            }
+        }
+    </div>
+</div>
+
+
+

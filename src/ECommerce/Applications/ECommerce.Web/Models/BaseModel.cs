@@ -1,0 +1,113 @@
+﻿using Autofac;
+using AutoMapper;
+using DevSkill.Http;
+using ECommerce.Membership.BusinessObjects;
+using ECommerce.Membership.DTOs;
+using ECommerce.Membership.Services;
+using static ECommerce.Web.Models.ResponseModel;
+
+namespace ECommerce.Web.Models
+{
+    public class BaseModel
+    {
+        protected IUserManagerAdapter<ApplicationUser>? _userManagerAdapter;
+        private IHttpContextAccessor _httpContextAccessor;
+        private ResponseModel _responseModel;
+        public UserBasicInfoDto? UserInfo { get; private set; }
+        private ILifetimeScope _scope;
+        private IMapper _mapper;
+
+
+        public BaseModel()
+        {
+            _responseModel = new ResponseModel();
+            _httpContextAccessor = new HttpContextAccessor();
+        }
+
+        public BaseModel(ILifetimeScope scope,
+                            IUserManagerAdapter<ApplicationUser>? userManagerAdapter,
+                            IHttpContextAccessor httpContextAccessor,
+                            IMapper mapper)
+        {
+            _userManagerAdapter = userManagerAdapter;
+            _scope = scope;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+
+        }
+
+        public virtual void Resolve(ILifetimeScope lifetimeScope)
+        {
+            _userManagerAdapter = _scope.Resolve<IUserManagerAdapter<ApplicationUser>>();
+            _scope = lifetimeScope;
+            _httpContextAccessor = _scope.Resolve<IHttpContextAccessor>();
+            _mapper = _scope.Resolve<IMapper>();
+        }
+        public ResponseModel GetResponse()
+        {
+            if (_httpContextAccessor.HttpContext.Session.IsAvailable
+                && _httpContextAccessor.HttpContext.Session.Keys.Contains(nameof(_responseModel)))
+            {
+                var response = _httpContextAccessor.HttpContext.Session.Get<ResponseModel>(nameof(_responseModel));
+                _httpContextAccessor.HttpContext.Session.Remove(nameof(_responseModel));
+                return response;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void SetResponse(string message, ResponseModel.ResponseType responseType, string area)
+        {
+            var response = new ResponseModel(message, responseType, area);
+            _httpContextAccessor.HttpContext.Session.Set<ResponseModel>(nameof(_responseModel), response);
+        }
+
+        public void StatusMessage(string message, ResponseType response, string area)
+        {
+            if (response == ResponseType.Success)
+                SetResponse(message, response, area);
+            else if (response == ResponseType.Error)
+                SetResponse(message, response, area);
+        }
+
+        private async Task GetMemberInfoAsync()
+        {
+            var userName = _httpContextAccessor!.HttpContext!.User.Identity!.Name;
+            var userInfo = await _userManagerAdapter!.FindByEmailAsync(userName!);
+            UserInfo = new UserBasicInfoDto();
+            _mapper!.Map(userInfo, UserInfo);
+        }
+
+        public async Task GetUserInfoAsync()
+        {
+            if (!_httpContextAccessor!.HttpContext!.User!.Identity!.IsAuthenticated)
+                throw new InvalidOperationException("Authenticated user required to access user information");
+
+            if (!HasSessionKey("UserInfo"))
+            {
+                await GetMemberInfoAsync();
+                SetSessionData<UserBasicInfoDto>("UserInfo", UserInfo!);
+            }
+
+            UserInfo = GetSessionData<UserBasicInfoDto>("UserInfo");
+        }
+
+        protected bool HasSessionKey(string key)
+        {
+            return _httpContextAccessor!.HttpContext!.Session.IsAvailable &&
+                _httpContextAccessor.HttpContext.Session.Keys.Contains(key);
+        }
+
+        protected void SetSessionData<T>(string key, T data)
+        {
+            _httpContextAccessor!.HttpContext!.Session.Set(key, data);
+        }
+
+        protected T GetSessionData<T>(string key)
+        {
+            return _httpContextAccessor!.HttpContext!.Session.Get<T>(key);
+        }
+    }
+}
