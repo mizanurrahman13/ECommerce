@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ECommerce.Infrastructure.Entities.Membership;
+using ECommerce.Infrastructure.Seeds;
 
 namespace ECommerce.Infrastructure.DbContexts
 {
@@ -35,7 +36,9 @@ namespace ECommerce.Infrastructure.DbContexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // add fluent api here
+            builder.Entity<Role>()
+                .HasData(DataSeed.Roles);
+
             base.OnModelCreating(builder);
         }
     }

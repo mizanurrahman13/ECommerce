@@ -13,6 +13,7 @@ using ECommerce.Membership.Services;
 using DevSkill.Http.Emails;
 using ECommerce.Infrastructure;
 using ECommerce.Membership;
+using ECommerce.Infrastructure.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => {
     containerBuilder.RegisterModule(new MembershipModule(connectionString, assemblyName));
     containerBuilder.RegisterModule(new EmailMessagingModule(connectionString, assemblyName));
 });
+
+builder.Services.AddSingleton<AdminDataSeed>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
@@ -95,6 +98,12 @@ try
     var app = builder.Build();
 
     Log.Information("Application Starting up");
+
+    var seedInstance = app.Services
+                        .CreateScope().ServiceProvider
+                        .GetRequiredService<AdminDataSeed>();
+
+    await seedInstance.SeedUserAsync();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
