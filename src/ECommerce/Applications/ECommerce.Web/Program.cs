@@ -14,6 +14,10 @@ using DevSkill.Http.Emails;
 using ECommerce.Infrastructure;
 using ECommerce.Membership;
 using ECommerce.Infrastructure.Seeds;
+using ECommerce.Web.Profiles;
+using ECommerce.Infrastructure.Profiles;
+using ECommerce.Membership.Profiles;
+using DevSkill.Http.Emails.BusinessObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +42,14 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => {
     containerBuilder.RegisterModule(new InfrastructureModule(connectionString, assemblyName, webHostEnvironment));
     containerBuilder.RegisterModule(new MembershipModule(connectionString, assemblyName));
     containerBuilder.RegisterModule(new EmailMessagingModule(connectionString, assemblyName));
+});
+
+// Configuring AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<InfrastructureProfile>();
+    cfg.AddProfile<MembershipProfile>();
+    cfg.AddProfile<WebProfile>();
 });
 
 builder.Services.AddSingleton<AdminDataSeed>();
@@ -92,6 +104,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+builder.Services.Configure<SmtpConfiguration>(builder.Configuration.GetSection("SMTPConfig"));
 
 try
 {
