@@ -93,6 +93,65 @@ namespace ECommerce.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Login(string returnUrl = null)
+        {
+            var model = _lifetimeScope.Resolve<LoginModel>();
+            var registerModel = _lifetimeScope.Resolve<RegisterModel>();
+
+            if (!string.IsNullOrEmpty(model.ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, model.ErrorMessage);
+            }
+
+            returnUrl ??= Url.Content("~/");
+
+            // Clear the existing external cookie to ensure a clean login process
+            await model.SignOutAsync();
+            await registerModel.GetExternalAuthenticationSchemesAsync();
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            model.Resolve(_lifetimeScope);
+            var registerModel = _lifetimeScope.Resolve<RegisterModel>();
+            model.ReturnUrl ??= Url.Content("~/");
+
+            await registerModel.GetExternalAuthenticationSchemesAsync();
+
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await model.PasswordSignInAsync();
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User logged in.");
+                    await model.RedirectByUserRole();
+                    return LocalRedirect(model.ReturnUrl);
+                }
+                if (result.RequiresTwoFactor)
+                {
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+                }
+                if (result.IsLockedOut)
+                {
+                    _logger.LogWarning("User account locked out.");
+                    return RedirectToPage("./Lockout");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
         public IActionResult Index()
         {
             return View();

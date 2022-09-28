@@ -1,0 +1,37 @@
+﻿@model LoginModel
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Log in";
+}
+
+<section class="login_content">
+   <form id="account" method="post" asp-action="Login" asp-controller="Account" asp-area="">
+      <h1>Login Form</h1>
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <div>
+         <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Username" />
+         <span asp-validation-for="Email" class="text-danger"></span>
+      </div>
+      <div>
+         <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" />
+         <span asp-validation-for="Password" class="text-danger"></span>
+      </div>
+      <div>
+         <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-3">Log in</button>
+         <a class="reset_pass" href="#">Lost your password?</a>
+      </div>
+      <div class="clearfix"></div>
+      <div class="separator">
+         <div class="clearfix"></div>
+         <br />
+         <div>
+            <h1>ECommerce</h1>
+            <p>©@DateTime.Now.Year ECommerce</p>
+         </div>
+      </div>
+   </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

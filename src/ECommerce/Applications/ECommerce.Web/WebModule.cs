@@ -10,6 +10,9 @@ namespace ECommerce.Web
             builder.RegisterType<RegisterModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<LoginModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
             builder.RegisterType<ConfirmEmailModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();

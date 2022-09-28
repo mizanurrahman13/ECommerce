@@ -17,7 +17,6 @@ namespace ECommerce.Web.Models
         private ILifetimeScope _scope;
         private IMapper _mapper;
 
-
         public BaseModel()
         {
             _responseModel = new ResponseModel();
@@ -36,10 +35,19 @@ namespace ECommerce.Web.Models
 
         }
 
+        public BaseModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter, 
+            IHttpContextAccessor httpContextAccessor, 
+            IMapper mapper)
+        {
+            _userManagerAdapter = userManagerAdapter;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+        }
+
         public virtual void Resolve(ILifetimeScope lifetimeScope)
         {
-            _userManagerAdapter = _scope.Resolve<IUserManagerAdapter<ApplicationUser>>();
             _scope = lifetimeScope;
+            _userManagerAdapter = _scope.Resolve<IUserManagerAdapter<ApplicationUser>>();
             _httpContextAccessor = _scope.Resolve<IHttpContextAccessor>();
             _mapper = _scope.Resolve<IMapper>();
         }
