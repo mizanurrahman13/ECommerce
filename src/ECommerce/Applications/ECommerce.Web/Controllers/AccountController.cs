@@ -152,6 +152,22 @@ namespace ECommerce.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            var model = _lifetimeScope.Resolve<LoginModel>();
+            await model.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction();
+            }
+        }
+
         public IActionResult Index()
         {
             return View();
