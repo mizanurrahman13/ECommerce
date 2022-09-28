@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Web.Data.Migrations
 {
     [DbContext(typeof(EmailMessagingContext))]
-    [Migration("20220928010840_InitEmailMessagingContext")]
+    [Migration("20220928090005_InitEmailMessagingContext")]
     partial class InitEmailMessagingContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

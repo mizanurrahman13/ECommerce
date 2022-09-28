@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220927210512_AddedFirstandLastNameInUserTable")]
+    [Migration("20220928090140_AddedFirstandLastNameInUserTable")]
     partial class AddedFirstandLastNameInUserTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,15 @@ namespace ECommerce.Web.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b08643fd-487f-401c-97bb-6117531abc7a"),
+                            ConcurrencyStamp = "73da2169-6fe8-4d66-897c-e2db8ed60297",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("ECommerce.Infrastructure.Entities.Membership.RoleClaim", b =>
