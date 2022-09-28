@@ -1,16 +1,30 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using ECommerce.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using ECommerce.Web;
+using System.Reflection;
+using ECommerce.Infrastructure.DbContexts;
+using DevSkill.Http.Emails.Contexts;
+using ECommerce.Infrastructure.Entities.Membership;
+using ECommerce.Membership.Services;
+using DevSkill.Http.Emails;
+using ECommerce.Infrastructure;
+using ECommerce.Membership;
+using ECommerce.Infrastructure.Seeds;
+using ECommerce.Web.Profiles;
+using ECommerce.Infrastructure.Profiles;
+using ECommerce.Membership.Profiles;
+using DevSkill.Http.Emails.BusinessObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
+var assemblyName = Assembly.GetExecutingAssembly().FullName;
+var webRoot = builder.Environment.WebRootPath;
 
 // Configuring Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
@@ -21,25 +35,88 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 //Autofac Configuration
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+var webHostEnvironment = builder.Environment;
+
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => {
-    containerBuilder
-    .RegisterModule(new WebModule());
+    containerBuilder.RegisterModule(new WebModule());
+    containerBuilder.RegisterModule(new InfrastructureModule(connectionString, assemblyName, webHostEnvironment));
+    containerBuilder.RegisterModule(new MembershipModule(connectionString, assemblyName));
+    containerBuilder.RegisterModule(new EmailMessagingModule(connectionString, assemblyName));
 });
 
+// Configuring AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<InfrastructureProfile>();
+    cfg.AddProfile<MembershipProfile>();
+    cfg.AddProfile<WebProfile>();
+});
+
+builder.Services.AddSingleton<AdminDataSeed>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
+builder.Services.AddDbContext<EmailMessagingContext>(options =>
+    options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddIdentity<ApplicationUser, Role>(
+    options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddUserManager<UserManager>()
+    .AddRoleManager<RoleManager>()
+    .AddSignInManager<SignInManager>()
+    .AddDefaultTokenProviders();
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 0;
+
+    // Lockout settings.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // User settings.
+    options.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
+builder.Services.Configure<SmtpConfiguration>(builder.Configuration.GetSection("SMTPConfig"));
 
 try
 {
     var app = builder.Build();
 
     Log.Information("Application Starting up");
+
+    var seedInstance = app.Services
+                        .CreateScope().ServiceProvider
+                        .GetRequiredService<AdminDataSeed>();
+
+    await seedInstance.SeedUserAsync();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -76,4 +153,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-
