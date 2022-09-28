@@ -68,7 +68,7 @@ namespace ECommerce.Web.Models
             }
             else
             {
-                this.ReturnUrl = "~/home/index";
+                this.ReturnUrl = "~/customer/dashboard";
             }
         }
 
