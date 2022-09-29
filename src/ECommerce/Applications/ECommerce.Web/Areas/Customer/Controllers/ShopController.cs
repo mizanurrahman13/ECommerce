@@ -9,5 +9,10 @@ namespace ECommerce.Web.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult Blog()
+        {
+            return View();
+        }
     }
 }
