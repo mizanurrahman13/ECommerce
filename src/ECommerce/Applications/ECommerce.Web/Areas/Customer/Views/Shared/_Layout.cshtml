@@ -1,0 +1,528 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css">
+
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/EcommerceTheme/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/font-awesome.min.css" type="text/css">
+
+    <link rel="stylesheet" href="~/EcommerceTheme/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/style.css" type="text/css">
+    <link rel="stylesheet" href="~/EcommerceTheme/css/custom-style.css" type="text/css">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+
+         #btn-back-to-top:hover {
+              opacity: 0.7;
+         }
+         .center {
+              text-align: center;
+              width: 100%;
+              color:#D5AE5F;
+         }
+         #total{
+              color:white;
+         }
+         
+
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+<!-- retreiving the title of every page for changing layouts dynamically-->
+@{
+    var titleValue = ViewData["Title"];
+}
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Humberger Begin -->
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="~/EcommerceTheme/img/logo.png" alt=""></a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li>
+                    <a class="wish-count"  asp-area="Customer" asp-controller="Shop"
+                    asp-action="Wishlist">
+                        <i class="fa fa-heart"></i> 
+                        <span>0</span>
+                    </a>
+                </li>
+                <li><a class="cart-count" href="/customer/Shop/ShoppingCart">
+                 <i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                
+            </ul>
+        </div>
+        <div class="humberger__menu__widget">
+            <div class="header__top__right__language">
+                <img src="~/EcommerceTheme/img/language.png" alt="">
+                <div>English</div>
+                <span class="arrow_carrot-down"></span>
+                <ul>
+                    <li><a href="#">Spanish</a></li>
+                    <li><a href="#">English</a></li>
+                    <li><a href="#">Bangla</a></li>
+                </ul>
+            </div>
+            <partial name="_LoginShopPartial"/>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                <li><a href="/Customer/Shop/">Home</a></li>
+                <li><a href="/Customer/Shop/ShopGrid">Shop</a></li>
+                <li>
+                    <a href="#">Pages</a>
+                    <ul class="header__menu__dropdown">
+
+                        <!--<li><a href="/Customer/Shop/ShopDetails">Shop Details</a></li>-->
+@*
+                        <li><a asp-area="Customer" asp-controller="Shop" asp-action="Product">Product Details</a></li>*@
+
+                        <li><a href="/Customer/Shop/ShopDetails">Shop Details</a></li>
+                        <li><a href="/Customer/Shop/Product">Product Details</a></li>
+                        <!--
+                        <li><a asp-area="Customer" asp-controller="Shop" asp-action="Product">Product Details</a></li>-->
+
+                        <li><a href="/Customer/Shop/ShoppingCart">Shoping Cart</a></li>
+                        <li><a href="/Customer/Shop/CheckOut">Check Out</a></li>
+                        <li><a href="/Customer/Shop/BlogDetails">Blog Details</a></li>
+                    </ul>
+                </li>
+                <li><a href="/Customer/Shop/Blog">Blog</a></li>
+                <li><a href="/Customer/Shop/Contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+        <div class="header__top__right__social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-pinterest-p"></i></a>
+        </div>
+        <div class="humberger__menu__contact">
+            <ul>
+                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                <li>Free Shipping for all Order of $99</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Humberger End -->
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+                            <ul>
+                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                                <li>Free Shipping for all Order of $99</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                            </div>
+                            <div class="header__top__right__language">
+                                <img src="~/EcommerceTheme/img/language.png" alt="">
+                                <div>English</div>
+                                <span class="arrow_carrot-down"></span>
+                                <ul>
+                                    <li><a href="#">Spanis</a></li>
+                                    <li><a href="#">English</a></li>
+                                </ul>
+                            </div>
+                            <partial name="_LoginShopPartial"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a asp-area="Customer" asp-controller="Shop" asp-action="Index"><img src="~/EcommerceTheme/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><a href="/Customer/Shop/Index">Home</a></li>
+                            <li><a href="/Customer/Shop/ShopGrid">Shop</a></li>
+                            <li>
+                                <a href="#">Pages</a>
+                                <ul class="header__menu__dropdown">
+                                    <!--<li><a href="/Customer/Shop/ShopDetails">Shop Details</a></li>-->
+  
+                                    @*
+                                    <li><a asp-area="Customer" asp-controller="Shop" asp-action="Product">Product Details</a></li>*@
+                                    <li><a href="/Customer/Shop/ShoppingCart">Shoping Cart</a></li>
+                                    <li><a href="/Customer/Shop/CheckOut">Check Out</a></li>
+                                    <li><a href="/Customer/Shop/BlogDetails">Blog Details</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/Customer/Shop/Blog">Blog</a></li>
+                            <li><a href="/Customer/Shop/Contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a class="wish-count" href="/customer/shop/wishlist" data-totalitems="0" ><i class="fa fa-heart"></i> <span id="wish-count">0</span></a></li>
+                            <li id="cart-icon"><a class="cart-count"><i class="fa fa-shopping-bag"></i> <span id="cart-count">0</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+    
+    <!-- Hero Section End -->
+    <!-- Cart Section STARTS -->
+    <div class="cart">
+            <h4 class="cart_title text-capitalize">Shopping cart</h4>
+            <div class="cart_content">
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-1.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Vegetables</div>
+                        <div class="cart_price">$50</div>
+                        <input type="number" value="1" class="product_quantity">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+                <div class="cart_box">
+                    <img src="~/EcommerceTheme/img/cart/cart-3.jpg" alt="" class="cart_image">
+                    <div class="detail_box">
+                        <div class="cart_product_title">Banana</div>
+                        <div class="cart_price">$10</div>
+                        <input type="number" value="1" class="product_quantity float-right">
+                    </div>
+                    <!-- Remove Product -->
+                    <i class="fa fa-trash remove_product" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="total">
+                <div class="total_title">SubTotal</div>
+                <div class="total_price">$0</div>
+            </div>
+            <!-- Buy Button -->
+            <a type="button" class="view_cart_button w-100 cart_widget_button text-dark text-center bg-light" 
+            asp-area="Customer" asp-controller="Shop" asp-action="ShoppingCart">View Cart</a>
+            
+            <a type="button" class="checkout_button w-100 cart_widget_button text-white bg_primary text-center"
+            asp-area="Customer" asp-controller="Shop" asp-action="CheckOut">Checkout</a>
+            <!-- Cart Close Button -->
+            <a id="close_cart">Close <i class="fa fa-times" aria-hidden="true"></i></a>
+        </div>
+    <!-- Cart Section ENDS -->
+    <!-- Main content begin -->
+    <section class="content">
+        @RenderBody()
+    </section>
+    <!-- Main content end -->
+    <!-- Footer Section Begin -->
+    <footer class="footer spad mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__about__logo">
+                            <a asp-area="Customer" asp-controller="Shop" asp-action="Index"><img src="~/EcommerceTheme/img/logo.png" alt=""></a>
+                        </div>
+                        <ul>
+                            <li>Address: 60-49 Road 11378 New York</li>
+                            <li>Phone: +65 11.188.888</li>
+                            <li>Email: hello@colorlib.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
+                    <div class="footer__widget">
+                        <h6>Useful Links</h6>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">About Our Shop</a></li>
+                            <li><a href="#">Secure Shopping</a></li>
+                            <li><a href="#">Delivery infomation</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Our Sitemap</a></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#">Who We Are</a></li>
+                            <li><a href="#">Our Services</a></li>
+                            <li><a href="#">Projects</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Innovation</a></li>
+                            <li><a href="#">Testimonials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer__widget">
+                        <h6>Join Our Newsletter Now</h6>
+                        <p>Get E-mail updates about our latest shop and special offers.</p>
+                        <form action="#">
+                            <input type="text" placeholder="Enter your mail">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__widget__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text">
+                            <p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                All rights reserved | This template is made with
+                                <i class="fa fa-heart" aria-hidden="true">
+
+                                </i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
+                        <div class="footer__copyright__payment"><img src="~/EcommerceTheme/img/payment-item.png" alt=""></div>
+                    </div>
+                    <!-- Back to top button -->
+                    <button type="button"
+                            class="btn bg_primary btn-floating btn-lg text-white display-4 outline-0"
+                            id="btn-back-to-top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+  <!-- sticky -->
+<section id="stickyCart">
+
+    <i class="fa fa-shopping-bag center" aria-hidden="true"></i>
+    <div class="itemCount">
+        <p id="itemCountPara">
+            <span>0 ITEMS</span>
+        </p>
+    </div>
+    <div id="total">
+        <div class="cartMoney"><span>0</span></div>
+    </div>
+</section>
+
+
+    <!-- Footer Section End -->
+    <script src="~/EcommerceTheme/js/jquery-3.3.1.min.js"></script>
+
+    <script src="~/EcommerceTheme/js/bootstrap.min.js"></script>
+
+    <script src="~/EcommerceTheme/js/jquery.nice-select.min.js"></script>
+    <script src="~/EcommerceTheme/js/jquery-ui.min.js"></script>
+    <script src="~/EcommerceTheme/js/jquery.slicknav.js"></script>
+
+    <script src="~/EcommerceTheme/js/mixitup.min.js"></script>
+    <script src="~/EcommerceTheme/js/owl.carousel.min.js"></script>
+    <script src="~/EcommerceTheme/js/cartWidget.js"></script>
+    <script src="~/EcommerceTheme/js/main.js"></script>
+    <script src="~/EcommerceTheme/js/rater.js"></script>
+    <script>
+               //activing links dynamically
+
+               $(document).ready(function(){
+                    $('.header__menu').find('[href="' + window.location.pathname + '"]')
+                        .parent().addClass('active');
+               });
+               $(document).ready(function(){
+                    $('.header__menu__dropdown')
+                        .find('[href="' + window.location.pathname + '"]')
+                        .parent().addClass('active');
+               });
+
+               //back to top button functionality
+
+               $(document).ready(function(){
+
+             //Check to see if the window is top if not then display button
+                   $(window).scroll(function(){
+
+                        // Show button after 1000px
+                        var showAfter = 200;
+                        if ( $(this).scrollTop() > showAfter ) {
+                            $('#btn-back-to-top').fadeIn();
+                        } else {
+                            $('#btn-back-to-top').fadeOut();
+                        }
+                    });
+
+                //Click event to scroll to top
+                $('#btn-back-to-top').click(function(){
+                    $('html, body').animate({scrollTop : 0},800);
+                        return false;
+                    });
+               });
+
+    //cartItems update 
+
+    let storeItems = localStorage.getItem("cartItems");
+    if(storeItems != null)
+    {
+        let jsonData = JSON.parse(storeItems);
+        $("#cart-count").text(jsonData.item1.length);
+        $("#itemCountPara").text(jsonData.item1.length + " " + 'ITEMS');
+        const sum = jsonData.item2.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+        $(".cartMoney").text(`৳ ${sum}`);
+       
+    }
+    else{
+        $("#itemCountPara").text('0 ITEMS');
+        $(".cartMoney").text(`৳ 0`);
+    }
+
+    window.addEventListener('storage', function (e) {
+
+            let storeItems = localStorage.getItem("cartItems");
+            if(storeItems != null)
+            {
+                let jsonData = JSON.parse(storeItems);
+                $("#cart-count").text(jsonData.item1.length);
+                $("#itemCountPara").text(jsonData.item1.length + " " + 'ITEMS');
+                const sum = jsonData.item2.reduce((a, b) => a + b, 0);
+                $(".cartMoney").text(`৳ ${sum}`);
+            }
+            else{
+                $("#itemCountPara").text('0 ITEMS');
+                $(".cartMoney").text(`৳ 0`);
+            }
+        });
+
+        $("#stickyCart").click(function(e){
+            
+           window.location = `/customer/shop/ShoppingCart`;
+            
+        });
+       
+    </script>
+
+   
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
