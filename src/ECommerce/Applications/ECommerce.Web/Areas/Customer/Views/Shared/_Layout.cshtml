@@ -221,8 +221,77 @@
         </div>
     </header>
     <!-- Header Section End -->
-    
+
+    <!-- Hero Section Begin -->
+    @{
+        if (titleValue != null)
+        {
+            if (titleValue.Equals("Ecommerce Home"))
+            {
+                <section class="hero">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <!--Categories-->
+                        <partial name="_CategoryPartial" />
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="hero__search">
+                                    <!--Search Form -->
+                                    <partial name="_SearchPartial" />
+                                    <div class="hero__search__phone">
+                                        <div class="hero__search__phone__icon">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+                                        <div class="hero__search__phone__text">
+                                            <h5>+65 11.188.888</h5>
+                                            <span>support 24/7 time</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Banner-->
+                                <partial name="_BannerPartial" />
+
+
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+            }
+            else
+            {
+
+                <section class="hero hero-normal">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <!--Categories-->
+                        <partial name="_CategoryPartial" />
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="hero__search">
+                                    <!--Search Form -->
+                            <partial name="_SearchPartial" />
+                                    <div class="hero__search__phone">
+                                        <div class="hero__search__phone__icon">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+                                        <div class="hero__search__phone__text">
+                                            <h5>+65 11.188.888</h5>
+                                            <span>support 24/7 time</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+            }
+        }
+    }
     <!-- Hero Section End -->
+    
     <!-- Cart Section STARTS -->
     <div class="cart">
             <h4 class="cart_title text-capitalize">Shopping cart</h4>

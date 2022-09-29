@@ -143,8 +143,10 @@
         @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
-                title="Manage">Hey @User.Identity?.Name!.ToUpper()</a>
+            <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index" title="Manage">
+                <i class="fa fa-user"></i>
+                Hey @User.Identity?.Name!
+            </a>
         </li>
        <li class="nav-item">
           <form  class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" 
