@@ -14,5 +14,25 @@ namespace ECommerce.Web.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public IActionResult CheckOut()
+        {
+            return View();
+        }
+
+        public IActionResult ShoppingCart()
+        {
+            return View();
+        }
+
+        public IActionResult BlogDetails()
+        {
+            return View();
+        }
     }
 }
