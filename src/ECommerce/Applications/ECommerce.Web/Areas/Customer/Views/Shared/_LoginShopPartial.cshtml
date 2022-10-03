@@ -1,0 +1,32 @@
+﻿@using ECommerce.Infrastructure.Entities.Membership
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="header__top__right__auth">
+        <a asp-area="Customer" asp-controller="Shop" asp-action="Index" title="Current User">
+            <i class="fa fa-user"></i>
+             Hey @User.Identity?.Name!
+        </a>
+    </div>
+
+    <div class="header__top__right__auth ml-3">
+        <form  class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout"
+        asp-route-returnUrl="@Url.Action("Index", "Home", new{ area=""})">
+            <button type="submit" class="border-0 bg-transparent"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="header__top__right__auth">
+         <a asp-area="Customer" asp-controller="Shop" asp-action="Login"><i class="fa fa-sign-in" aria-hidden="true"></i>Login</a>
+    </div>
+    <div class="header__top__right__auth ml-3">
+        <a asp-area="Customer" asp-controller="Shop" asp-action="Register"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
+    </div>
+}
+
+    
