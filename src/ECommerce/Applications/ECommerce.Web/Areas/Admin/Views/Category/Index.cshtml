@@ -1,0 +1,170 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+@section Styles
+    {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables/components.css">
+
+
+    <!--Alertify.js-->
+    <!-- include the style -->
+    <link rel="stylesheet" href="~/alertifyjs/css/alertify.min.css" />
+    <!-- include a theme -->
+    <link rel="stylesheet" href="~/alertifyjs/css/themes/default.min.css" />
+
+}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="float-left">
+                                <h3 class="card-title">New Currently Available Categories</h3>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="float-right">
+                                <a class="btn btn-outline-info btn-sm" asp-area="Admin" asp-controller="Category" asp-action="Create"><i class="fa fa-plus mr-2"></i> Add Category</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /.card-body -->
+                <div class="card-body" id="dataTableBody">
+                    <div class="col-md-12 p-0">
+                        <table id="AllCategoriesDataTable" class="table datatable-show-all">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <!--FromDB-->
+                            <tfoot>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <partial name="_ModalPartial" />
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+
+    @section Scripts
+    {
+    <!--Alertify.js-->
+    <!-- include the script -->
+    <script src="~/alertifyjs/alertify.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/AdminLTE/plugins/select2/js/select2.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#AllCategoriesDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/Admin/Category/GetCategories"
+                },
+                "columnDefs": [
+                    {
+                        "orderable": false,
+                        "targets": 0,
+                        "render": function (data, type, row) {
+                            return `<img src="https://localhost:7190/admin/image?url=${data}&w=75&h=75" class="rounded"/>`;
+                        }
+                    },
+                    {
+                        "orderable": false,
+                        "targets": 3,
+                        "render": function (data, type, row) {
+                            return actionDropDown(data, type, row);
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+    <script>
+        function deleteCategory(name, id) {
+            $.ajax({
+                url: '@Url.Action("CategoryDelete", "Category", "Admin")',
+                type: 'POST',
+                //dataType: 'json',
+                cache: false,
+                data: { 'id': id },
+                success: function (results) {
+                    location.reload()
+                    //$("#dataTableBody").load(location.href + " #dataTableBody")
+                    //alertify.success("<strong>"+productName+"</strong> "+" deleted.");
+                },
+                error: function () {
+                    alertify.defaults.glossary.title = 'Problem.!';
+                    alertify.error('Error occured to perform this action.')
+                }
+            });
+        }
+        function deleteWarning(name, data) {
+            var id = data;
+            alertify.confirm('Confirm Delete!', 'Do you want to delete <strong>' + name + '</strong> from your Store?',
+                function () {
+                    deleteCategory(name, id);
+                },
+                function () {
+                    //alertify.warning("<strong>"+storeName+"</strong> "+" delete ceased.");
+                });
+        }
+    </script>
+    <script>
+        function actionDropDown(data, type, row) {
+            var name = row[1];
+            return `<td class="text-center">
+                <div class="list-icons text-center">
+                    <div class="dropdown">
+                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                            <i class="icon-menu9"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="/Admin/Category/Edit?Id=${data}" class="dropdown-item text-info">
+                                <i class="fas fa-pencil-alt"></i>
+                                <span class="ml-2">Edit</span>
+                            </a>
+                            <a href="#" class="dropdown-item text-danger" onclick="deleteWarning('${name}', '${data}')">
+                                <i class="fas fa-trash"></i>
+                                <span class="ml-2">Delete</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </td>`;
+        }
+    </script>
+    <script>
+        var msg = '@TempData["Msg"]';
+        if (msg.length) {
+            alertify.success(msg);
+        }
+    </script>
+}
