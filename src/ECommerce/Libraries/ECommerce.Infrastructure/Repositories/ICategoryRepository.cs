@@ -1,10 +1,12 @@
 ﻿using DevSkill.Data;
 using ECommerce.Infrastructure.DbContexts;
-using ECommerce.Infrastructure.Entities;
+using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
+using CategoryBO = ECommerce.Infrastructure.BusinessObjects.Category;
 
 namespace ECommerce.Infrastructure.Repositories
 {
-    public interface ICategoryRepository : IRepository<Category, Guid, ApplicationDbContext>
+    public interface ICategoryRepository : IRepository<CategoryEntity, Guid, ApplicationDbContext>
     {
+        Task<int> IsCategoryAlreadyExists(CategoryBO category);
     }
 }

@@ -4,7 +4,7 @@ using DevSkill.Http;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.DTOs;
 using ECommerce.Membership.Services;
-using static ECommerce.Web.Models.ResponseModel;
+using ECommerce.Web.Enums;
 
 namespace ECommerce.Web.Models
 {
@@ -66,17 +66,17 @@ namespace ECommerce.Web.Models
             }
         }
 
-        public void SetResponse(string message, ResponseModel.ResponseType responseType, string area)
+        public void SetResponse(string message, ResponseTypes responseType, string area)
         {
             var response = new ResponseModel(message, responseType, area);
             _httpContextAccessor.HttpContext.Session.Set<ResponseModel>(nameof(_responseModel), response);
         }
 
-        public void StatusMessage(string message, ResponseType response, string area)
+        public void StatusMessage(string message, ResponseTypes response, string area)
         {
-            if (response == ResponseType.Success)
+            if (response == ResponseTypes.Success)
                 SetResponse(message, response, area);
-            else if (response == ResponseType.Error)
+            else if (response == ResponseTypes.Error)
                 SetResponse(message, response, area);
         }
 

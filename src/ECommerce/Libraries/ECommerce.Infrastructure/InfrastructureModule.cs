@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using ECommerce.Infrastructure.DbContexts;
+using ECommerce.Infrastructure.Repositories;
+using ECommerce.Infrastructure.Services;
+using ECommerce.Infrastructure.UnitOfWorks;
 using Microsoft.AspNetCore.Hosting;
 
 namespace ECommerce.Infrastructure
@@ -31,8 +34,14 @@ namespace ECommerce.Infrastructure
                 .WithParameter("migrationAssemblyName", _migrationAssemblyName)
                 .InstancePerLifetimeScope();
 
-            //builder.RegisterType<InfrastructureUnitOfWork>().As<IInfrastructureUnitOfWork>()
-            //    .InstancePerLifetimeScope();
+            builder.RegisterType<ECommerceUnitOfWork>().As<IECommerceUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryRepository>().As<ICategoryRepository>()
+               .InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryService>().As<ICategoryService>()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

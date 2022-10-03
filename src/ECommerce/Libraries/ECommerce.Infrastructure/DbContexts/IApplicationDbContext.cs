@@ -5,6 +5,6 @@ namespace ECommerce.Infrastructure.DbContexts
 {
     public interface IApplicationDbContext
     {
-        public DbSet<Category> Categories { get; set; }
+        DbSet<Category> Categories { get; set; }
     }
 }
