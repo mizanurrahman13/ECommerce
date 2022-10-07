@@ -26,7 +26,7 @@ namespace ECommerce.Web.Areas.Admin.Models
         public async Task<object> GetCategoryAsync(DataTablesAjaxRequestModel model)
         {
             var data = await _categoryService!.GetCategoryAsync(model.PageIndex, model.PageSize,
-                model.SearchText, model.GetSortText(new string[] { "Name" }));
+                model.SearchText, model.GetSortText(new string[] { "ImageUrl", "Name", "Description" }));
 
             return new
             {
@@ -35,7 +35,9 @@ namespace ECommerce.Web.Areas.Admin.Models
                 data = (from record in data.records
                         select new string[]
                         {
+                                record.ImageUrl!,
                                 record.Name!,
+                                record.Description!,
                                 record.Id.ToString()
                         }
                     ).ToArray()

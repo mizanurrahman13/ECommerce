@@ -7,9 +7,9 @@ namespace ECommerce.Infrastructure.Repositories
 {
     public class CategoryRepository : Repository<Category, Guid, ApplicationDbContext>, ICategoryRepository
     {
-        public CategoryRepository(IApplicationDbContext applicationDbContext)
-            : base((ApplicationDbContext)applicationDbContext)
+        public CategoryRepository(ApplicationDbContext context) : base(context)
         {
+
         }
 
         public async Task<int> IsCategoryAlreadyExists(CategoryBO category)

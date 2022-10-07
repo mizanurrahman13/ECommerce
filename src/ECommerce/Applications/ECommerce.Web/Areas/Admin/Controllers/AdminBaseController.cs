@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class AdminBaseController<T> : BaseController<T>
         where T : Controller
     {

@@ -12,7 +12,8 @@ namespace ECommerce.Infrastructure.DbContexts
         private readonly string _connectionString;
         private readonly string _migrationAssemblyName;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
+            )
             : base(options)
         {
         }
@@ -22,36 +23,7 @@ namespace ECommerce.Infrastructure.DbContexts
             _connectionString = connectionString;
             _migrationAssemblyName = migrationAssemblyName;
         }
-
-        private async ValueTask<T> InsertAsync<T>(T @object)
-        {
-            this.Entry(@object).State = EntityState.Added;
-            await this.SaveChangesAsync();
-
-            return @object;
-        }
-
-        private IQueryable<T> SelectAll<T>() where T : class => this.Set<T>();
-
-        private async ValueTask<T> SelectAsync<T>(params object[] @objectIds) where T : class =>
-            await this.FindAsync<T>(objectIds);
-
-        private async ValueTask<T> UpdateAsync<T>(T @object)
-        {
-            this.Entry(@object).State = EntityState.Modified;
-            await this.SaveChangesAsync();
-
-            return @object;
-        }
-
-        private async ValueTask<T> DeleteAsync<T>(T @object)
-        {
-            this.Entry(@object).State = EntityState.Deleted;
-            await this.SaveChangesAsync();
-
-            return @object;
-        }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
             if (!dbContextOptionsBuilder.IsConfigured)
@@ -62,6 +34,32 @@ namespace ECommerce.Infrastructure.DbContexts
             }
 
             base.OnConfiguring(dbContextOptionsBuilder);
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            var now = DateTime.UtcNow;
+
+            foreach (var changedEntity in ChangeTracker.Entries())
+            {
+                if (changedEntity.Entity is IAuditable entity)
+                {
+                    switch (changedEntity.State)
+                    {
+                        case EntityState.Added:
+                            entity.CreatedDate = now;
+                            entity.UpdatedDate = now;
+                            break;
+                        case EntityState.Modified:
+                            Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+                            Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+                            entity.UpdatedDate = now;
+                            break;
+                    }
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

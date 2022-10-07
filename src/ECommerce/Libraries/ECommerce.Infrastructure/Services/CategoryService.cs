@@ -10,12 +10,15 @@ namespace ECommerce.Infrastructure.Services
     {
         private readonly IECommerceUnitOfWork _ecommerceUnitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
         public CategoryService(IECommerceUnitOfWork ecommerceUnitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _ecommerceUnitOfWork = ecommerceUnitOfWork;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
         public async Task CreateCategory(CategoryBO category)
         {
@@ -24,6 +27,10 @@ namespace ECommerce.Infrastructure.Services
             if (count == 0)
             {
                 var categoryEntity = _mapper.Map<CategoryEntity>(category);
+
+                categoryEntity.CreatedBy = await _currentUserService.GetUsername();
+                categoryEntity.UpdatedBy = await _currentUserService.GetUsername();
+
                 await _ecommerceUnitOfWork.Categories.AddAsync(categoryEntity);
                 await _ecommerceUnitOfWork.SaveAsync();
             }

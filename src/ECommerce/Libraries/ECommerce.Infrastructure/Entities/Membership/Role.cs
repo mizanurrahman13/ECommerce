@@ -2,7 +2,7 @@
 
 namespace ECommerce.Infrastructure.Entities.Membership
 {
-    public class Role : IdentityRole<Guid>
+    public class Role : IdentityRole<Guid>, IAuditable
     {
         public Role()
             : base()
@@ -13,5 +13,10 @@ namespace ECommerce.Infrastructure.Entities.Membership
             : base(roleName)
         {
         }
+
+        public DateTimeOffset? CreatedDate { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ECommerce.Infrastructure.DbContexts;
+using ECommerce.Infrastructure.Entities;
 using ECommerce.Infrastructure.Repositories;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Infrastructure.UnitOfWorks;
@@ -41,6 +42,9 @@ namespace ECommerce.Infrastructure
                .InstancePerLifetimeScope();
 
             builder.RegisterType<CategoryService>().As<ICategoryService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CurrentUserService>().As<ICurrentUserService>()
                 .InstancePerLifetimeScope();
 
             base.Load(builder);

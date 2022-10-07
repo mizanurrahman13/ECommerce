@@ -18,6 +18,7 @@ using ECommerce.Web.Profiles;
 using ECommerce.Infrastructure.Profiles;
 using ECommerce.Membership.Profiles;
 using DevSkill.Http.Emails.BusinessObjects;
+using ECommerce.Web.Areas.Admin.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<InfrastructureProfile>();
     cfg.AddProfile<MembershipProfile>();
     cfg.AddProfile<WebProfile>();
+    cfg.AddProfile<AdminProfile>();
 });
 
 builder.Services.AddSingleton<AdminDataSeed>();
@@ -92,6 +94,13 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.AllowedUserNameCharacters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -137,6 +146,7 @@ try
 
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseSession();
 
     app.MapControllerRoute(
         name: "areas",

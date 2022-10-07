@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Web.Data.Migrations
 {
     [DbContext(typeof(EmailMessagingContext))]
-    [Migration("20220928090005_InitEmailMessagingContext")]
-    partial class InitEmailMessagingContext
+    [Migration("20221005183123_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

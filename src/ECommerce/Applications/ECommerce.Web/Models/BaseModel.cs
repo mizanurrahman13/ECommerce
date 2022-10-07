@@ -8,14 +8,14 @@ using ECommerce.Web.Enums;
 
 namespace ECommerce.Web.Models
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
         protected IUserManagerAdapter<ApplicationUser>? _userManagerAdapter;
-        private IHttpContextAccessor _httpContextAccessor;
-        private ResponseModel _responseModel;
+        protected IHttpContextAccessor? _httpContextAccessor;        
+        protected ILifetimeScope? _scope;
+        protected IMapper? _mapper;
+        protected ResponseModel _responseModel;
         public UserBasicInfoDto? UserInfo { get; private set; }
-        private ILifetimeScope _scope;
-        private IMapper _mapper;
 
         public BaseModel()
         {
