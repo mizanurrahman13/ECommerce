@@ -48,5 +48,10 @@ namespace ECommerce.Web.Areas.Admin.Models
         {
             await _categoryService!.DeleteCategoryAsync(id);
         }
+
+        public void Delete(Guid id)
+        {
+            _categoryService?.DeleteCategory(id);
+        }
     }
 }

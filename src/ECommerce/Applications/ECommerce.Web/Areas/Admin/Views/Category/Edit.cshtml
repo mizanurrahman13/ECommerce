@@ -1,0 +1,179 @@
+﻿@model CategoryEditModel
+@{
+    ViewData["Title"] = "Edit Category";
+    ViewData["PageNav"] = "Edit Category";
+}
+
+@section Styles
+{
+    <!-- summernote -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/summernote/summernote-bs4.min.css">
+    <!-- dropzonejs -->
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <!-- toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+}
+    
+<form role="form" asp-controller="Category" asp-action="Edit" method="post" asp-antiforgery="true">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-8">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <!-- /.card-header -->
+                    <!-- form start -->                    
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name">Name</label>
+                            <input type="text" class="form-control" asp-for="Name" id="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description">Description</label>
+                            <textarea asp-for="Description" id="summernote">
+                                    Write <em>about</em> <u>your Product</u> <strong>here</strong>
+                                </textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-4">
+                <!-- /.card-header -->
+                <div class="card">
+                    <!-- form start -->
+                    <div class="card-body">
+
+                        <div id="categoryImage" class="fallback dropzone">
+                            <input name="file" type="file" class="d-none" />
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <!-- /Hidden Fields For Image Url -->
+                    @Html.HiddenFor(m => m.ImageUrl)
+                </div>
+            </div>
+            <!--/.col (right) -->
+
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+    <div class="card-footer">
+        <a asp-action="Index" asp-controller="Category" asp-area="Admin" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </div>
+</form>
+
+@section Scripts
+{
+
+<!-- Summernote -->
+<script src="/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- dropzonejs -->
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<!-- toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+// Summernote
+$('#summernote').summernote({
+    placeholder: 'Write about your Category details...',
+    tabsize: 2,
+    height: 120
+});
+
+//Dropzone Start
+var images = [];
+var imageParam = $("#ImageUrl");
+
+Dropzone.autoDiscover = false;
+var myDropzone = new Dropzone("div#categoryImage", {
+    url: "/Admin/Image/ImageUploader",
+    maxFiles: 1,
+    addRemoveLinks: true,
+    init: function() {
+        var drop_zone = this;
+        let categoryId = $("#Id").val();
+            $.ajax({
+            type: 'POST',
+            url: "/Admin/Category/ImageByCategoryId",
+            data: { categoryId: categoryId },
+            success: function(data){
+                //console.log(data);
+                data.map((c)=>{
+                        let serverFile = {
+                            name: c.url,
+                            size: c.size
+                        };
+                        drop_zone.emit("addedfile", serverFile);
+                        drop_zone.emit("thumbnail", serverFile, "https://localhost:7293/admin/image?url=" + c.url + "&w=75&h=75");
+                        images.push(c.url);
+                        imageParam.val(images);
+                });
+            }
+        });
+    },
+    success(file, message) {
+        if (message.code == 200) {
+            file.uploadedUrl = message.path;
+            $("#ImageUrl").val(message.path);
+            toastr["success"]("File Uploaded Successfully!")
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        }
+    },
+
+    removedfile: function (file) {
+        var fileName = file.name;
+        $.ajax({
+            type: 'POST',
+            url: "/Admin/Image/DeleteImage",
+            data: { path: fileName },
+            success: function (data, message) {
+                let imageIndex = images.indexOf(data.deletedImage);
+                console.log("imageIndex", imageIndex);
+                if (imageIndex >= 0) {
+                    images.splice(imageIndex, 1);
+                    imageParam.val("");
+                    imageParam.val(images);
+                    console.log("images", images, "imageParam", imageParam);
+                }
+
+            }
+        });
+
+        var _ref;
+        return (_ref = file.previewElement) !=
+            null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+    }
+});
+</script>
+<script>
+    var msg = '@TempData["message"]';
+    if (msg.length) {
+        toastr.error(msg);
+    }
+</script>
+}

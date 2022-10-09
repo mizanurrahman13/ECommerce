@@ -70,27 +70,6 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             return new { Code = 505, Message = "Failed! Bad Parameter Format" };
         }
 
-        //Delete Image
-        [HttpPost]
-        public async Task<dynamic> DeleteCategoryImage(string path)
-        {
-            if (path != null)
-            {
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", path);
-
-                if (System.IO.File.Exists(filePath))
-                {
-                    FileInfo file = new FileInfo(filePath);
-                    file.Delete();
-                    return new { Code = 200, DeletedImage = path, Message = "Success" };
-                }
-
-                return new { Code = 500, Message = "Failed" };
-            }
-
-            return new { Code = 505, Message = "Failed! Bad Parameter Format" };
-        }
-
         // Upload Image
         [HttpPost]
         public async Task<dynamic> ImageUploader(IFormFile file)

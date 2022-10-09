@@ -74,7 +74,11 @@ namespace ECommerce.Infrastructure.Services
 
             var categoryEntity = await _ecommerceUnitOfWork.Categories.GetByIdAsync(category.Id);
             categoryEntity = _mapper.Map(category, categoryEntity);
-            _ecommerceUnitOfWork.Save();
+
+            categoryEntity.CreatedBy = await _currentUserService.GetUsername();
+            categoryEntity.UpdatedBy = await _currentUserService.GetUsername();
+
+            await _ecommerceUnitOfWork.SaveAsync();
 
         }
 
@@ -89,6 +93,22 @@ namespace ECommerce.Infrastructure.Services
             var categoriesEO = await _ecommerceUnitOfWork.Categories.GetAsync(x => x.Id == id, null);
             var categoriesBO = _mapper.Map<List<CategoryBO>>(categoriesEO);
             return categoriesBO;
+        }
+
+        public void DeleteCategory(Guid id)
+        {
+            _ecommerceUnitOfWork.Categories.Remove(id);
+            _ecommerceUnitOfWork.Save();
+        }
+
+        public CategoryBO GetCategoryImageById(Guid Id)
+        {
+            var result = _ecommerceUnitOfWork.
+                 Categories.Get(x => x.Id.Equals(Id),
+                 string.Empty).FirstOrDefault();
+
+            var category = _mapper.Map<CategoryBO>(result);
+            return category;
         }
     }
 }

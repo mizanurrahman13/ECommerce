@@ -103,15 +103,15 @@
 <script>
     function deleteCategory(name, id) {
         $.ajax({
-            url: '@Url.Action("CategoryDelete", "Category", "Admin")',
+                url: '@Url.Action("CategoryDelete", "Category", "Admin")',
             type: 'POST',
             //dataType: 'json',
             cache: false,
             data: { 'id': id },
             success: function (results) {
-                location.reload()
-                //$("#dataTableBody").load(location.href + " #dataTableBody")
-                //alertify.success("<strong>"+productName+"</strong> "+" deleted.");
+                //location.reload()
+                $('#AllCategoriesDataTable').DataTable().ajax.reload();
+                alertify.success("<strong>" + name + "</strong> " + " deleted.");
             },
             error: function () {
                 alertify.defaults.glossary.title = 'Problem.!';
@@ -155,7 +155,7 @@
     }
 </script>
 <script>
-    var msg = '@TempData["Msg"]';
+    var msg = '@TempData["message"]';
     if (msg.length) {
         alertify.success(msg);
     }

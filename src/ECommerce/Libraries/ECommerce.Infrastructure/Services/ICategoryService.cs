@@ -14,5 +14,7 @@ namespace ECommerce.Infrastructure.Services
         Task<Category> GetCategoryByIdAsync(Guid id);
         Task UpdateCategoryAsync(Category category);
         Task<List<Category>> GetCategoriesAsync(Guid? id);
+        void DeleteCategory(Guid id);
+        Category GetCategoryImageById(Guid Id);
     }
 }

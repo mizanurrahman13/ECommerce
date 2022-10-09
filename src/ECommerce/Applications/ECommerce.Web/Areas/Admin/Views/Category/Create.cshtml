@@ -5,7 +5,7 @@
 }
 
 @section Styles
-    {
+{
     <!-- summernote -->
     <link rel="stylesheet" href="/AdminLTE/plugins/summernote/summernote-bs4.min.css">
     <!-- dropzonejs -->
@@ -86,63 +86,80 @@
 <!-- toastr -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script>
-    // Summernote
-    $('#summernote').summernote({
-        placeholder: 'Write about your Category details...',
-        tabsize: 2,
-        height: 120
-    });
-    Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone("div#categoryImage", {
-        url: "/Admin/Image/ImageUploader",
-        maxFiles: 1,
-        addRemoveLinks: true,
-        dictDefaultMessage: "Drop or Click here to Upload Category Image<br> 1 File Only",
-        init: function () {
-            //will be impliment later
-        },
-        success(file, message) {
-            if (message.code == 200) {
-                file.uploadedUrl = message.path;
-                $("#ImageUrl").val(message.path);
-                toastr["success"]("File Uploaded Successfully!")
-                toastr.options = {
-                    "closeButton": true,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": true,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
+// Summernote
+$('#summernote').summernote({
+    placeholder: 'Write about your Category details...',
+    tabsize: 2,
+    height: 120
+});
+
+var images = [];
+
+Dropzone.autoDiscover = false;
+var myDropzone = new Dropzone("div#categoryImage", {
+    url: "/Admin/Image/ImageUploader",
+    maxFiles: 1,
+    addRemoveLinks: true,
+    dictDefaultMessage: "Drop or Click here to Upload Category Image<br> 1 File Only",
+    init: function () {
+        //will be impliment later
+    },
+    success(file, message) {
+        if (message.code == 200) {
+            file.uploadedUrl = message.path;
+            $("#ImageUrl").val(message.path);
+            toastr["success"]("File Uploaded Successfully!")
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        }
+    },
+
+    removedfile: function (file) {
+        var fileName = "Files\\" + file.name;
+        $.ajax({
+            type: 'POST',
+            url: "/Admin/Image/DeleteImage",
+            data: { path: fileName },
+            success: function (data, message) {
+
+                console.log(images);
+                console.log(data);
+                console.log(data.deletedImage);
+                let imageIndex = images.indexOf(data.deletedImage);
+                console.log("imageIndex", imageIndex);
+                if (imageIndex >= 0) {
+                    images.splice(imageIndex, 1);
+
+                    $("#ImageUrl").val("");
+
+                    $("#ImageUrl").val(images);
                 }
             }
-        },
+        });
 
-        removedfile: function (file) {
-            $.ajax({
-                type: 'POST',
-                url: '/Admin/Image/DeleteCategoryImage',
-                data: { url: file.uploadedUrl },
-                sucess: function (data) {
-                    console.log('success: ' + data);
-                }
-            });
-            var _ref;
-
-            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
-        }
-    });
+        var _ref;
+        return (_ref = file.previewElement) !=
+            null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+    }
+});
 </script>
 <script>
-    var msg = '@TempData["Msg"]';
+    var msg = '@TempData["message"]';
     if (msg.length) {
         toastr.error(msg);
     }
