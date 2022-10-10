@@ -105,7 +105,13 @@ namespace ECommerce.Infrastructure.DbContexts
                 .HasForeignKey(f => f.ReviewId);
 
             modelBuilder.Entity<Role>()
-                .HasData(DataSeed.Roles);
+                .HasData(RoleSeed.Roles);
+
+            modelBuilder.Entity<Category>()
+                .HasData(CategorySeed.Categories);
+
+            modelBuilder.Entity<Product>()
+                .HasData(ProductSeed.Products);
 
             base.OnModelCreating(modelBuilder);
         }
