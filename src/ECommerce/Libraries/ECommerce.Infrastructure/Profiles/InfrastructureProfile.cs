@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ECommerce.Infrastructure.BusinessObjects;
+using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
 
 namespace ECommerce.Infrastructure.Profiles
 {
@@ -6,7 +8,7 @@ namespace ECommerce.Infrastructure.Profiles
     {
         public InfrastructureProfile()
         {
-
+            CreateMap<CategoryEntity, Category>().ReverseMap();
         }
     }
 }

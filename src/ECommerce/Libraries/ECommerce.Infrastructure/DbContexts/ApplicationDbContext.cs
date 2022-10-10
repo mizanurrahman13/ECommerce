@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ECommerce.Infrastructure.Entities.Membership;
 using ECommerce.Infrastructure.Seeds;
+using ECommerce.Infrastructure.Entities;
 
 namespace ECommerce.Infrastructure.DbContexts
 {
@@ -11,7 +12,8 @@ namespace ECommerce.Infrastructure.DbContexts
         private readonly string _connectionString;
         private readonly string _migrationAssemblyName;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
+            )
             : base(options)
         {
         }
@@ -21,7 +23,7 @@ namespace ECommerce.Infrastructure.DbContexts
             _connectionString = connectionString;
             _migrationAssemblyName = migrationAssemblyName;
         }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
             if (!dbContextOptionsBuilder.IsConfigured)
@@ -34,6 +36,32 @@ namespace ECommerce.Infrastructure.DbContexts
             base.OnConfiguring(dbContextOptionsBuilder);
         }
 
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            var now = DateTime.UtcNow;
+
+            foreach (var changedEntity in ChangeTracker.Entries())
+            {
+                if (changedEntity.Entity is IAuditable entity)
+                {
+                    switch (changedEntity.State)
+                    {
+                        case EntityState.Added:
+                            entity.CreatedDate = now;
+                            entity.UpdatedDate = now;
+                            break;
+                        case EntityState.Modified:
+                            Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+                            Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+                            entity.UpdatedDate = now;
+                            break;
+                    }
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Role>()
@@ -41,5 +69,7 @@ namespace ECommerce.Infrastructure.DbContexts
 
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Category> Categories { get; set; }
     }
 }

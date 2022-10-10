@@ -1,13 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Autofac;
+using ECommerce.Web.Areas.Admin.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class DashboardController : Controller
+    public class DashboardController : AdminBaseController<DashboardController>
     {
+        public DashboardController(ILogger<DashboardController> logger, ILifetimeScope scope)
+        : base(logger, scope)
+        {
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var model = _scope.Resolve<DashboardModel>();
+            return View(model);
         }
     }
 }
