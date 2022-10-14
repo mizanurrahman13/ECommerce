@@ -39,7 +39,6 @@ namespace ECommerce.Infrastructure.Seeds
                         UpdatedBy="admin@gmail.com"
                     }
                 };
-
             }
         }
     }

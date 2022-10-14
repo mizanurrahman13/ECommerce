@@ -50,5 +50,19 @@ namespace ECommerce.Infrastructure.Services
             }
             return (result.total, result.totalDisplay, products);
         }
+
+        public async Task<(int total, int totalDisplay, IList<ProductBO> products)> GetActiveProducts(int pageIndex, int pageSize, string searchText, string orderBy)
+        {
+            var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.Name.Contains(searchText),
+                orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
+
+            List<ProductBO> products = new List<ProductBO>();
+            foreach (ProductEntity product in result.data)
+            {
+                products.Add(_mapper.Map<ProductBO>(product));
+            }
+
+            return (result.total, result.totalDisplay, products);
+        }
     }
 }

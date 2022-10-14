@@ -1,0 +1,380 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+@section Styles
+{
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables/components.css">
+
+    <!--Toggle switch-->
+    <link href="~/CustomSwitch/css/component-custom-switch.css" rel="stylesheet">
+
+    <!--Alertify.js-->
+    <!-- include the style -->
+    <link rel="stylesheet" href="~/alertifyjs/css/alertify.min.css" />
+    <!-- include a theme -->
+    <link rel="stylesheet" href="~/alertifyjs/css/themes/default.min.css" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-6">
+                <div class="float-left">
+                    <h3 class="card-title">New Currently Available Products</h3>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="float-right">
+                    <a class="btn btn-outline-info btn-sm" asp-area="Admin" asp-controller="Product" asp-action="Add"><i class="fa fa-plus mr-2"></i> Add Product</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.card-body -->
+    <div class="card-body" id="dataTableBody">
+        <div class="col-md-12 p-0">
+            <table id="AllProductsDataTable" class="table table-striped datatable-show-all" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th style="width:15%">Name</th>
+                        <th style="width:15%">Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Discounted</th>
+                        <th>Discount</th>
+                        <th>Published</th>
+                        <th>Featured</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <!--FromDB-->
+                <tfoot>
+                    <tr>
+                        <th>Image</th>
+                        <th style="width:15%">Name</th>
+                        <th style="width:15%">Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Discounted</th>
+                        <th>Discount</th>
+                        <th>Published</th>
+                        <th>Featured</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+@section Scripts
+{
+<!--Alertify.js-->
+<!-- include the script -->
+<script src="~/alertifyjs/alertify.min.js"></script>
+
+
+<!--Toggle Switch-->
+<script src="~/CustomSwitch/js/bootstrap4-toggle.min.js"></script>
+
+<!-- DataTables -->
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+
+<script>
+$(function () {
+    $('#AllProductsDataTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "/Admin/Product/GetProducts"
+        },
+        "drawCallback": function (settings) {
+            //console.log(settings.json);
+            rowTrigger();
+        },
+        "columnDefs": [
+            {
+                "orderable": false,
+                "targets": 0,
+                "render": function (data, type, row) {
+                    return `<img src="https://localhost:7293/admin/image?url=${data}&w=50&h=50" class="rounded"/>`;
+                }
+            },
+            {
+                "orderable": true,
+                "targets": 1,
+                "render": function (data, type, row) {
+                    return redirectToProduct(row);
+                }
+            },
+            {
+                "orderable": false,
+                "targets": 2,
+                "render": function (data, type, row) {
+                    return GetProductCategoryList(data);
+                }
+            },
+            {
+                "orderable": false,
+                "targets": 3
+            },
+            {
+                "orderable": false,
+                "targets": 4
+            },
+            {
+                "orderable": false,
+                "targets": 5
+            },
+            {
+                "orderable": false,
+                "targets": 6
+            },
+            {
+                "orderable": false,
+                "targets": 7,
+                "render": function (data, type, row) {
+                    return feedProperty(data, type, row);
+                }
+            },
+            {
+                "orderable": false,
+                "targets": 8,
+                "render": function (data, type, row) {
+                    return featureProperty(data, type, row);
+                }
+            },
+            {
+                "orderable": false,
+                "targets": 9,
+                "render": function (data, type, row) {
+                    return actionDropDown(data, type, row);
+                }
+            }
+        ]
+
+    });
+});
+</script>
+<script>
+function redirectToProduct(row) {
+    var productName = row[1];
+    var productId = row[9];
+    return `<a href="/Customer/Shop/Product/${productId}" target="_blank">${productName}</a>`;
+}
+</script>
+
+<script>
+function GetProductCategoryList(data) {
+    //var items=``;
+    //if(data.length==0 || data=='default'){
+    //    return `<span class="badge badge-danger">No Category Assigned</span>`
+    //}
+    //var products = data.split(',');
+    //products.forEach((x)=>{
+    //    items+=`<span class="badge badge-success m-2"> ${x} </span>`;
+    //});
+    //return items;
+
+    var items = ``;
+
+    var CategoriesWithId = data.split(',');//[{id},{category}]-->array
+
+    for (var i = 0; i < CategoriesWithId.length; i++) {
+        var categoryWithId = CategoriesWithId[i].slice(1, -1);//{id}, {category}
+        var categoryAndId = categoryWithId.split('^');//{id} and {category} seperated
+
+        var id = categoryAndId[0];
+        var category = categoryAndId[1];
+
+        console.log("Category: " + category);
+        console.log("ID: " + id);
+
+        if (typeof category === 'undefined')
+            category = '';
+        else
+            category = category.slice(1, -1);//bracket removed
+
+
+        if (typeof id === 'undefined')
+            id = '';
+        else
+            id = id.slice(1, -1);//bracket removed
+
+        if (category.length == 0 || category == 'default' || category === '') {
+            return `<span class="badge badge-danger">No Category Assigned</span>`;
+        }
+        else {
+            items += `<a href="/Customer/Shop/Category/${id}" target="_blank">
+                        <span class="badge badge-success m-2"> ${category} </span></a>`;
+        }
+    }
+    return items;
+}
+</script>
+<script>
+function feedProperty(data, type, row) {
+    var id = row[9];
+    var value = row[7];
+    var productName = row[1];
+    setRowIdFeed(id, value);
+    return `<div class="custom-switch custom-switch-label-yesno custom-switch-sm pl-0">
+                    <input class="custom-switch-input" id="example_04${id}" type="checkbox" onclick="FeedCheckBoxFunction('${id}', '${value}', '${productName}')">
+                    <label class="custom-switch-btn" for="example_04${id}"></label>
+            </div>`;
+
+}
+function featureProperty(data, type, row) {
+    var id = row[9];
+    var value = row[8];
+    var productName = row[1];
+    setRowIdFeature(id, value);
+    return `<label class="custom-checkbox-feature">
+            <input id="feedId${id}" type="checkbox" hidden onclick="FeatureCheckBoxFunction('${id}', '${value}', '${productName}')">
+            <i id="feedIconId${id}" class="fa-solid fa-cloud-bolt fa-2xl"></i>
+            </label>`;
+}
+</script>
+
+<script>
+var rowsFeed = []
+function setRowIdFeed(id, value) {
+    let item = { id, value };
+    rowsFeed.push(item);
+}
+var rowsFeature = []
+function setRowIdFeature(id, value) {
+    let item = { id, value };
+    rowsFeature.push(item);
+}
+
+function rowTrigger() {
+    if (rowsFeed.length > 0) {
+        for (let row = 0; row < rowsFeed.length; row++) {
+            setCheckboxFeed(rowsFeed[row].id, rowsFeed[row].value);
+            if (row == rowsFeed.length - 1) {
+                rowsFeed.length = 0;
+            }
+        }
+    }
+
+    if (rowsFeature.length > 0) {
+        for (let row = 0; row < rowsFeature.length; row++) {
+            setCheckboxFeature(rowsFeature[row].id, rowsFeature[row].value);
+            if (row == rowsFeature.length - 1) {
+                rowsFeature.length = 0;
+            }
+        }
+    }
+}
+
+function setCheckboxFeed(id, value) {
+    var checkboxId = "example_04" + id;
+    if (value.toLowerCase() == 'true') {
+        $("#" + checkboxId).prop('checked', true);
+    } else {
+        $("#" + checkboxId).prop('checked', false);
+    }
+}
+
+function setCheckboxFeature(id, value) {
+    var checkboxId = "feedId" + id;
+    var iconId = "feedIconId" + id;
+    if (value.toLowerCase() == 'true') {
+        $("#" + checkboxId).prop('checked', true);
+        $("#" + iconId).css('color', '#4CAF50');
+    } else {
+        $("#" + checkboxId).prop('checked', false);
+        $("#" + iconId).css('color', '#777');
+    }
+}
+</script>
+<script>
+
+function FeedCheckBoxFunction(id, value, productName) {
+    var checkboxId = "example_04" + id;
+    var feedcheckboxId = "feedId" + id;
+    var feedIconId = "feedIconId" + id;
+    if ($("#" + checkboxId).is(':checked')) {
+        changeFeedAvailability(id, value, productName);
+    } else {
+
+        alertify.confirm('Confirm unpublish!', 'Do you want to unpublish <strong>' + productName + '</strong> from feed?',
+            function () {
+                $("#" + feedcheckboxId).prop('checked', false);
+                $("#" + feedIconId).css('color', '#777');
+                changeFeedAvailability(id, value, productName);
+            },
+            function () {
+                $("#" + checkboxId).prop('checked', true);
+            });
+    }
+}
+
+function FeatureCheckBoxFunction(id, value, productName) {
+    var checkboxId = "feedId" + id;
+    var iconId = "feedIconId" + id;
+    if ($("#" + checkboxId).is(':checked')) {
+        if ($("#example_04" + id).is(':checked')) {
+            $("#" + iconId).css('color', '#4CAF50');
+            changeFeatureAvailability(id, value, productName);
+        } else {
+            $("#" + checkboxId).prop('checked', false);
+            alertify.error('Make <strong>' + productName + '</strong> visiable first');
+        }
+    } else {
+
+        alertify.confirm('Confirm remove from feature!', 'Do you want to remove <strong>' + productName + '</strong> from feature product?',
+            function () {
+                $("#" + iconId).css('color', '#777');
+                changeFeatureAvailability(id, value, productName);
+            },
+            function () {
+                $("#" + checkboxId).prop('checked', true);
+                $("#" + iconId).css('color', '#4CAF50');
+            });
+    }
+}
+</script>
+
+<script>
+function actionDropDown(data, type, row) {
+    var productName = row[1];
+    return `<td class="text-center">
+        <div class="list-icons text-center">
+            <div class="dropdown">
+                <a href="#" class="list-icons-item" data-toggle="dropdown">
+                    <i class="icon-menu9"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="/Admin/Product/Edit?Id=${data}" class="dropdown-item text-info">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span class="ml-2">Edit</span>
+                    </a>
+                    <a href="#" class="dropdown-item text-danger" onclick="deleteWarning('${productName}', '${data}')">
+                        <i class="fas fa-trash"></i>
+                        <span class="ml-2">Delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </td>`;
+}
+</script>
+
+<script>
+    var msg = '@TempData["Msg"]';
+    if (msg.length) {
+        alertify.success(msg);
+    }
+</script>
+}
+

@@ -33,6 +33,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                 recordsTotal = data.total,
                 recordsFiltered = data.displayTotal,
                 data = (from record in data.records
+                        orderby record.CreatedDate descending
                         select new string[]
                         {
                                 record.ImageUrl!,

@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221010183718_AddedInventoryDataSeed")]
+    partial class AddedInventoryDataSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +60,9 @@ namespace ECommerce.Web.Data.Migrations
                         {
                             Id = new Guid("f23b443b-2185-4dd7-9952-8a91185e5244"),
                             CreatedBy = "Admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 11, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1752), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 10, 18, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7427), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Category Example....",
-                            ImageUrl = "Files\\NoImageFound.png",
+                            ImageUrl = "Files/NoImageFoung.png",
                             Name = "Default"
                         });
                 });
@@ -101,7 +103,7 @@ namespace ECommerce.Web.Data.Migrations
                         {
                             Id = new Guid("f23b443b-2185-4dd7-9952-8a91185e5244"),
                             CreatedBy = "Admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 11, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1829), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 10, 18, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7545), new TimeSpan(0, 0, 0, 0, 0)),
                             ProductId = new Guid("7410bdfd-c2f1-4f29-b8b1-1321810cc9a9"),
                             Quantity = 23
                         },
@@ -109,7 +111,7 @@ namespace ECommerce.Web.Data.Migrations
                         {
                             Id = new Guid("97081fb9-f963-4125-aee3-ae7deaecb0ec"),
                             CreatedBy = "Admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 11, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1834), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 10, 18, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7553), new TimeSpan(0, 0, 0, 0, 0)),
                             ProductId = new Guid("72a73a5f-1930-49e3-b924-d72b59c050a2"),
                             Quantity = 25
                         });
@@ -242,9 +244,9 @@ namespace ECommerce.Web.Data.Migrations
                         new
                         {
                             Id = new Guid("b08643fd-487f-401c-97bb-6117531abc7a"),
-                            ConcurrencyStamp = "638011064678511435",
+                            ConcurrencyStamp = "638010454372737001",
                             CreatedBy = "Admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 11, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1467), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 10, 18, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7044), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -462,7 +464,7 @@ namespace ECommerce.Web.Data.Migrations
                             Id = new Guid("7410bdfd-c2f1-4f29-b8b1-1321810cc9a9"),
                             ActiveStatus = true,
                             CreatedBy = "admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1780), new TimeSpan(0, 6, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 0, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7473), new TimeSpan(0, 6, 0, 0, 0)),
                             DeleteQueue = false,
                             Description = "This is the best product...........",
                             DiscountedPrice = 3000m,
@@ -470,14 +472,14 @@ namespace ECommerce.Web.Data.Migrations
                             Name = "Apex Shoes",
                             UnitPrice = 2500m,
                             UpdatedBy = "admin@gmail.com",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1793), new TimeSpan(0, 6, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 0, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7491), new TimeSpan(0, 6, 0, 0, 0))
                         },
                         new
                         {
                             Id = new Guid("72a73a5f-1930-49e3-b924-d72b59c050a2"),
                             ActiveStatus = true,
                             CreatedBy = "admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1800), new TimeSpan(0, 6, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 0, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7501), new TimeSpan(0, 6, 0, 0, 0)),
                             DeleteQueue = false,
                             Description = "This is the best product...........",
                             DiscountedPrice = 3000m,
@@ -485,7 +487,7 @@ namespace ECommerce.Web.Data.Migrations
                             Name = "Bata Shoes",
                             UnitPrice = 2500m,
                             UpdatedBy = "admin@gmail.com",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1802), new TimeSpan(0, 6, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 0, 37, 17, 273, DateTimeKind.Unspecified).AddTicks(7505), new TimeSpan(0, 6, 0, 0, 0))
                         });
                 });
 
@@ -562,28 +564,6 @@ namespace ECommerce.Web.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("168528cc-7ba4-452d-b4bf-d8032b3c2ef7"),
-                            CreatedBy = "admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1864), new TimeSpan(0, 6, 0, 0, 0)),
-                            ProductId = new Guid("7410bdfd-c2f1-4f29-b8b1-1321810cc9a9"),
-                            UpdatedBy = "admin@gmail.com",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1866), new TimeSpan(0, 6, 0, 0, 0)),
-                            Url = "Files\\NoImageFound.png"
-                        },
-                        new
-                        {
-                            Id = new Guid("9b545b2c-7e36-41ac-b39a-052cd61c8d4c"),
-                            CreatedBy = "admin@gmail.com",
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1872), new TimeSpan(0, 6, 0, 0, 0)),
-                            ProductId = new Guid("72a73a5f-1930-49e3-b924-d72b59c050a2"),
-                            UpdatedBy = "admin@gmail.com",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 11, 17, 34, 27, 851, DateTimeKind.Unspecified).AddTicks(1874), new TimeSpan(0, 6, 0, 0, 0)),
-                            Url = "Files\\NoImageFound.png"
-                        });
                 });
 
             modelBuilder.Entity("ECommerce.Infrastructure.Entities.Review", b =>

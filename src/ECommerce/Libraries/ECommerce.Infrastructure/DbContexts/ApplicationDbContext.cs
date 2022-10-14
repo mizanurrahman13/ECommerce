@@ -113,6 +113,12 @@ namespace ECommerce.Infrastructure.DbContexts
             modelBuilder.Entity<Product>()
                 .HasData(ProductSeed.Products);
 
+            modelBuilder.Entity<Inventory>()
+                .HasData(InventorySeed.Inventories);
+
+            modelBuilder.Entity<ProductImage>()
+                .HasData(ProductImageSeed.ProductImages);
+
             base.OnModelCreating(modelBuilder);
         }
 
