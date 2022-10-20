@@ -10,7 +10,7 @@ namespace ECommerce.Infrastructure.Services
             int pageSize,
             string searchText,
             string orderBy);
-        Task<(int total, int totalDisplay, IList<Product> products)> GetActiveProducts(int pageIndex, int pageSize, string searchText, string orderBy);
-
+        Task<(int total, int totalDisplay, IList<Product> products)> GetActiveProductsAsync(int pageIndex, int pageSize, string searchText, string orderBy);
+        (int total, int totalDisplay, IList<Product> products) GetActiveProducts(int pageIndex, int pageSize, string searchText, string orderBy);
     }
 }

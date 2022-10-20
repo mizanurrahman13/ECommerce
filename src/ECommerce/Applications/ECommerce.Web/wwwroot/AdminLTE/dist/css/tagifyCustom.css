@@ -4,11 +4,11 @@
     background: rgba(255, 255, 255, 0.8);
 }
 /* Suggestions items */
-.tagify__dropdown.users-list {
+.tagify__dropdown.categories-list {
     font-size: 14px;
 }
 
-    .tagify__dropdown.users-list .tagify__dropdown__item {
+    .tagify__dropdown.categories-list .tagify__dropdown__item {
         padding: 0.5em 0.7em;
         display: grid;
         grid-template-columns: auto 1fr;
@@ -16,11 +16,11 @@
         grid-template-areas: "avatar name" "avatar email";
     }
 
-        .tagify__dropdown.users-list .tagify__dropdown__item:hover .tagify__dropdown__item__avatar-wrap {
+        .tagify__dropdown.categories-list .tagify__dropdown__item:hover .tagify__dropdown__item__avatar-wrap {
             transform: scale(1.2);
         }
 
-    .tagify__dropdown.users-list .tagify__dropdown__item__avatar-wrap {
+    .tagify__dropdown.categories-list .tagify__dropdown__item__avatar-wrap {
         grid-area: avatar;
         width: 36px;
         height: 36px;
@@ -30,26 +30,26 @@
         transition: 0.1s ease-out;
     }
 
-    .tagify__dropdown.users-list img {
+    .tagify__dropdown.categories-list img {
         width: 100%;
         vertical-align: top;
     }
 
-    .tagify__dropdown.users-list strong {
+    .tagify__dropdown.categories-list strong {
         grid-area: name;
         width: 100%;
         align-self: center;
         font-weight: 500;
     }
 
-    .tagify__dropdown.users-list span {
+    .tagify__dropdown.categories-list span {
         grid-area: email;
         width: 100%;
         font-size: 0.9em;
         opacity: 0.6;
     }
 
-    .tagify__dropdown.users-list .tagify__dropdown__item__addAll {
+    .tagify__dropdown.categories-list .tagify__dropdown__item__addAll {
         border-bottom: 1px solid #DDD;
         gap: 0;
     }

@@ -9,6 +9,7 @@ namespace ECommerce.Web.Areas.Admin.Profiles
         public AdminProfile()
         {
             CreateMap<CategoryCreateModel, Category>().ReverseMap();
+            CreateMap<ProductCreateModel, Product>().ReverseMap();
         }
     }
 }

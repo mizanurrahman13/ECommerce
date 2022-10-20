@@ -119,6 +119,9 @@ namespace ECommerce.Infrastructure.DbContexts
             modelBuilder.Entity<ProductImage>()
                 .HasData(ProductImageSeed.ProductImages);
 
+            modelBuilder.Entity<ProductCategory>()
+                .HasData(ProductCategorySeed.ProductCategories);
+
             base.OnModelCreating(modelBuilder);
         }
 

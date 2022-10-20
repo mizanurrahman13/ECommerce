@@ -16,14 +16,14 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var model = _scope.Resolve<DashboardModel>();
+            var model = _lifetimeScope.Resolve<DashboardModel>();
 
             return View(model);
         }
 
         public async Task<JsonResult> GetCategories()
         {
-            var model = _scope.Resolve<CategoryListModel>();
+            var model = _lifetimeScope.Resolve<CategoryListModel>();
             var dataTableModel = new DataTablesAjaxRequestModel(Request);
             var list = await model.GetCategoryAsync(dataTableModel);
 
@@ -33,7 +33,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = _scope.Resolve<CategoryCreateModel>();
+            var model = _lifetimeScope.Resolve<CategoryCreateModel>();
 
             return View(model);
         }
@@ -44,7 +44,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         {
             try
             {
-                model.Resolve(_scope);
+                model.Resolve(_lifetimeScope);
 
                 if (model.ImageUrl == null)
                 {
@@ -81,7 +81,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = _scope.Resolve<CategoryEditModel>();
+            var model = _lifetimeScope.Resolve<CategoryEditModel>();
             try
             {
                 if (id == Guid.Empty)
@@ -102,7 +102,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CategoryEditModel model)
         {
-            model.Resolve(_scope);
+            model.Resolve(_lifetimeScope);
             try
             {
                 if (!ModelState.IsValid)
@@ -129,7 +129,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         [HttpPost]
         public object CategoryDelete(string id)
         {
-            var model = _scope.Resolve<CategoryListModel>();
+            var model = _lifetimeScope.Resolve<CategoryListModel>();
             try
             {
                 model.Delete(new Guid(id));
@@ -147,11 +147,25 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         public JsonResult ImageByCategoryId(Guid categoryId)
         {
             var model = new CategoryImageModel();
-            model.Resolve(_scope);
+            model.Resolve(_lifetimeScope);
 
             var result = model.GetImageByCategoryId(categoryId);
 
             return Json(result);
+        }
+
+        //public JsonResult GetAllCategories()
+        //{
+        //    var model = _lifetimeScope.Resolve<CategoryListModel>();
+
+        //    return Json(model.GetAllAsync());
+        //}
+
+        public JsonResult GetAllCategories()
+        {
+            var model = _lifetimeScope.Resolve<CategoryListModel>();
+
+            return Json(model.GetAll());
         }
     }
 }

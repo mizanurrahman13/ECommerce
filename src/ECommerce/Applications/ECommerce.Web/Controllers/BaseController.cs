@@ -9,13 +9,13 @@ namespace ECommerce.Web.Controllers
     public class BaseController<T> : Controller where T : Controller
     {
         protected readonly ILogger<T> _logger;
-        protected readonly ILifetimeScope _scope;
+        protected readonly ILifetimeScope _lifetimeScope;
 
         public BaseController(ILogger<T> logger,
             ILifetimeScope scope)
         {
             _logger = logger;
-            _scope = scope;
+            _lifetimeScope = scope;
         }
 
         protected virtual void ViewResponse(string message, ResponseTypes type)

@@ -14,7 +14,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var model = _scope.Resolve<DashboardModel>();
+            var model = _lifetimeScope.Resolve<DashboardModel>();
             return View(model);
         }
     }

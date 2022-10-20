@@ -16,5 +16,8 @@ namespace ECommerce.Infrastructure.Services
         Task<List<Category>> GetCategoriesAsync(Guid? id);
         void DeleteCategory(Guid id);
         Category GetCategoryImageById(Guid Id);
+        Category GetCategoryById(Guid id);
+        Task<IList<Category>> GetAllAsync();
+        IList<Category> GetAll();
     }
 }

@@ -62,6 +62,17 @@ namespace ECommerce.Infrastructure.Services
             return category;
         }
 
+        public CategoryBO GetCategoryById(Guid id)
+        {
+            var categoryEntity = _ecommerceUnitOfWork.Categories.GetById(id);
+
+            if (categoryEntity is null)
+                throw new InvalidOperationException("Category with this id not found");
+
+            var category = _mapper.Map<CategoryBO>(categoryEntity);
+            return category;
+        }
+
         public async Task UpdateCategoryAsync(CategoryBO category)
         {
             if (category is null)
@@ -109,6 +120,34 @@ namespace ECommerce.Infrastructure.Services
 
             var category = _mapper.Map<CategoryBO>(result);
             return category;
+        }
+
+        public async Task<IList<CategoryBO>> GetAllAsync()
+        {
+            var categoryEntities = await _ecommerceUnitOfWork.Categories.GetAllAsync();
+
+            List<CategoryBO> categories = new List<CategoryBO>();
+
+            foreach (CategoryEntity entity in categoryEntities)
+            {
+                categories.Add(_mapper.Map<CategoryBO>(entity));
+            }
+
+            return categories;
+        }
+
+        public IList<CategoryBO> GetAll()
+        {
+            var categoryEntities = _ecommerceUnitOfWork.Categories.GetAll();
+
+            List<CategoryBO> categories = new List<CategoryBO>();
+
+            foreach (CategoryEntity entity in categoryEntities)
+            {
+                categories.Add(_mapper.Map<CategoryBO>(entity));
+            }
+
+            return categories;
         }
     }
 }
