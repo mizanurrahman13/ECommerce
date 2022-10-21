@@ -44,6 +44,12 @@ namespace ECommerce.Web
             builder.RegisterType<ProductCreateModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<ProductEditModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductImageModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

@@ -1,7 +1,7 @@
-@model ProductCreateModel
+﻿@model ProductEditModel
 @{
-    ViewData["Title"] = "Create Product";
-    ViewData["PageNav"] = "Create Product Page";
+    ViewData["Title"] = "Edit Product";
+    ViewData["PageNav"] = "Edit Product";   
 }
 
 @section Styles{
@@ -18,9 +18,9 @@
 
 }
 
-<form role="form" asp-controller="Product" asp-action="Create" method="post" asp-antiforgery="true">
+<form role="form" asp-controller="Product" asp-action="Edit" method="post" asp-antiforgery="true">
     <div class="container-fluid">
-        <div class="row">
+        <dv class="row">
             <!-- left column -->
             <div class="col-md-8">
                 <!-- general form elements -->
@@ -28,6 +28,7 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
                         <div class="form-group">
                             <label asp-for="Name">Product Name</label>
                             <input type="text" class="form-control" asp-for="Name" id="Name">
@@ -96,45 +97,19 @@
                     </div>
                     <!-- /.card-body -->
                 </div>
-
-
-                <div class="card">
-                    <!-- form start -->
-                    <div class="card-body">
-                        <h5>Product Categories</h5>
-                        <input name='categories-list-tags' value='Mango, Apple'>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-
-                @* <div class="card">
-                    <!-- form start -->
-
-                    <div class="card-body">
-                    <h5>Product Stock</h5>
-                    <label asp-for="StockQuantity"/>
-                    <input type="number" class="form-control" 
-                    asp-for="StockQuantity" />
-
-                    </div>
-                    <!--/.card-body-->
-                    </div>*@
-
-
-            </div>
-            <!-- /.card-body -->
+                   
             <!-- /Hidden Fields -->
-            @Html.HiddenFor(m => m.ImageUrlsParam)
-            @Html.HiddenFor(m => m.CategoriesId)
                     
-
+            @Html.HiddenFor(m => m.ImageUrlsParam)
+                
             <div class="card-footer col-md-12">
                 <a asp-action="Index" asp-controller="Product" asp-area="Admin" class="btn btn-default">Cancel</a>
-                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
 </form>
+
 
 @section Scripts
 {
@@ -159,66 +134,67 @@ $('#summernote').summernote({
     height: 238
 
 });
+//Dropzone Start
 var images = [];
-
+var deletedImages = [];
+var imageParam = $("#ImageUrlsParam");
+//$("div#myId").dropzone({
+//   url: "/Admin/Category/ImageUploader"
+// });
 Dropzone.autoDiscover = false;
 var myDropzone = new Dropzone("div#productImages", {
     url: "/Admin/Image/ImageUploader",
     maxFiles: 10,
     addRemoveLinks: true,
     init: function() {
-        //will be implemented later
+        var drop_zone = this;
+        let productId = $("#Id").val();
+        $.ajax({
+            type: 'POST',
+            url: "/Admin/Product/ImageByProductId",
+            data: {productId:  productId},
+            success: function(data){
+                //console.log(data);
+                data.map((c)=>{
+                    let serverFile = {
+                            name: c.url,
+                            size: c.size
+                    };
+                    drop_zone.emit("addedfile", serverFile);
+                    drop_zone.emit("thumbnail", serverFile, "https://localhost:7293/admin/image?url=" + c.url + "&w=75&h=75");
+                    images.push(c.url);
+                    imageParam.val(images);
+                });
+            }
+        });
+
     },
     success(file, message) {
         if(message.code == 200)
         {
-            $("#ImageUrlsParam").val("");
+            imageParam.val("");
             images.push(message.path);
-            $("#ImageUrlsParam").val(images);
-
-            toastr["success"]("File Uploaded Successfully!")
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
+            imageParam.val(images);
         }
 
-        console.log("success file", file);
     },
     removedfile: function(file) {
-            var fileName = "Files\\" + file.name;
+            var fileName = file.name;
             $.ajax({
             type: 'POST',
             url: "/Admin/Image/DeleteImage",
             data: {path: fileName},
             success: function(data,message){
-                             
-                console.log(images);
-                console.log( data);
-                console.log(data.deletedImage);
                 let imageIndex = images.indexOf(data.deletedImage);
                 console.log("imageIndex", imageIndex);
                 if(imageIndex >= 0)
                 {
                     images.splice(imageIndex, 1);
-                               
-                    $("#ImageUrlsParam").val("");
-                         
-                    $("#ImageUrlsParam").val(images);
+                    imageParam.val("");
+                    imageParam.val(images);
+                    console.log("images", images, "imageParam", imageParam);
                 }
+                               
             }
         });
 
@@ -229,124 +205,18 @@ var myDropzone = new Dropzone("div#productImages", {
 
 });
 
-// initialize Tagify on the above input node reference
-let dataFromAjax = new Promise((resolve, reject) => {
-    let data = $.post("/Admin/Category/GetAllCategories",
-        function (result) {
-            let x = result.map((c, i) => {
-                c.value = i + 1;
-                c.avatar = c.imageUrl;
-                delete c.imageUrl;
-                return c;
-            });
-            resolve(data);
-            reject("Not Found");
-        });
-});
-
-dataFromAjax.then((res) => {
-
-    let categoryData = res;
-
-    var inputElm = document.querySelector('input[name=categories-list-tags]');
-
-    function tagTemplate(tagData) {
-        return `
-            <tag title="${tagData.name}"
-                    contenteditable='false'
-                    spellcheck='false'
-                    tabIndex="-1"
-                    class="tagify__tag ${tagData.class ? tagData.class : ""}"
-                    ${this.getAttributes(tagData)}>
-                <x title='' class='tagify__tag__removeBtn' role='button'
-                aria-label='remove tag'></x>
-                <div>
-                    <div class='tagify__tag__avatar-wrap'>
-                        <img onerror="this.style.visibility='hidden'"
-                        src="${tagData.avatar}">
-                    </div>
-                    <span class='tagify__tag-text'>${tagData.name}</span>
-                </div>
-            </tag>
-        `
-    }
-
-    function suggestionItemTemplate(tagData) {
-        return `
-            <div ${this.getAttributes(tagData)}
-                class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
-                tabindex="0"
-                role="option">
-                ${tagData.avatar ? `
-                <div class='tagify__dropdown__item__avatar-wrap'>
-                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-                </div>` : ''
-            }
-                <strong>${tagData.name}</strong>
-            </div>
-        `
-    }
-
-    var tagify = new Tagify(inputElm, {
-        tagTextProp: 'name',
-        enforceWhitelist: true,
-        skipInvalid: true,
-        dropdown: {
-            closeOnSelect: false,
-            enabled: 0,
-            classname: 'categories-list',
-            searchKeys: ['name']
-        },
-        templates: {
-            tag: tagTemplate,
-            dropdownItem: suggestionItemTemplate
-        },
-        whitelist: categoryData
-
-
-    })
-
-    // listen to dropdown suggestion items selection
-    tagify.on('dropdown:select', onSelect)
-    tagify.on('remove', onSelect)
-
-    var ids = [];
-
-    function onSelect(e) {
-        console.log("this e", e)
-        var id = e.detail.data.id;
-
-        //filtering ids if removed
-
-        if (e.type == "remove") {
-            ids = ids.filter(item => item !== id);
-            console.log(ids);
-            $("#CategoriesId").val("");
-            $("#CategoriesId").val(ids);
-        }
-
-        //adding ids if added
-
-        else {
-            $("#CategoriesId").val("");
-            ids.push(id);
-            $("#CategoriesId").val(ids);
-        }
-        console.log(ids);
-    }
-
-    function onRemove(e) {
-        console.log("Removing item", e)
-
-    }     
-});
-
 </script>
+
 <script>
-    var msg = '@TempData["message"]';
+    var msg = '@TempData["Message"]';
     if (msg.length) {
        toastr.error(msg);
     }
 </script>
-
 }
+
+
+
+
+
+

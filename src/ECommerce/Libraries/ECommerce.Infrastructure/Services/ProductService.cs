@@ -22,7 +22,7 @@ namespace ECommerce.Infrastructure.Services
         }
         public async Task CreateProduct(ProductBO product)
         {
-            var count = await _ecommerceUnitOfWork.Categories.GetCountAsync(x => x.Name == product.Name);
+            var count = await _ecommerceUnitOfWork.Products.GetCountAsync(x => x.Name == product.Name);
 
             if (count == 0)
             {
@@ -77,6 +77,59 @@ namespace ECommerce.Infrastructure.Services
             }
 
             return (result.total, result.totalDisplay, products);
+        }
+
+        public async Task<ProductBO> GetProductByIdAsync(Guid id)
+        {
+            var productEntity = await _ecommerceUnitOfWork.Products.GetByIdAsync(id);
+
+            if (productEntity is null)
+                throw new InvalidOperationException("Product with this id not found");
+
+            var product = _mapper.Map<ProductBO>(productEntity);
+            return product;
+        }
+
+        public ProductBO GetProductById(Guid id)
+        {
+            var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            if (productEntity is null)
+                throw new InvalidOperationException("Product with this id not found");
+
+            var product = _mapper.Map<ProductBO>(productEntity);
+            return product;
+        }
+
+        public async Task UpdateProductAsync(ProductBO product)
+        {
+            if (product is null)
+                throw new InvalidOperationException("Product must be provided to update item");
+
+            var count = await _ecommerceUnitOfWork.Products.IsProductAlreadyExists(product);
+
+            if (count != 0)
+                throw new InvalidOperationException("Product name already exists");
+
+            var productEntity = _ecommerceUnitOfWork.Products.Get(x => x.Id.Equals(product.Id),
+                                    "ProductImages").FirstOrDefault();
+            productEntity.ProductImages = null;
+            productEntity = _mapper.Map(product, productEntity);
+
+            productEntity.CreatedBy = await _currentUserService.GetUsername();
+            productEntity.UpdatedBy = await _currentUserService.GetUsername();
+
+            await _ecommerceUnitOfWork.SaveAsync();
+        }
+
+        public ProductBO GetProductImageById(Guid Id)
+        {
+            var result = _ecommerceUnitOfWork.
+                 Products.Get(x => x.Id.Equals(Id),
+                 "ProductImages").FirstOrDefault();
+
+            var product = _mapper.Map<ProductBO>(result);
+            return product;
         }
     }
 }

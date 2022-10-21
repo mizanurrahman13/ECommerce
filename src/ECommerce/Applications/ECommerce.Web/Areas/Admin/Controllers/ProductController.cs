@@ -99,5 +99,83 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
             return View(model);            
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = _lifetimeScope.Resolve<ProductEditModel>();
+            try
+            {
+                if (id == Guid.Empty)
+                    throw new InvalidOperationException("Id must be provided to get product");
+
+                await model.GetProduct(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductEditModel model)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                model.Resolve(_lifetimeScope);
+
+                try
+                {
+                    var imageUrls = model?.ImageUrlsParam?.Split(",");
+                    List<string> validImages = new List<string>();
+                    if (imageUrls == null)
+                    {
+                        validImages.Add("Files/NoImageFound.png");
+                    }
+                    else
+                    {
+                        foreach (var imageUrl in imageUrls)
+                        {
+                            string filePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                                               imageUrl);
+                            var validPath = imageUrl.Replace("\\", "/");
+                            if (validPath != "Files/NoImageFound.png")
+                                validImages.Add(validPath);
+                        }
+                    }
+                    await model?.UpdateProductAsync(validImages);
+                    TempData["message"] = $"{model?.Name} is successfully updated ";
+                    return RedirectToAction("Index");
+                }
+                catch (DuplicateException ioe)
+                {
+                    _logger.LogError(ioe, ioe.Message);
+
+                    TempData["message"] = ioe.Message;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    TempData["message"] = "Product could not be updated due to some error";
+                }
+            }
+
+            return View(model);
+        }
+
+        public JsonResult ImageByProductId(Guid productId)
+        {
+            var model = new ProductImageModel();
+            model.Resolve(_lifetimeScope);
+
+            var result = model.GetImagesByProductId(productId);
+
+            return Json(result);
+        }
     }
 }

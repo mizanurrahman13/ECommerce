@@ -14,6 +14,7 @@ namespace ECommerce.Web.Profiles
             CreateMap<RegisterModel, ApplicationUser>().ReverseMap();
             CreateMap<ApplicationUser, UserBasicInfoDto>().ReverseMap();
             CreateMap<CategoryCreateModel, Category>().ReverseMap();
+            //CreateMap<ProductEditModel, Product>().ReverseMap();
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using DevSkill.Data;
-
-namespace ECommerce.Infrastructure.Entities
+﻿namespace ECommerce.Infrastructure.BusinessObjects
 {
-    public class ProductImage : IAuditable, IEntity<Guid>
+    public class ProductImage
     {
         public Guid Id { get; set; }
         public string? Url { get; set; }
@@ -13,6 +11,6 @@ namespace ECommerce.Infrastructure.Entities
         public string? UpdatedBy { get; set; }
 
         public Guid ProductId { get; set; }
-        public Product? Product { get; set; }        
+        public Product? Product { get; set; }
     }
 }

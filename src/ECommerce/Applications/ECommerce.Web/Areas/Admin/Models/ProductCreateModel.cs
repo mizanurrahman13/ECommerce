@@ -8,6 +8,7 @@ using ECommerce.Membership.Services;
 using System.ComponentModel.DataAnnotations;
 using ProductCategoryBO = ECommerce.Infrastructure.BusinessObjects.ProductCategory;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
+using ProductImageBO = ECommerce.Infrastructure.BusinessObjects.ProductImage;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -32,7 +33,7 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public string? CategoriesId { get; set; }
 
-        public List<ProductImage>? ProductImages { get; set; }
+        public List<ProductImageBO>? ProductImages { get; set; }
 
         public bool ActiveStatus { get; set; }
         public List<ProductCategoryBO>? ProductCategories { get; set; }
@@ -75,11 +76,11 @@ namespace ECommerce.Web.Areas.Admin.Models
             else
                 product.ActiveStatus = false;
 
-            product.ProductImages = new List<ProductImage>();
+            product.ProductImages = new List<ProductImageBO>();
             product.ProductCategories = new List<ProductCategoryBO>();
             foreach (var images in imageUrls)
             {
-                product.ProductImages?.Add(new ProductImage
+                product.ProductImages?.Add(new ProductImageBO
                 {
                     Url = images,
                 });

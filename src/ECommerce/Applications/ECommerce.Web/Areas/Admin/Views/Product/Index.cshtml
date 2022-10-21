@@ -173,15 +173,6 @@ function redirectToProduct(row) {
 
 <script>
 function GetProductCategoryList(data) {
-    //var items=``;
-    //if(data.length==0 || data=='default'){
-    //    return `<span class="badge badge-danger">No Category Assigned</span>`
-    //}
-    //var products = data.split(',');
-    //products.forEach((x)=>{
-    //    items+=`<span class="badge badge-success m-2"> ${x} </span>`;
-    //});
-    //return items;
 
     var items = ``;
 
@@ -371,7 +362,7 @@ function actionDropDown(data, type, row) {
 </script>
 
 <script>
-    var msg = '@TempData["Msg"]';
+    var msg = '@TempData["message"]';
     if (msg.length) {
         alertify.success(msg);
     }

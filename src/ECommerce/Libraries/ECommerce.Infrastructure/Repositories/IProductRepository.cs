@@ -14,5 +14,6 @@ namespace ECommerce.Infrastructure.Repositories
             Expression<Func<ProductEntity, bool>> filter = null,
             string orderBy = null,
             string includeProperties = "", int pageIndex = 1, int pageSize = 10, bool isTrackingOff = false);
+        Task<IList<ProductEntity>> GetAsync(Expression<Func<ProductEntity, bool>> filter, string includeProperties = "");
     }
 }

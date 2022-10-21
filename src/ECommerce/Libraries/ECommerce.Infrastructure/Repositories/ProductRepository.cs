@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
+using System.Linq;
 
 namespace ECommerce.Infrastructure.Repositories
 {
@@ -36,6 +37,25 @@ namespace ECommerce.Infrastructure.Repositories
             }
 
             return query.ToList();
+        }
+
+        public virtual async Task<IList<Product>> GetAsync(Expression<Func<Product, bool>> filter, string includeProperties = "")
+        {
+            IQueryable<Product> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            //return query.ToList();
+            return await EntityFrameworkQueryableExtensions.ToListAsync(query);
         }
 
         public virtual (IList<Product> data, int total, int totalDisplay) GetDynamic(

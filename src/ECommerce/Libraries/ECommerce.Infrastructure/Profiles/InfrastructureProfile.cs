@@ -3,6 +3,7 @@ using ECommerce.Infrastructure.BusinessObjects;
 using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
 using ProductEntity = ECommerce.Infrastructure.Entities.Product;
 using ProductCategoryEntity = ECommerce.Infrastructure.Entities.ProductCategory;
+using ProductImageEntity = ECommerce.Infrastructure.Entities.ProductImage;
 
 namespace ECommerce.Infrastructure.Profiles
 {
@@ -13,6 +14,7 @@ namespace ECommerce.Infrastructure.Profiles
             CreateMap<CategoryEntity, Category>().ReverseMap();
             CreateMap<ProductEntity, Product>().ReverseMap();
             CreateMap<ProductCategoryEntity, ProductCategory>().ReverseMap();
+            CreateMap<ProductImageEntity, ProductImage>().ReverseMap();
         }
     }
 }
