@@ -50,6 +50,12 @@ namespace ECommerce.Web
             builder.RegisterType<ProductImageModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<ProductVisibilityChangeModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductFeatureChangeModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

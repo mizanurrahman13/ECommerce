@@ -64,10 +64,13 @@ namespace ECommerce.Web.Areas.Admin.Models
             };
         }
 
-        public object GetProducts(DataTablesAjaxRequestModel model)
+        public object? GetProducts(DataTablesAjaxRequestModel model)
         {
-            var data = _productService!.GetActiveProducts(model.PageIndex, model.PageSize,
-                model.SearchText, model.GetSortText(new string[] { "Name", "UnitPrice" }));
+            var data = _productService!.GetActiveProducts(
+                model.PageIndex, 
+                model.PageSize,
+                model.SearchText, 
+                model.GetSortText(new string[] { "Name", "UnitPrice" }));
 
             return new
             {

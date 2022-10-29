@@ -131,5 +131,21 @@ namespace ECommerce.Infrastructure.Services
             var product = _mapper.Map<ProductBO>(result);
             return product;
         }
+
+        public void ChangeVisibility(Guid id)
+        {
+            var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            productEntity.ActiveStatus = (productEntity.ActiveStatus) ? false : true;
+            _ecommerceUnitOfWork.SaveAsync();
+        }
+
+        public void ChangeFeatureProperty(Guid id)
+        {
+            var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            productEntity.Featured = (productEntity.Featured) ? false : true;
+            _ecommerceUnitOfWork.SaveAsync();
+        }
     }
 }

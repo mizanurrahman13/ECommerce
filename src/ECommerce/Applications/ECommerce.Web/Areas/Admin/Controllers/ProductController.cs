@@ -177,5 +177,39 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public object ProductFeedVisibility(string id)
+        {
+            var model = _lifetimeScope.Resolve<ProductVisibilityChangeModel>();
+            try
+            {
+                model.ChangeVisibility(new Guid(id));
+                return new { Code = 200, Message = "Success" };
+            }
+            catch (Exception ioe)
+            {
+                _logger.LogError(ioe, ioe.Message);
+            }
+
+            return new { Code = 400, Message = "Unsuccessful" };
+        }
+
+        [HttpPost]
+        public object ProductFeatureAvailability(string id)
+        {
+            var model = _lifetimeScope.Resolve<ProductFeatureChangeModel>();
+            try
+            {
+                model.ChangeFeatureProperty(new Guid(id));
+                return new { Code = 200, Message = "Success" };
+            }
+            catch (Exception ioe)
+            {
+                _logger.LogError(ioe, ioe.Message);
+            }
+
+            return new { Code = 400, Message = "Unsuccessful" };
+        }
     }
 }

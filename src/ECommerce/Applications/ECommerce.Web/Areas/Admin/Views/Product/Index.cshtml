@@ -228,7 +228,7 @@ function featureProperty(data, type, row) {
     var productName = row[1];
     setRowIdFeature(id, value);
     return `<label class="custom-checkbox-feature">
-            <input id="feedId${id}" type="checkbox" hidden onclick="FeatureCheckBoxFunction('${id}', '${value}', '${productName}')">
+            <input id="feedId${id}" type="checkbox" onclick="FeatureCheckBoxFunction('${id}', '${value}', '${productName}')">
             <i id="feedIconId${id}" class="fa-solid fa-cloud-bolt fa-2xl"></i>
             </label>`;
 }
@@ -333,6 +333,55 @@ function FeatureCheckBoxFunction(id, value, productName) {
             });
     }
 }
+</script>
+<script>
+    function changeFeedAvailability(id, value, productName) {
+        $.ajax({
+            url: '@Url.Action("ProductFeedVisibility", "Product", "Admin")',
+            type: 'POST',
+            //dataType: 'json',
+            cache: false,
+            data: { 'id': id },
+            success: function (results) {
+                var message = "";
+                var checkboxId = "example_04" + id;;
+                if ($("#" + checkboxId).is(':checked')) {
+                    message = "published to the feed";
+                } else {
+                    message = "Unpublished from feed";
+                }
+                alertify.success("<strong>" + productName + "</strong> " + message);
+            },
+            error: function () {
+                alertify.defaults.glossary.title = 'Problem.!';
+                alertify.error('Error occured to perform this action.')
+            }
+        });
+    }
+
+    function changeFeatureAvailability(id, value, productName) {
+        $.ajax({
+            url: '@Url.Action("ProductFeatureAvailability", "Product", "Admin")',
+            type: 'POST',
+            //dataType: 'json',
+            cache: false,
+            data: { 'id': id },
+            success: function (results) {
+                var message = "";
+                var checkboxId = "feedId" + id;
+                if ($("#" + checkboxId).is(':checked')) {
+                    message = "added to the feature";
+                } else {
+                    message = "removed from feature";
+                }
+                alertify.success("<strong>" + productName + "</strong> " + message);
+            },
+            error: function () {
+                alertify.defaults.glossary.title = 'Problem.!';
+                alertify.error('Error occured to perform this action.')
+            }
+        });
+    }
 </script>
 
 <script>
