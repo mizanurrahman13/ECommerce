@@ -15,7 +15,7 @@ namespace ECommerce.Web.Areas.Admin.Models
         public TrashedProductListModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter,
             IHttpContextAccessor httpContextAccessor,
             IProductService productService,
-            ICategoryService categoryService, 
+            ICategoryService categoryService,
             IProductRestoreService productRestoreService,
             IMapper mapper)
             : base(userManagerAdapter, httpContextAccessor, mapper)
@@ -39,8 +39,8 @@ namespace ECommerce.Web.Areas.Admin.Models
                 recordsTotal = data.total,
                 recordsFiltered = data.totalDisplay,
                 data = (from productInfo in data.trashedProducts
-                    select new string[]
-                    {
+                        select new string[]
+                        {
                         (productInfo.ProductImages!=null)?
                             productInfo.ProductImages.Select(x => x.Url).FirstOrDefault().ToString():string.Empty,
                         productInfo.Name,
@@ -53,7 +53,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                         (productInfo!=null)?
                         _productRestoreService.GetTrashByProductId(productInfo.Id).TriggeredOn.ToString("F"):string.Empty,
                         productInfo.Id.ToString()
-                    }).ToArray()
+                        }).ToArray()
             };
         }
     }

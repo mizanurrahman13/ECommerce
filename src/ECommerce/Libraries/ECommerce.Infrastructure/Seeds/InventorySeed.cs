@@ -13,8 +13,8 @@ namespace ECommerce.Infrastructure.Seeds
                     new Inventory
                     {
                         Id = Guid.Parse("F23B443B-2185-4DD7-9952-8A91185E5244"),
-                        Quantity=23, 
-                        ProductId=Guid.Parse("7410BDFD-C2F1-4F29-B8B1-1321810CC9A9"),                        
+                        Quantity=23,
+                        ProductId=Guid.Parse("7410BDFD-C2F1-4F29-B8B1-1321810CC9A9"),
                         CreatedDate = DateTime.UtcNow,
                         CreatedBy = "Admin@gmail.com"
                     },

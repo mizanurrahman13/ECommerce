@@ -2,10 +2,9 @@
 using ECommerce.Infrastructure.DbContexts;
 using ECommerce.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
-using System.Linq;
 
 namespace ECommerce.Infrastructure.Repositories
 {

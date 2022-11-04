@@ -1,8 +1,8 @@
 ﻿using DevSkill.Data;
 using ECommerce.Infrastructure.DbContexts;
-using ProductEntity = ECommerce.Infrastructure.Entities.Product;
-using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
 using System.Linq.Expressions;
+using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
+using ProductEntity = ECommerce.Infrastructure.Entities.Product;
 
 namespace ECommerce.Infrastructure.Repositories
 {

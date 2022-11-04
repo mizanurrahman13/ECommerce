@@ -12,12 +12,12 @@ namespace ECommerce.Infrastructure.Seeds
                 {
                     new ProductCategory
                     {
-                        ProductId= Guid.Parse("7F6A2181-C381-4E6F-9C14-D9FC2C85B4F2"), 
+                        ProductId= Guid.Parse("7F6A2181-C381-4E6F-9C14-D9FC2C85B4F2"),
                         CategoryId= Guid.Parse("7A61CF49-D11A-494D-95CA-C649ED215773")
                     },
                     new ProductCategory
                     {
-                        ProductId= Guid.Parse("7F6A2181-C381-4E6F-9C14-D9FC2C85B4F2"), 
+                        ProductId= Guid.Parse("7F6A2181-C381-4E6F-9C14-D9FC2C85B4F2"),
                         CategoryId=Guid.Parse("D6DCF59A-0CF7-4C22-AFF5-38CD0223ACA0")
                     },
                     new ProductCategory

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using ECommerce.Infrastructure.BusinessObjects;
 using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
-using ProductEntity = ECommerce.Infrastructure.Entities.Product;
 using ProductCategoryEntity = ECommerce.Infrastructure.Entities.ProductCategory;
-using ProductImageEntity = ECommerce.Infrastructure.Entities.ProductImage;
 using ProductDeleteEntity = ECommerce.Infrastructure.Entities.ProductDelete;
+using ProductEntity = ECommerce.Infrastructure.Entities.Product;
+using ProductImageEntity = ECommerce.Infrastructure.Entities.ProductImage;
 
 namespace ECommerce.Infrastructure.Profiles
 {

@@ -11,7 +11,7 @@ namespace ECommerce.Web.Models
     public abstract class BaseModel
     {
         protected IUserManagerAdapter<ApplicationUser>? _userManagerAdapter;
-        protected IHttpContextAccessor? _httpContextAccessor;        
+        protected IHttpContextAccessor? _httpContextAccessor;
         protected ILifetimeScope? _scope;
         protected IMapper? _mapper;
         protected ResponseModel _responseModel;
@@ -35,8 +35,8 @@ namespace ECommerce.Web.Models
 
         }
 
-        public BaseModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter, 
-            IHttpContextAccessor httpContextAccessor, 
+        public BaseModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter,
+            IHttpContextAccessor httpContextAccessor,
             IMapper mapper)
         {
             _userManagerAdapter = userManagerAdapter;

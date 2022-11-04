@@ -4,7 +4,6 @@ using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.UnitOfWorks;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
 using ProductEntity = ECommerce.Infrastructure.Entities.Product;
-using ProductImageBO = ECommerce.Infrastructure.BusinessObjects.ProductImage;
 
 namespace ECommerce.Infrastructure.Services
 {

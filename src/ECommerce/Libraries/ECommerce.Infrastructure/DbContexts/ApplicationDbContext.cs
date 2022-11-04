@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ECommerce.Infrastructure.Entities;
 using ECommerce.Infrastructure.Entities.Membership;
 using ECommerce.Infrastructure.Seeds;
-using ECommerce.Infrastructure.Entities;
-using System.Reflection.Emit;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.DbContexts
 {
@@ -24,7 +23,7 @@ namespace ECommerce.Infrastructure.DbContexts
             _connectionString = connectionString;
             _migrationAssemblyName = migrationAssemblyName;
         }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
             if (!dbContextOptionsBuilder.IsConfigured)

@@ -11,8 +11,8 @@ namespace ECommerce.Web.Models
 
         }
 
-        public PublicLayoutModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter, 
-            IHttpContextAccessor httpContextAccessor, 
+        public PublicLayoutModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter,
+            IHttpContextAccessor httpContextAccessor,
             IMapper mapper)
             : base(userManagerAdapter, httpContextAccessor, mapper)
         {

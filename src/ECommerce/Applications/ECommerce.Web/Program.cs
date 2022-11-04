@@ -1,24 +1,24 @@
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using DevSkill.Http.Emails;
+using DevSkill.Http.Emails.BusinessObjects;
+using DevSkill.Http.Emails.Contexts;
+using ECommerce.Infrastructure;
+using ECommerce.Infrastructure.DbContexts;
+using ECommerce.Infrastructure.Entities.Membership;
+using ECommerce.Infrastructure.Profiles;
+using ECommerce.Infrastructure.Seeds;
+using ECommerce.Membership;
+using ECommerce.Membership.Profiles;
+using ECommerce.Membership.Services;
+using ECommerce.Web;
+using ECommerce.Web.Areas.Admin.Profiles;
+using ECommerce.Web.Profiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
-using ECommerce.Web;
 using System.Reflection;
-using ECommerce.Infrastructure.DbContexts;
-using DevSkill.Http.Emails.Contexts;
-using ECommerce.Infrastructure.Entities.Membership;
-using ECommerce.Membership.Services;
-using DevSkill.Http.Emails;
-using ECommerce.Infrastructure;
-using ECommerce.Membership;
-using ECommerce.Infrastructure.Seeds;
-using ECommerce.Web.Profiles;
-using ECommerce.Infrastructure.Profiles;
-using ECommerce.Membership.Profiles;
-using DevSkill.Http.Emails.BusinessObjects;
-using ECommerce.Web.Areas.Admin.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +38,8 @@ builder.Host.UseSerilog((ctx, lc) => lc
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 var webHostEnvironment = builder.Environment;
 
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => {
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
     containerBuilder.RegisterModule(new WebModule());
     containerBuilder.RegisterModule(new InfrastructureModule(connectionString, assemblyName, webHostEnvironment));
     containerBuilder.RegisterModule(new MembershipModule(connectionString, assemblyName));

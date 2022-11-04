@@ -19,8 +19,8 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         }
 
-        public ProductImageModel(IProductService productService, 
-            IMapper mapper, 
+        public ProductImageModel(IProductService productService,
+            IMapper mapper,
             IWebHostEnvironment webHostEnvironment)
         {
             _productService = productService;

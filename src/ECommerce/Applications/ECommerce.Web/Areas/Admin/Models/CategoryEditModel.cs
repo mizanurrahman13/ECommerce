@@ -1,11 +1,10 @@
 ﻿using Autofac;
 using AutoMapper;
+using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
+using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
 using System.ComponentModel.DataAnnotations;
-using ECommerce.Membership.BusinessObjects;
-using ECommerce.Infrastructure.BusinessObjects;
-using System.ComponentModel.Design;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {

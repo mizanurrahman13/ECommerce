@@ -5,7 +5,7 @@ namespace ECommerce.Infrastructure.Services
     public interface ICategoryService
     {
         Task CreateCategory(Category category);
-        Task<(int total, int displayTotal, IList<Category> records)> 
+        Task<(int total, int displayTotal, IList<Category> records)>
             GetCategoryAsync(int pageIndex,
             int pageSize,
             string searchText,

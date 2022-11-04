@@ -1,13 +1,11 @@
 ﻿using Autofac;
 using AutoMapper;
-using ECommerce.Infrastructure.BusinessObjects;
-using ECommerce.Infrastructure.Entities;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
 using System.ComponentModel.DataAnnotations;
-using ProductCategoryBO = ECommerce.Infrastructure.BusinessObjects.ProductCategory;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
+using ProductCategoryBO = ECommerce.Infrastructure.BusinessObjects.ProductCategory;
 using ProductImageBO = ECommerce.Infrastructure.BusinessObjects.ProductImage;
 
 namespace ECommerce.Web.Areas.Admin.Models
@@ -102,7 +100,6 @@ namespace ECommerce.Web.Areas.Admin.Models
                         CategoryId = new Guid(id)
                     });
                 }
-
             }
 
             if (product.DiscountedPrice > product.UnitPrice)

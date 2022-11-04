@@ -11,7 +11,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
     {
         private IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(ILogger<ProductController> logger, 
+        public ProductController(ILogger<ProductController> logger,
             ILifetimeScope scope,
             IWebHostEnvironment webHostEnvironment)
         : base(logger, scope)
@@ -95,7 +95,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                 }
             }
 
-            return View(model);            
+            return View(model);
         }
 
         [HttpGet]
@@ -274,7 +274,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
                 return new { Code = 200, Message = "Success" };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }

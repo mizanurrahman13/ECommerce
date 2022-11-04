@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ECommerce.Web.Models;
+using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.DTOs;
 using ECommerce.Web.Areas.Admin.Models;
-using ECommerce.Infrastructure.BusinessObjects;
+using ECommerce.Web.Models;
 
 namespace ECommerce.Web.Profiles
 {

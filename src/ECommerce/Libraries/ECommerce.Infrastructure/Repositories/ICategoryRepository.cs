@@ -1,8 +1,8 @@
 ﻿using DevSkill.Data;
 using ECommerce.Infrastructure.DbContexts;
-using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
-using CategoryBO = ECommerce.Infrastructure.BusinessObjects.Category;
 using System.Linq.Expressions;
+using CategoryBO = ECommerce.Infrastructure.BusinessObjects.Category;
+using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
 
 namespace ECommerce.Infrastructure.Repositories
 {

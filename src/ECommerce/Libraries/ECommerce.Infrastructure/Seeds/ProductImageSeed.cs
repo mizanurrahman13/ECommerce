@@ -18,7 +18,7 @@ namespace ECommerce.Infrastructure.Seeds
                         CreatedDate=DateTime.Now,
                         UpdatedDate=DateTime.Now,
                         CreatedBy="admin@gmail.com",
-                        UpdatedBy="admin@gmail.com"                        
+                        UpdatedBy="admin@gmail.com"
                     },
                     new ProductImage
                     {

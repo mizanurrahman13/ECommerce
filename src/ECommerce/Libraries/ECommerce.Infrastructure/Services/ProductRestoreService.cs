@@ -10,7 +10,7 @@ namespace ECommerce.Infrastructure.Services
         private readonly IECommerceUnitOfWork _eCommerceUnitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductRestoreService(IECommerceUnitOfWork eCommerceUnitOfWork, 
+        public ProductRestoreService(IECommerceUnitOfWork eCommerceUnitOfWork,
             IMapper mapper)
         {
             _eCommerceUnitOfWork = eCommerceUnitOfWork;
@@ -47,7 +47,7 @@ namespace ECommerce.Infrastructure.Services
             var trasedProduct = new List<ProductDelete>();
             foreach (var entity in entities)
                 trasedProduct.Add(_mapper.Map<ProductDelete>(entity));
-            
+
             return trasedProduct;
         }
     }

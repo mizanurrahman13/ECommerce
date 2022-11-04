@@ -1,5 +1,4 @@
 ﻿using DevSkill.Core.Utilities;
-using ECommerce.Infrastructure.Entities;
 
 namespace ECommerce.Infrastructure.BusinessObjects
 {
