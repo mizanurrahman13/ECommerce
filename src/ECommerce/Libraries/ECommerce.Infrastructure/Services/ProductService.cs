@@ -191,5 +191,11 @@ namespace ECommerce.Infrastructure.Services
 
             return (result.total, result.totalDisplay, trashedProducts);
         }
+
+        public void DeleteProduct(Guid id)
+        {
+            _ecommerceUnitOfWork.Products.Remove(id);
+            _ecommerceUnitOfWork.Save();
+        }
     }
 }

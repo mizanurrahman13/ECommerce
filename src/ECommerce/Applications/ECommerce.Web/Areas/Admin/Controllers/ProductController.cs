@@ -2,9 +2,7 @@
 using DevSkill.Http.Utilities;
 using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Web.Areas.Admin.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace ECommerce.Web.Areas.Admin.Controllers
 {
@@ -114,6 +112,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+
                 return RedirectToAction("Index");
             }
 
@@ -150,6 +149,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                     }
                     await model?.UpdateProductAsync(validImages);
                     TempData["message"] = $"{model?.Name} is successfully updated ";
+
                     return RedirectToAction("Index");
                 }
                 catch (DuplicateException ioe)
@@ -185,6 +185,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             try
             {
                 model.ChangeVisibility(new Guid(id));
+
                 return new { Code = 200, Message = "Success" };
             }
             catch (Exception ioe)
@@ -202,6 +203,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             try
             {
                 model.ChangeFeatureProperty(new Guid(id));
+
                 return new { Code = 200, Message = "Success" };
             }
             catch (Exception ioe)
@@ -219,14 +221,15 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             try
             {
                 model.MakeTrash(new Guid(id));
+
                 return new { Code = 200, Message = "Success" };
             }
             catch (Exception ioe)
             {
                 _logger.LogError(ioe, ioe.Message);
             }
-            return new { Code = 400, Message = "Unsuccessful" };
 
+            return new { Code = 400, Message = "Unsuccessful" };
         }
 
         public IActionResult Trash()//for viewing deleted products
@@ -255,6 +258,25 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             catch (Exception ioe)
             {
                 _logger.LogError(ioe, ioe.Message);
+            }
+
+            return new { Code = 400, Message = "Unsuccessful" };
+        }
+
+        [HttpPost]
+        public object ForceDelete(string productId)
+        {
+            var model = _lifetimeScope.Resolve<ProductRestoreModel>();
+
+            try
+            {
+                model.ForceDelete(Guid.Parse(productId));
+
+                return new { Code = 200, Message = "Success" };
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
             }
 
             return new { Code = 400, Message = "Unsuccessful" };

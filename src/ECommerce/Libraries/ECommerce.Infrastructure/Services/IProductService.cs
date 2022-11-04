@@ -21,5 +21,6 @@ namespace ECommerce.Infrastructure.Services
         void ChangeFeatureProperty(Guid id);
         (int total, int totalDisplay, IList<Product> trashedProducts) GetTrashedProducts(
                     int pageIndex, int pageSize, string searchText, string orderBy);
+        void DeleteProduct(Guid id);
     }
 }

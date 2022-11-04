@@ -9,7 +9,6 @@ namespace ECommerce.Web.Areas.Admin.Models
 {
     public class ProductRestoreModel : AdminLayoutModel
     {
-
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
         public DateTime TriggeredOn { get; set; }
@@ -51,19 +50,7 @@ namespace ECommerce.Web.Areas.Admin.Models
             var product = _productService!.GetProductById(productId);
             product.Featured = false;//removed from feature
             product.ActiveStatus = false;//removed from feed
-            product.DeleteQueue = true;//moved to delete queue    
-
-            //product.ProductImages = new List<ProductImage>();
-
-            //IList<string> imageUrls = (IList<string>)product.ProductImages;
-
-            //foreach (var images in imageUrls)
-            //{
-            //    product.ProductImages?.Add(new ProductImage
-            //    {
-            //        Url = images,
-            //    });
-            //}
+            product.DeleteQueue = true;//moved to delete queue
 
             var trashedProduct = new ProductDelete();
             trashedProduct.ProductId = product.Id;//product id assigned
@@ -86,6 +73,15 @@ namespace ECommerce.Web.Areas.Admin.Models
 
             var trashedProduct = _productRestoreService.GetTrashByProductId(productId);
             _productRestoreService.Remove(trashedProduct.Id);//removed from trash table
+        }
+
+        public void ForceDelete(Guid productId)
+        {
+            var product = _productService!.GetProductById(productId);
+            var trashedProduct = _productRestoreService.GetTrashByProductId(productId);
+
+            _productService!.DeleteProduct(product.Id);
+            _productRestoreService.Remove(trashedProduct.Id);
         }
     }
 }
