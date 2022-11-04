@@ -89,36 +89,5 @@ namespace ECommerce.Web.Areas.Admin.Models
 
             await _productService!.UpdateProductAsync(product);
         }
-
-        //public void MapProduct(Product product)
-        //{
-        //    Id = product.Id;
-        //    Name = product.Name;
-        //    Description = product.Description;
-        //    UnitPrice = product.UnitPrice;
-        //    DiscountedPrice = product.DiscountedPrice;
-        //    ActiveStatus = product.ActiveStatus;
-        //    CreatedBy = product.CreatedBy;
-        //    CreatedDate = product.CreatedDate;
-        //    UpdatedBy = product.UpdatedBy;
-        //    UpdatedDate = product.UpdatedDate;
-        //}
-
-        //public Product MapProduct()
-        //{
-        //    var product = new Product();
-        //    Id = product.Id;
-        //    Name = product.Name;
-        //    Description = product.Description;
-        //    UnitPrice = product.UnitPrice;
-        //    DiscountedPrice = product.DiscountedPrice;
-        //    ActiveStatus = product.ActiveStatus;
-        //    CreatedBy = product.CreatedBy;
-        //    CreatedDate = product.CreatedDate;
-        //    UpdatedBy = product.UpdatedBy;
-        //    UpdatedDate = product.UpdatedDate;
-
-        //    return product;
-        //}
     }
 }

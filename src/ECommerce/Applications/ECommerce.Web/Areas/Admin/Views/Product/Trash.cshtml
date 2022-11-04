@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="~/alertifyjs/css/themes/default.min.css" />
 
 }
-
     
 <div class="card">
     <div class="card-header">
@@ -71,222 +70,218 @@
 
     <partial name="_ModalPartial" />
 </div>
-<!-- /.card -->
-        
+<!-- /.card -->        
 
-    @section Scripts
-    {
-    <!--Alertify.js-->
-    <!-- include the script -->
-    <script src="~/alertifyjs/alertify.min.js"></script>
+@section Scripts
+{
+<!--Alertify.js-->
+<!-- include the script -->
+<script src="~/alertifyjs/alertify.min.js"></script>
 
 
-    <!-- DataTables -->
-    <script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="~/AdminLTE/plugins/select2/js/select2.min.js"></script>
+<!-- DataTables -->
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/select2/js/select2.min.js"></script>
 
-    <script>
-        $(function () {
-            $('#DeletedProductsDataTable').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "searching": false,
-                "ajax": {
-                    "url": "/Admin/Product/GetTrashedProducts",
-                    "dataType": 'json'
-                    //,
-                    //"data": {id: "C1457E73-ABC4-42A4-AF2F-CE7CA1C65FF1"}
-                },
-                "columnDefs": [
-                    {
-                        "orderable": false,
-                        "targets": 0,
-                        "render": function (data, type, row) {
-                            var productName = row[1];
-                            return `<img src="https://localhost:7293/admin/image?url=${data}&w=75&h=75" class="rounded"
-                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="${productName}" style="cursor: pointer;"/>`;
-                        }
-                    },
-                    {
-                        "orderable": true,
-                        "targets": 1,
-                        "render": function (data, type, row) {
-                            return `<h5 style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Restore to see details">${data}</h5>`;
-                        }
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 2,
-                        "render": function (data, type, row) {
-                            return GetProductCategoryList(data);
-                        }
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 3
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 4
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 5,
-                        "render": function (data, type, row) {
-                            return timer(data, type, row);
-                        }
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 6,
-                        "render": function (data, type, row) {
-                            return actionDropDown(data, type, row);
-                        }
+<script>
+    $(function () {
+        $('#DeletedProductsDataTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "searching": false,
+            "ajax": {
+                "url": "/Admin/Product/GetTrashedProducts",
+                "dataType": 'json'
+                //,
+                //"data": {id: "C1457E73-ABC4-42A4-AF2F-CE7CA1C65FF1"}
+            },
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": 0,
+                    "render": function (data, type, row) {
+                        var productName = row[1];
+                        return `<img src="https://localhost:7293/admin/image?url=${data}&w=75&h=75" class="rounded"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="${productName}" style="cursor: pointer;"/>`;
                     }
-                ]
-            });
-        });
-    </script>
-    <script>
-
-
-        function timer(data, type, row) {
-            var triggeredTime = data;
-            var productId = row[6];
-            var productName = row[1];
-            makeTimer(triggeredTime, productId, productName);
-            return `<div id="timer${productId}" class="row align-items-end" style="line-height: 1;
-                                                                    padding: 2px;
-                                                                    font-size: 30px;">
-                    <div id="hours${productId}" class="column text-center mr-1" style="font-size: 20px;
-                                                       color: #0B8D50;"></div>
-                    <div id="minutes${productId}" class="column text-center mr-1 ml-1" style="font-size: 20px;
-                                                         color: #E4A405;"></div>
-                    <div id="seconds${productId}" class="column text-center ml-1" style="font-size: 17px;
-                                                         color: #FF0000;"></div>
-                    </div>`;
-        }
-        function makeTimer(triggeredTime, productId, productName) {
-            setInterval(function () {
-                var endTime = new Date(new Date(triggeredTime).getTime() + (60 * 60 * 24 * 1000) + (60 * 60 * 6 * 1000));//Plus 6 hour for adjusting UTC +0
-
-                endTime = (Date.parse(endTime) / 1000);
-
-                var now = new Date();
-                now = (Date.parse(now) / 1000);
-
-                var timeLeft = endTime - now;
-
-                var days = Math.floor(timeLeft / 86400);
-                var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-                var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
-                var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
-
-                if (hours < "10") { hours = "0" + hours; }
-                if (minutes < "10") { minutes = "0" + minutes; }
-                if (seconds < "10") { seconds = "0" + seconds; }
-
-                $("#hours" + productId).html(hours + `<span style="display: block;
-                                                                         font-size: 10px;">Hours</span>`);
-                $("#minutes" + productId).html(minutes + `<span style="display: block;
-                                                                         font-size: 10px;">Minutes</span>`);
-                $("#seconds" + productId).html(seconds + `<span style="display: block;
-                                                                         font-size: 10px;">Seconds</span>`);
-
-                if (hours == 0 && minutes == 0 && seconds == 0) {
-                    forceDelete(productId, productName);
+                },
+                {
+                    "orderable": true,
+                    "targets": 1,
+                    "render": function (data, type, row) {
+                        return `<h5 style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Restore to see details">${data}</h5>`;
+                    }
+                },
+                {
+                    "orderable": false,
+                    "targets": 2,
+                    "render": function (data, type, row) {
+                        return GetProductCategoryList(data);
+                    }
+                },
+                {
+                    "orderable": false,
+                    "targets": 3
+                },
+                {
+                    "orderable": false,
+                    "targets": 4
+                },
+                {
+                    "orderable": false,
+                    "targets": 5,
+                    "render": function (data, type, row) {
+                        return timer(data, type, row);
+                    }
+                },
+                {
+                    "orderable": false,
+                    "targets": 6,
+                    "render": function (data, type, row) {
+                        return actionDropDown(data, type, row);
+                    }
                 }
+            ]
+        });
+    });
+</script>
+<script>
+    function timer(data, type, row) {
+        var triggeredTime = data;
+        var productId = row[6];
+        var productName = row[1];
+        makeTimer(triggeredTime, productId, productName);
+        return `<div id="timer${productId}" class="row align-items-end" style="line-height: 1;
+                                                                padding: 2px;
+                                                                font-size: 30px;">
+                <div id="hours${productId}" class="column text-center mr-1" style="font-size: 20px;
+                                                    color: #0B8D50;"></div>
+                <div id="minutes${productId}" class="column text-center mr-1 ml-1" style="font-size: 20px;
+                                                        color: #E4A405;"></div>
+                <div id="seconds${productId}" class="column text-center ml-1" style="font-size: 17px;
+                                                        color: #FF0000;"></div>
+                </div>`;
+    }
+    function makeTimer(triggeredTime, productId, productName) {
+        setInterval(function () {
+            var endTime = new Date(new Date(triggeredTime).getTime() + (60 * 60 * 24 * 1000) + (60 * 60 * 6 * 1000));//Plus 6 hour for adjusting UTC +0
 
-            }, 1000);
-        }
-    </script>
-    <script>
-        function GetProductCategoryList(data) {
-            var items = ``;
-            if (data.length == 0) {
-                return `<span class="badge badge-danger">No Category Assigned</span>`
+            endTime = (Date.parse(endTime) / 1000);
+
+            var now = new Date();
+            now = (Date.parse(now) / 1000);
+
+            var timeLeft = endTime - now;
+
+            var days = Math.floor(timeLeft / 86400);
+            var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+            var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
+            var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+            if (hours < "10") { hours = "0" + hours; }
+            if (minutes < "10") { minutes = "0" + minutes; }
+            if (seconds < "10") { seconds = "0" + seconds; }
+
+            $("#hours" + productId).html(hours + `<span style="display: block;
+                                                                        font-size: 10px;">Hours</span>`);
+            $("#minutes" + productId).html(minutes + `<span style="display: block;
+                                                                        font-size: 10px;">Minutes</span>`);
+            $("#seconds" + productId).html(seconds + `<span style="display: block;
+                                                                        font-size: 10px;">Seconds</span>`);
+
+            if (hours == 0 && minutes == 0 && seconds == 0) {
+                forceDelete(productId, productName);
             }
-            var products = data.split(',');
-            products.forEach((x) => {
-                items += `<span class="badge badge-success m-2"> ${x} </span>`;
-            });
-            return items;
-        }
-    </script>
-    <script>
-        function actionDropDown(data, type, row) {
-            var productName = row[1];
-            var productId = row[6];
-            return `<td class="text-center">
-                <div class="list-icons text-center">
-                    <div class="dropdown">
-                        <a href="#" class="list-icons-item" data-toggle="dropdown">
-                            <i class="icon-menu9"></i>
-                        </a>
 
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" onclick="restoreProduct('${productId}', '${productName}')" class="dropdown-item text-info">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                                <span class="ml-2">Restore Product</span>
-                            </a>
-                            <a href="#" onclick="deleteWarning('${productId}', '${productName}')" class="dropdown-item text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                                <span class="ml-2">Force Delete</span>
-                            </a>
-                        </div>
+        }, 1000);
+    }
+</script>
+<script>
+    function GetProductCategoryList(data) {
+        var items = ``;
+        if (data.length == 0) {
+            return `<span class="badge badge-danger">No Category Assigned</span>`
+        }
+        var products = data.split(',');
+        products.forEach((x) => {
+            items += `<span class="badge badge-success m-2"> ${x} </span>`;
+        });
+        return items;
+    }
+</script>
+<script>
+    function actionDropDown(data, type, row) {
+        var productName = row[1];
+        var productId = row[6];
+        return `<td class="text-center">
+            <div class="list-icons text-center">
+                <div class="dropdown">
+                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                        <i class="icon-menu9"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" onclick="restoreProduct('${productId}', '${productName}')" class="dropdown-item text-info">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span class="ml-2">Restore Product</span>
+                        </a>
+                        <a href="#" onclick="deleteWarning('${productId}', '${productName}')" class="dropdown-item text-danger">
+                            <i class="fa-solid fa-trash"></i>
+                            <span class="ml-2">Force Delete</span>
+                        </a>
                     </div>
                 </div>
-            </td>`;
-        }
-    </script>
-    <script>
-        function restoreProduct(productId, productName) {
-            console.log(productName);
-            $.ajax({
-                url: '@Url.Action("RestoreProduct", "Product", "Admin")',
-                type: 'POST',
-                cache: false,
-                data: { 'productId': productId },
-                success: function (results) {
-                    $('#DeletedProductsDataTable').DataTable().ajax.reload();
-                    alertify.success("<strong>" + productName + "</strong> " + " retored.");
-                },
-                error: function () {
-                    alertify.defaults.glossary.title = 'Problem.!';
-                    alertify.error('Error occured to perform this action.')
-                }
-            });
-        }
-    </script>
-    <script>
-        function forceDelete(productId, productName) {
-            $.ajax({
-                url: '@Url.Action("ForceDelete", "Product", "Admin")',
-                type: 'POST',
-                cache: false,
-                data: { 'productId': productId },
-                success: function (results) {
-                    $('#DeletedProductsDataTable').DataTable().ajax.reload();
-                    alertify.success("<strong>" + productName + "</strong> " + " permanently deleted.");
-                },
-                error: function () {
-                    alertify.defaults.glossary.title = 'Problem.!';
-                    alertify.error('Error occured to perform this action.')
-                }
-            });
-        }
-    </script>
-    <script>
-        function deleteWarning(productId, productName) {
-            alertify.confirm('Confirm Permanent Delete!', 'Do you want to permanently delete <strong>' + productName + '</strong> from trash?',
-            function () {
-                forceDelete(productId, productName);
+            </div>
+        </td>`;
+    }
+</script>
+<script>
+    function restoreProduct(productId, productName) {
+        console.log(productName);
+        $.ajax({
+            url: '@Url.Action("RestoreProduct", "Product", "Admin")',
+            type: 'POST',
+            cache: false,
+            data: { 'productId': productId },
+            success: function (results) {
+                $('#DeletedProductsDataTable').DataTable().ajax.reload();
+                alertify.success("<strong>" + productName + "</strong> " + " retored.");
             },
-            function () {
-                //alertify.warning("<strong>"+productName+"</strong> "+" delete ceased.");
-            });
-        }
-    </script>
-
+            error: function () {
+                alertify.defaults.glossary.title = 'Problem.!';
+                alertify.error('Error occured to perform this action.')
+            }
+        });
+    }
+</script>
+<script>
+    function forceDelete(productId, productName) {
+        $.ajax({
+            url: '@Url.Action("ForceDelete", "Product", "Admin")',
+            type: 'POST',
+            cache: false,
+            data: { 'productId': productId },
+            success: function (results) {
+                $('#DeletedProductsDataTable').DataTable().ajax.reload();
+                alertify.success("<strong>" + productName + "</strong> " + " permanently deleted.");
+            },
+            error: function () {
+                alertify.defaults.glossary.title = 'Problem.!';
+                alertify.error('Error occured to perform this action.')
+            }
+        });
+    }
+</script>
+<script>
+    function deleteWarning(productId, productName) {
+        alertify.confirm('Confirm Permanent Delete!', 'Do you want to permanently delete <strong>' + productName + '</strong> from trash?',
+        function () {
+            forceDelete(productId, productName);
+        },
+        function () {
+            //alertify.warning("<strong>"+productName+"</strong> "+" delete ceased.");
+        });
+    }
+</script>
 }
 

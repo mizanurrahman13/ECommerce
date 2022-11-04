@@ -10,20 +10,6 @@ namespace ECommerce.Infrastructure.Seeds
             {
                 return new Product[]
                 {
-                    //new Product
-                    //{
-                    //    Id = Guid.Parse("7410BDFD-C2F1-4F29-B8B1-1321810CC9A9"),
-                    //    Name = "Apex Shoes",
-                    //    Description="This is the best product...........",
-                    //    UnitPrice=2500,
-                    //    DiscountedPrice=3000,
-                    //    ActiveStatus=true,
-                    //    Featured=false,                        
-                    //    CreatedDate=DateTime.Now,
-                    //    UpdatedDate=DateTime.Now,
-                    //    CreatedBy="admin@gmail.com",
-                    //    UpdatedBy="admin@gmail.com"
-                    //},
                     new Product
                     {
                         Id = Guid.Parse("17A7DFF9-34FD-44E6-98C2-AA9DD60392EF"),
