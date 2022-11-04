@@ -25,9 +25,9 @@ namespace ECommerce.Infrastructure.BusinessObjects
         public IList<ProductCategory>? ProductCategories { get; set; }
         public Inventory? ProductInventory { get; set; }
 
-        public Product()
-        {
-            Id = (Id == Guid.Empty) ? IdentityGenerator.NewSequentialGuid() : Id;
-        }
+        //public Product()
+        //{
+        //    Id = (Id == Guid.Empty) ? IdentityGenerator.NewSequentialGuid() : Id;
+        //}
     }
 }

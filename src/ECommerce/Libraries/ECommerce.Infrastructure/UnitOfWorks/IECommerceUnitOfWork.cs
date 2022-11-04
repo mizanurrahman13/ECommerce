@@ -7,5 +7,6 @@ namespace ECommerce.Infrastructure.UnitOfWorks
     {
         public ICategoryRepository Categories { get; }
         public IProductRepository Products { get; }
+        public IProductRestoreRepository ProductRestores { get; }
     }
 }

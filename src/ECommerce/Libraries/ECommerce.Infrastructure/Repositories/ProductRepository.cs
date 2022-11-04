@@ -21,6 +21,11 @@ namespace ECommerce.Infrastructure.Repositories
             return await GetCountAsync(x => x.Name == product.Name && x.Id != product.Id);
         }
 
+        public int IsProductAlreadyExist(ProductBO product)
+        {
+            return GetCount(x => x.Name == product.Name && x.Id != product.Id);
+        }
+
         public virtual IList<Product> Get(Expression<Func<Product, bool>> filter, string includeProperties = "")
         {
             IQueryable<Product> query = _dbSet;

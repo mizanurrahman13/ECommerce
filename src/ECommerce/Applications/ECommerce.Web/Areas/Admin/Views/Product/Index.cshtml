@@ -383,7 +383,35 @@ function FeatureCheckBoxFunction(id, value, productName) {
         });
     }
 </script>
-
+<script>
+    function moveToTrash(productName, id) {
+        $.ajax({
+            url: '@Url.Action("MakeTrash", "Product", "Admin")',
+            type: 'POST',
+            //dataType: 'json',
+            cache: false,
+            data: { 'id': id },
+            success: function (results) {
+                $('#AllProductsDataTable').DataTable().ajax.reload();
+                alertify.success("<strong>" + productName + "</strong> " + " moved to trash can.");
+            },
+            error: function () {
+                alertify.defaults.glossary.title = 'Problem.!';
+                alertify.error('Error occured to perform this action.')
+            }
+        });
+    }
+    function deleteWarning(productName, data) {
+        var id = data;
+        alertify.confirm('Confirm Delete!', 'Do you want to delete <strong>' + productName + '</strong> from your store?',
+            function () {
+                moveToTrash(productName, id);
+            },
+            function () {
+                //alertify.warning("<strong>"+productName+"</strong> "+" delete ceased.");
+            });
+    }
+</script>
 <script>
 function actionDropDown(data, type, row) {
     var productName = row[1];

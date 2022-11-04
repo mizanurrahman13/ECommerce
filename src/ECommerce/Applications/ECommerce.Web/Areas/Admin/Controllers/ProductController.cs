@@ -79,7 +79,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                     else
                         await model?.CreateProduct(validImages, categoriesId);
 
-                    TempData["message"] = $"{model?.Name} is successfully added ";
+                    TempData["message"] = $"{model?.Name} is successfully added.";
 
                     return RedirectToAction("Index");
                 }
@@ -202,6 +202,54 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             try
             {
                 model.ChangeFeatureProperty(new Guid(id));
+                return new { Code = 200, Message = "Success" };
+            }
+            catch (Exception ioe)
+            {
+                _logger.LogError(ioe, ioe.Message);
+            }
+
+            return new { Code = 400, Message = "Unsuccessful" };
+        }
+
+        [HttpPost]
+        public object MakeTrash(string id)
+        {
+            var model = _lifetimeScope.Resolve<ProductRestoreModel>();
+            try
+            {
+                model.MakeTrash(new Guid(id));
+                return new { Code = 200, Message = "Success" };
+            }
+            catch (Exception ioe)
+            {
+                _logger.LogError(ioe, ioe.Message);
+            }
+            return new { Code = 400, Message = "Unsuccessful" };
+
+        }
+
+        public IActionResult Trash()//for viewing deleted products
+        {
+            return View();
+        }
+
+        public JsonResult GetTrashedProducts()//sends all products to dataTable in View
+        {
+            var DataTableModel = new DataTablesAjaxRequestModel(Request);
+            var model = _lifetimeScope.Resolve<TrashedProductListModel>();
+            var obj = Json(model.GetAllTrashProducts(DataTableModel));
+
+            return obj;
+        }
+
+        [HttpPost]
+        public object RestoreProduct(string productId)
+        {
+            var model = _lifetimeScope.Resolve<ProductRestoreModel>();
+            try
+            {
+                model.Restore(new Guid(productId));
                 return new { Code = 200, Message = "Success" };
             }
             catch (Exception ioe)

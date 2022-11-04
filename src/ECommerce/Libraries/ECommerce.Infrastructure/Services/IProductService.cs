@@ -15,8 +15,11 @@ namespace ECommerce.Infrastructure.Services
         Task<Product> GetProductByIdAsync(Guid id);
         Product GetProductById(Guid id);
         Task UpdateProductAsync(Product product);
+        void UpdateProduct(Product product);
         Product GetProductImageById(Guid Id);
         void ChangeVisibility(Guid id);
         void ChangeFeatureProperty(Guid id);
+        (int total, int totalDisplay, IList<Product> trashedProducts) GetTrashedProducts(
+                    int pageIndex, int pageSize, string searchText, string orderBy);
     }
 }

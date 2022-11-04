@@ -52,6 +52,12 @@ namespace ECommerce.Infrastructure
             builder.RegisterType<ProductService>().As<IProductService>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<ProductRestoreRepository>().As<IProductRestoreRepository>()
+               .InstancePerLifetimeScope();
+
+            builder.RegisterType<ProductRestoreService>().As<IProductRestoreService>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }

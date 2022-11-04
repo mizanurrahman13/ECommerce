@@ -56,6 +56,12 @@ namespace ECommerce.Web
             builder.RegisterType<ProductFeatureChangeModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<ProductRestoreModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<TrashedProductListModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

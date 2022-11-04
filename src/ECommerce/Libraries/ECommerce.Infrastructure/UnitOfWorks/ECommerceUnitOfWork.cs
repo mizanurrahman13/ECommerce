@@ -8,15 +8,18 @@ namespace ECommerce.Infrastructure.UnitOfWorks
     {
         public ICategoryRepository Categories { get; private set; }
         public IProductRepository Products { get; private set; }
+        public IProductRestoreRepository ProductRestores { get; private set; }
 
         public ECommerceUnitOfWork(ApplicationDbContext applicationDbContext,
             ICategoryRepository categoryRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IProductRestoreRepository productRestores)
             : base(applicationDbContext)
         {
 
             Categories = categoryRepository;
             Products = productRepository;
+            ProductRestores = productRestores;
         }
     }
 }

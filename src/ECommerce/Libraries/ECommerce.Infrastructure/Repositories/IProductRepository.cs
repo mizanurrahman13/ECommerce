@@ -9,6 +9,7 @@ namespace ECommerce.Infrastructure.Repositories
     public interface IProductRepository : IRepository<ProductEntity, Guid, ApplicationDbContext>
     {
         Task<int> IsProductAlreadyExists(ProductBO product);
+        int IsProductAlreadyExist(ProductBO product);
         IList<ProductEntity> Get(Expression<Func<ProductEntity, bool>> filter, string includeProperties = "");
         (IList<ProductEntity> data, int total, int totalDisplay) GetDynamic(
             Expression<Func<ProductEntity, bool>> filter = null,

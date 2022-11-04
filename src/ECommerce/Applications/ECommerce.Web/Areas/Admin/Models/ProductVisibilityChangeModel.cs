@@ -36,7 +36,7 @@ namespace ECommerce.Web.Areas.Admin.Models
             product.Featured = false;//for unpublishing product, it's also will remove from feature
 
             //edited as it removed from feature
-            _productService!.UpdateProductAsync(product);
+            _productService!.UpdateProduct(product);
             _productService.ChangeVisibility(id);
         }
     }
