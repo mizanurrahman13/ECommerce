@@ -1,0 +1,352 @@
+@model ProductCreateModel
+@{
+    ViewData["Title"] = "Create Product";
+    ViewData["PageNav"] = "Create Product Page";
+}
+
+@section Styles{
+    
+<!-- toastr -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<!-- summernote -->
+<link rel="stylesheet" href="~/AdminLTE/plugins/summernote/summernote-bs4.min.css">
+<!-- dropzonejs -->
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+<!-- tagify -->
+<link href="https://unpkg.com/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="~/AdminLTE/dist/css/tagifyCustom.css">
+
+}
+
+<form role="form" asp-controller="Product" asp-action="Create" method="post" asp-antiforgery="true">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-8">
+                <!-- general form elements -->
+                <div class="card">
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Name">Product Name</label>
+                            <input type="text" class="form-control" asp-for="Name" id="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description">Product Description</label>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <textarea asp-for="Description" id="summernote">
+                                Place <em>some</em> <u>text</u> <strong>here</strong>
+                            </textarea>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card -->
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Pricing</h4>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="UnitPrice">Price</label>
+                                    <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                                <input type="number" class="form-control" id="UnitPrice" asp-for="UnitPrice" placeholder="BDT 0.00" />
+
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="DiscountedPrice">Discount Price</label>
+                                    <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
+                                <input type="number" class="form-control" id="DiscountedPrice" asp-for="DiscountedPrice" placeholder="BDT 0.00" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Product status</h5><br />
+                        <div class="form-group col-md-12">
+                            <select class="form-control" asp-for="Status">
+                                <option>Active</option>
+                                <option>Draft</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <!-- form start -->
+                    <div class="card-body">
+
+                        <div id="productImages" class="fallback dropzone" >
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+
+                <div class="card">
+                    <!-- form start -->
+                    <div class="card-body">
+                        <h5>Product Categories</h5>
+                        <input name='categories-list-tags' value='Mango, Apple'>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                @* <div class="card">
+                    <!-- form start -->
+
+                    <div class="card-body">
+                    <h5>Product Stock</h5>
+                    <label asp-for="StockQuantity"/>
+                    <input type="number" class="form-control" 
+                    asp-for="StockQuantity" />
+
+                    </div>
+                    <!--/.card-body-->
+                    </div>*@
+
+
+            </div>
+            <!-- /.card-body -->
+            <!-- /Hidden Fields -->
+            @Html.HiddenFor(m => m.ImageUrlsParam)
+            @Html.HiddenFor(m => m.CategoriesId)
+                    
+
+            <div class="card-footer col-md-12">
+                <a asp-action="Index" asp-controller="Product" asp-area="Admin" class="btn btn-default">Cancel</a>
+                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+
+<!-- Summernote -->
+<script src="/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- dropzonejs -->
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="https://unpkg.com/@@yaireo/tagify"></script>
+<script src="https://unpkg.com/@@yaireo/tagify@3.1.0/dist/tagify.polyfills.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+<script>
+
+// Summernote
+$('#summernote').summernote({
+    placeholder: 'Write about your Product',
+    tabsize: 2,
+    height: 238
+
+});
+var images = [];
+
+Dropzone.autoDiscover = false;
+var myDropzone = new Dropzone("div#productImages", {
+    url: "/Admin/Image/ImageUploader",
+    maxFiles: 10,
+    addRemoveLinks: true,
+    init: function() {
+        //will be implemented later
+    },
+    success(file, message) {
+        if(message.code == 200)
+        {
+            $("#ImageUrlsParam").val("");
+            images.push(message.path);
+            $("#ImageUrlsParam").val(images);
+
+            toastr["success"]("File Uploaded Successfully!")
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        }
+
+        console.log("success file", file);
+    },
+    removedfile: function(file) {
+            var fileName = "Files\\" + file.name;
+            $.ajax({
+            type: 'POST',
+            url: "/Admin/Image/DeleteImage",
+            data: {path: fileName},
+            success: function(data,message){
+                             
+                console.log(images);
+                console.log( data);
+                console.log(data.deletedImage);
+                let imageIndex = images.indexOf(data.deletedImage);
+                console.log("imageIndex", imageIndex);
+                if(imageIndex >= 0)
+                {
+                    images.splice(imageIndex, 1);
+                               
+                    $("#ImageUrlsParam").val("");
+                         
+                    $("#ImageUrlsParam").val(images);
+                }
+            }
+        });
+
+        var _ref;
+        return (_ref = file.previewElement) !=
+            null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+    }
+
+});
+
+// initialize Tagify on the above input node reference
+let dataFromAjax = new Promise((resolve, reject) => {
+    let data = $.post("/Admin/Category/GetAllCategories",
+        function (result) {
+            let x = result.map((c, i) => {
+                c.value = i + 1;
+                c.avatar = c.imageUrl;
+                delete c.imageUrl;
+                return c;
+            });
+            resolve(data);
+            reject("Not Found");
+        });
+});
+
+dataFromAjax.then((res) => {
+
+    let categoryData = res;
+
+    var inputElm = document.querySelector('input[name=categories-list-tags]');
+
+    function tagTemplate(tagData) {
+        return `
+            <tag title="${tagData.name}"
+                    contenteditable='false'
+                    spellcheck='false'
+                    tabIndex="-1"
+                    class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                    ${this.getAttributes(tagData)}>
+                <x title='' class='tagify__tag__removeBtn' role='button'
+                aria-label='remove tag'></x>
+                <div>
+                    <div class='tagify__tag__avatar-wrap'>
+                        <img onerror="this.style.visibility='hidden'"
+                        src="${tagData.avatar}">
+                    </div>
+                    <span class='tagify__tag-text'>${tagData.name}</span>
+                </div>
+            </tag>
+        `
+    }
+
+    function suggestionItemTemplate(tagData) {
+        return `
+            <div ${this.getAttributes(tagData)}
+                class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                tabindex="0"
+                role="option">
+                ${tagData.avatar ? `
+                <div class='tagify__dropdown__item__avatar-wrap'>
+                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                </div>` : ''
+            }
+                <strong>${tagData.name}</strong>
+            </div>
+        `
+    }
+
+    var tagify = new Tagify(inputElm, {
+        tagTextProp: 'name',
+        enforceWhitelist: true,
+        skipInvalid: true,
+        dropdown: {
+            closeOnSelect: false,
+            enabled: 0,
+            classname: 'categories-list',
+            searchKeys: ['name']
+        },
+        templates: {
+            tag: tagTemplate,
+            dropdownItem: suggestionItemTemplate
+        },
+        whitelist: categoryData
+
+
+    })
+
+    // listen to dropdown suggestion items selection
+    tagify.on('dropdown:select', onSelect)
+    tagify.on('remove', onSelect)
+
+    var ids = [];
+
+    function onSelect(e) {
+        console.log("this e", e)
+        var id = e.detail.data.id;
+
+        //filtering ids if removed
+
+        if (e.type == "remove") {
+            ids = ids.filter(item => item !== id);
+            console.log(ids);
+            $("#CategoriesId").val("");
+            $("#CategoriesId").val(ids);
+        }
+
+        //adding ids if added
+
+        else {
+            $("#CategoriesId").val("");
+            ids.push(id);
+            $("#CategoriesId").val(ids);
+        }
+        console.log(ids);
+    }
+
+    function onRemove(e) {
+        console.log("Removing item", e)
+
+    }     
+});
+
+</script>
+<script>
+    var msg = '@TempData["message"]';
+    if (msg.length) {
+       toastr.error(msg);
+    }
+</script>
+
+}

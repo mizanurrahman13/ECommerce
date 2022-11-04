@@ -1,5 +1,4 @@
 ﻿using DevSkill.Http.Emails.Services;
-using DevSkill.Http.Utilities;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Templates;
 

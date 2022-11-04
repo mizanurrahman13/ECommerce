@@ -3,5 +3,6 @@
     public interface ICurrentUserService
     {
         Task<string> GetUsername();
+        string GetUsernames();
     }
 }

@@ -28,8 +28,9 @@ namespace ECommerce.Web.Areas.Admin.Models
         }
 
         public CategoryCreateModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter,
-           IHttpContextAccessor httpContextAccessor, ICategoryService categoryService,
-        IMapper mapper)
+            IHttpContextAccessor httpContextAccessor,
+            ICategoryService categoryService,
+            IMapper mapper)
            : base(userManagerAdapter, httpContextAccessor, mapper)
         {
             _categoryService = categoryService;

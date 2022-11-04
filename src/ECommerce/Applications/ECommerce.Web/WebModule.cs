@@ -38,7 +38,30 @@ namespace ECommerce.Web
             builder.RegisterType<CategoryImageModel>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
-
+            builder.RegisterType<ProductListModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductCreateModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductEditModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductImageModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductVisibilityChangeModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductFeatureChangeModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ProductRestoreModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<TrashedProductListModel>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

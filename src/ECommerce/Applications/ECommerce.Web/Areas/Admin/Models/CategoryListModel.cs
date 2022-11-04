@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DevSkill.Http.Utilities;
+using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
@@ -33,6 +34,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                 recordsTotal = data.total,
                 recordsFiltered = data.displayTotal,
                 data = (from record in data.records
+                        orderby record.CreatedDate descending
                         select new string[]
                         {
                                 record.ImageUrl!,
@@ -52,6 +54,16 @@ namespace ECommerce.Web.Areas.Admin.Models
         public void Delete(Guid id)
         {
             _categoryService?.DeleteCategory(id);
+        }
+
+        public async Task<IList<Category>> GetAllAsync()
+        {
+            return await _categoryService.GetAllAsync();
+        }
+
+        public IList<Category> GetAll()
+        {
+            return _categoryService.GetAll();
         }
     }
 }

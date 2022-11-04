@@ -13,6 +13,8 @@ namespace ECommerce.Infrastructure.BusinessObjects
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
 
+        public IList<ProductCategory>? ProductCategories { get; set; }
+
         public Category()
         {
             Id = (Id == Guid.Empty) ? IdentityGenerator.NewSequentialGuid() : Id;

@@ -5,7 +5,7 @@ namespace ECommerce.Infrastructure.Services
     public interface ICategoryService
     {
         Task CreateCategory(Category category);
-        Task<(int total, int displayTotal, IList<Category> records)> 
+        Task<(int total, int displayTotal, IList<Category> records)>
             GetCategoryAsync(int pageIndex,
             int pageSize,
             string searchText,
@@ -16,5 +16,8 @@ namespace ECommerce.Infrastructure.Services
         Task<List<Category>> GetCategoriesAsync(Guid? id);
         void DeleteCategory(Guid id);
         Category GetCategoryImageById(Guid Id);
+        Category GetCategoryById(Guid id);
+        Task<IList<Category>> GetAllAsync();
+        IList<Category> GetAll();
     }
 }

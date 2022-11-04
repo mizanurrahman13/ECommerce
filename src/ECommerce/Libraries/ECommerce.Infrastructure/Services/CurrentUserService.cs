@@ -21,5 +21,17 @@ namespace ECommerce.Infrastructure.Services
 
             return currentUsername;
         }
+
+        public string GetUsernames()
+        {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+
+            var currentUsername = !string.IsNullOrEmpty(userName)
+                ? userName
+
+                : "Anonymous";
+
+            return currentUsername;
+        }
     }
 }

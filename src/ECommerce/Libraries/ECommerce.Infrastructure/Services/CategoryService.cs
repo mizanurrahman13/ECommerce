@@ -48,6 +48,7 @@ namespace ECommerce.Infrastructure.Services
             {
                 categories.Add(_mapper.Map<CategoryBO>(entitiy));
             }
+
             return (result.total, result.totalDisplay, categories);
         }
 
@@ -59,6 +60,19 @@ namespace ECommerce.Infrastructure.Services
                 throw new InvalidOperationException("Category with this id not found");
 
             var category = _mapper.Map<CategoryBO>(categoryEntity);
+
+            return category;
+        }
+
+        public CategoryBO GetCategoryById(Guid id)
+        {
+            var categoryEntity = _ecommerceUnitOfWork.Categories.GetById(id);
+
+            if (categoryEntity is null)
+                throw new InvalidOperationException("Category with this id not found");
+
+            var category = _mapper.Map<CategoryBO>(categoryEntity);
+
             return category;
         }
 
@@ -79,7 +93,6 @@ namespace ECommerce.Infrastructure.Services
             categoryEntity.UpdatedBy = await _currentUserService.GetUsername();
 
             await _ecommerceUnitOfWork.SaveAsync();
-
         }
 
         public async Task DeleteCategoryAsync(Guid id)
@@ -92,6 +105,7 @@ namespace ECommerce.Infrastructure.Services
         {
             var categoriesEO = await _ecommerceUnitOfWork.Categories.GetAsync(x => x.Id == id, null);
             var categoriesBO = _mapper.Map<List<CategoryBO>>(categoriesEO);
+
             return categoriesBO;
         }
 
@@ -108,7 +122,36 @@ namespace ECommerce.Infrastructure.Services
                  string.Empty).FirstOrDefault();
 
             var category = _mapper.Map<CategoryBO>(result);
+
             return category;
+        }
+
+        public async Task<IList<CategoryBO>> GetAllAsync()
+        {
+            var categoryEntities = await _ecommerceUnitOfWork.Categories.GetAllAsync();
+
+            List<CategoryBO> categories = new List<CategoryBO>();
+
+            foreach (CategoryEntity entity in categoryEntities)
+            {
+                categories.Add(_mapper.Map<CategoryBO>(entity));
+            }
+
+            return categories;
+        }
+
+        public IList<CategoryBO> GetAll()
+        {
+            var categoryEntities = _ecommerceUnitOfWork.Categories.GetAll();
+
+            List<CategoryBO> categories = new List<CategoryBO>();
+
+            foreach (CategoryEntity entity in categoryEntities)
+            {
+                categories.Add(_mapper.Map<CategoryBO>(entity));
+            }
+
+            return categories;
         }
     }
 }

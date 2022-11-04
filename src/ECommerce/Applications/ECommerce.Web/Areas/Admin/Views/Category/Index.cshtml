@@ -90,6 +90,14 @@
                     }
                 },
                 {
+                    "orderable": true,
+                    "targets": 1
+                },
+                {
+                    "orderable": false,
+                    "targets": 2
+                },
+                {
                     "orderable": false,
                     "targets": 3,
                     "render": function (data, type, row) {
@@ -122,12 +130,12 @@
     function deleteWarning(name, data) {
         var id = data;
         alertify.confirm('Confirm Delete!', 'Do you want to delete <strong>' + name + '</strong> from your Store?',
-            function () {
-                deleteCategory(name, id);
-            },
-            function () {
-                //alertify.warning("<strong>"+storeName+"</strong> "+" delete ceased.");
-            });
+        function () {
+            deleteCategory(name, id);
+        },
+        function () {
+            //alertify.warning("<strong>"+storeName+"</strong> "+" delete ceased.");
+        });
     }
 </script>
 <script>

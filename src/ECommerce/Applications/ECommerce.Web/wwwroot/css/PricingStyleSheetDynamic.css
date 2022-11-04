@@ -1,0 +1,139 @@
+﻿:root {
+    --inputColor: #095cb5;
+}
+
+.pricingTableDynamic {
+    text-align: center;
+    background: #fff;
+    margin: 0 -15px;
+    box-shadow: 0 0 10px #ababab;
+    padding-bottom: 40px;
+    border-radius: 10px;
+    color: #cad0de;
+    transform: scale(1);
+    transition: all .5s ease 0s
+}
+
+    .pricingTableDynamic:hover {
+        transform: scale(1.05);
+        z-index: 1
+    }
+
+    .pricingTableDynamic .pricingTableDynamic-header {
+        padding: 40px 0;
+        background: #f5f6f9;
+        border-radius: 10px 10px 50% 50%;
+        transition: all .5s ease 0s
+    }
+
+    .pricingTableDynamic:hover .pricingTableDynamic-header {
+        background: var(--inputColor);
+    }
+
+    .pricingTableDynamic .pricingTableDynamic-header i {
+        font-size: 50px;
+        color: #858c9a;
+        margin-bottom: 10px;
+        transition: all .5s ease 0s
+    }
+
+    .pricingTableDynamic .price-value {
+        font-size: 35px;
+        color: var(--inputColor);
+        transition: all .5s ease 0s
+    }
+
+    .pricingTableDynamic .month {
+        display: block;
+        font-size: 14px;
+        color: #cad0de
+    }
+
+    .pricingTableDynamic:hover .month,
+    .pricingTableDynamic:hover .price-value,
+    .pricingTableDynamic:hover .pricingTableDynamic-header i {
+        color: #fff
+    }
+
+    .pricingTableDynamic .heading {
+        font-size: 24px;
+        color: var(--inputColor);
+        margin-bottom: 20px;
+        text-transform: uppercase
+    }
+
+    .pricingTableDynamic .pricing-content ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px
+    }
+
+        .pricingTableDynamic .pricing-content ul li {
+            line-height: 30px;
+            color: #a7a8aa
+        }
+
+    .pricingTableDynamic .pricingTableDynamic-signup a/*,
+    .ActionDiv button*/ {
+        display: inline-block;
+        font-size: 15px;
+        color: #fff;
+        padding: 10px 35px;
+        border-radius: 20px;
+        background: var(--inputColor);
+        text-transform: uppercase;
+        transition: all .3s ease 0s
+    }
+
+        .pricingTableDynamic .pricingTableDynamic-signup a:hover,
+        /*.ActionDiv button:hover*/ {
+            box-shadow: 0 0 10px var(--inputColor)
+        }
+
+    .pricingTableDynamic.blue .heading,
+    .pricingTableDynamic.blue .price-value {
+        color: #4b64ff
+    }
+
+    .pricingTableDynamic.blue .pricingTableDynamic-signup a,
+    .pricingTableDynamic.blue:hover .pricingTableDynamic-header {
+        background: #4b64ff
+    }
+
+        .pricingTableDynamic.blue .pricingTableDynamic-signup a:hover {
+            box-shadow: 0 0 10px #4b64ff
+        }
+
+    .pricingTableDynamic.red .heading,
+    .pricingTableDynamic.red .price-value {
+        color: #ff4b4b
+    }
+
+    .pricingTableDynamic.red .pricingTableDynamic-signup a,
+    .pricingTableDynamic.red:hover .pricingTableDynamic-header {
+        background: #ff4b4b
+    }
+
+        .pricingTableDynamic.red .pricingTableDynamic-signup a:hover {
+            box-shadow: 0 0 10px #ff4b4b
+        }
+
+    .pricingTableDynamic.green .heading,
+    .pricingTableDynamic.green .price-value {
+        color: #40c952
+    }
+
+    .pricingTableDynamic.green .pricingTableDynamic-signup a,
+    .pricingTableDynamic.green:hover .pricingTableDynamic-header {
+        background: #40c952
+    }
+
+        .pricingTableDynamic.green .pricingTableDynamic-signup a:hover {
+            box-shadow: 0 0 10px #40c952
+        }
+
+    .pricingTableDynamic.blue:hover .price-value,
+    .pricingTableDynamic.green:hover .price-value,
+    .pricingTableDynamic.red:hover .price-value {
+        color: #fff
+    }
