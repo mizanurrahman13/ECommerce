@@ -2,9 +2,7 @@
 using DevSkill.Core.Utilities;
 using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.UnitOfWorks;
-using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Security;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
 using ProductEntity = ECommerce.Infrastructure.Entities.Product;
 
@@ -79,7 +77,7 @@ namespace ECommerce.Infrastructure.Services
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
 
             if (result.totalDisplay == 0 && result.total == 0 && result.data == null)
-                throw new InvalidOperationException("Product List is empty.");
+                throw new NullReferenceException("Check filter property.");
 
             List<ProductBO> products = new List<ProductBO>();
             foreach (ProductEntity product in result.data)
@@ -158,6 +156,9 @@ namespace ECommerce.Infrastructure.Services
 
         public ProductBO GetProductImageById(Guid Id)
         {
+            if (Id == Guid.Empty)
+                throw new InvalidParameterException("Id must be provided to get product including images.");
+
             var result = _ecommerceUnitOfWork.
                  Products.Get(x => x.Id.Equals(Id),
                  "ProductImages").FirstOrDefault();
@@ -170,7 +171,7 @@ namespace ECommerce.Infrastructure.Services
         public void ChangeVisibility(Guid id)
         {
             if (id == Guid.Empty)
-                throw new InvalidParameterException("Id must be provided to get an product.");
+                throw new InvalidParameterException("Id must be provided to get a product.");
 
             var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
 
@@ -184,7 +185,7 @@ namespace ECommerce.Infrastructure.Services
         public void ChangeFeatureProperty(Guid id)
         {
             if (id == Guid.Empty)
-                throw new InvalidParameterException("Id must be provided to get an product.");
+                throw new InvalidParameterException("Id must be provided to get a product.");
 
             var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
 
@@ -200,6 +201,9 @@ namespace ECommerce.Infrastructure.Services
         {
             var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.DeleteQueue,
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
+
+            if (result.totalDisplay == 0 && result.total == 0 && result.data == null)
+                throw new NullReferenceException("Check filter property.");
 
             IList<ProductBO> trashedProducts = new List<ProductBO>();
             foreach (var product in result.data)

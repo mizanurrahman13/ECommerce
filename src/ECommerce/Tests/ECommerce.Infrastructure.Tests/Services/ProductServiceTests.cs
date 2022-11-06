@@ -11,6 +11,7 @@ using Org.BouncyCastle.Security;
 using Shouldly;
 using System.Linq.Expressions;
 using ProductEntity = ECommerce.Infrastructure.Entities.Product;
+using ProductImageEntity = ECommerce.Infrastructure.Entities.ProductImage;
 
 namespace ECommerce.Infrastructure.Tests.Services
 {
@@ -604,6 +605,179 @@ namespace ECommerce.Infrastructure.Tests.Services
             this.ShouldSatisfyAllConditions(
                 () => _eCommerceUnitOfWorkMock.VerifyAll(),
                 () => _productRepositoryMock.VerifyAll()
+            );
+        }
+
+        [Test]
+        public void GetTrashedProducts_ProductExists_GetTrashedProductList()
+        {
+            // Arrange
+            const int pageIndex = 1;
+            const int pageSize = 10;
+            const string searchText = "iPhone";
+            const string orderBy = "Name";
+            const int total = 10;
+            const int totalDisplay = 10;
+
+            var product = new Product
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000,
+                DeleteQueue = true
+            };
+            var productEntity = new ProductEntity()
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000,
+                DeleteQueue = true
+            };
+            var listOfProduct = new List<Product>() { product };
+            var listOfProductEntity = new List<ProductEntity>() { productEntity };
+
+            _eCommerceUnitOfWorkMock.Setup(x => x.Products)
+                .Returns(_productRepositoryMock.Object);
+
+            _productRepositoryMock.Setup(p => p.GetDynamic(It.Is<Expression<Func<ProductEntity, bool>>>
+                (i => i.Compile()(productEntity)), orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true))
+                .Returns((listOfProductEntity, total, totalDisplay)).Verifiable();
+
+            _mapperMock.Setup(x => x.Map<Product>(productEntity))
+                .Returns(product).Verifiable();
+
+            //Act
+            _productService.GetTrashedProducts(pageIndex, pageSize, searchText, orderBy);
+
+            //Assert 
+            this.ShouldSatisfyAllConditions(
+                () => _eCommerceUnitOfWorkMock.VerifyAll(),
+                () => _productRepositoryMock.VerifyAll(),
+                () => _mapperMock.VerifyAll()
+            );
+        }
+
+        [Test]
+        public void GetTrashedProducts_ProductDeleteQueIsFalse_ThrowNullReferenceException()
+        {
+            // Arrange
+            const int pageIndex = 1;
+            const int pageSize = 10;
+            const string searchText = "iPhone";
+            const string orderBy = "Name";
+            const int total = 10;
+            const int totalDisplay = 10;
+
+            var product = new Product
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000,
+                DeleteQueue = false
+            };
+            var productEntity = new ProductEntity()
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000,
+                DeleteQueue = false
+            };
+            var listOfProduct = new List<Product>() { product };
+            var listOfProductEntity = new List<ProductEntity>() { productEntity };
+
+            _eCommerceUnitOfWorkMock.Setup(x => x.Products)
+                .Returns(_productRepositoryMock.Object);
+
+            _productRepositoryMock.Setup(p => p.GetDynamic(It.Is<Expression<Func<ProductEntity, bool>>>
+                (i => i.Compile()(productEntity)), orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true))
+                .Returns((listOfProductEntity, total, totalDisplay)).Verifiable();
+
+            _mapperMock.Setup(x => x.Map<Product>(productEntity))
+                .Returns(product).Verifiable();
+
+            // Act and Assert 
+            Should.Throw<NullReferenceException>(
+                () => _productService.GetTrashedProducts(pageIndex, pageSize, searchText, orderBy)
+            );
+        }
+
+        [Test]
+        public void GetProductImageById_ProductIdIsEmpty_ThrowInvalidParameterException()
+        {
+            // Arrange
+            var Id = Guid.Empty;
+
+            //Act & Assert 
+            Should.Throw<InvalidParameterException>(
+                () => _productService.GetProductImageById(Id)
+            );
+        }
+
+        [Test]
+        public void GetProductImageById_ProductExists_GetProductImageById()
+        {
+            // Arrange
+            var product = new Product
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000
+            };
+            var productEntity = new ProductEntity
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000
+            };
+
+            var productImage = new ProductImage
+            {
+                Id = Guid.Parse("168528CC-7BA4-452D-B4BF-D8032B3C2EF7"),
+                Url = "Files\\NoImageFound.png",
+                ProductId = product.Id
+            };
+
+            var productImageEntity = new ProductImageEntity
+            {
+                Id = Guid.Parse("168528CC-7BA4-452D-B4BF-D8032B3C2EF7"),
+                Url = "Files\\NoImageFound.png",
+                ProductId = product.Id
+            };
+
+            var listOfProductImage = new List<ProductImageEntity> { productImageEntity };
+            var listOfProduct = new List<ProductEntity>() { productEntity };            
+
+            _eCommerceUnitOfWorkMock.Setup(x => x.Products)
+                .Returns(_productRepositoryMock.Object);
+
+            _productRepositoryMock.Setup(x => x.Get(It.Is<Expression<Func<ProductEntity, bool>>>
+                (i => i.Compile()(productEntity)), "ProductImages")).Returns(listOfProduct).Verifiable();
+
+            productEntity.ProductImages = listOfProductImage;
+
+            _mapperMock.Setup(x => x.Map<Product>(productEntity))
+                .Returns(product).Verifiable();
+
+            //Act 
+            _productService.GetProductImageById(productEntity.Id);
+            
+            //Assert 
+            this.ShouldSatisfyAllConditions(
+                () => _eCommerceUnitOfWorkMock.VerifyAll(),
+                () => _productRepositoryMock.VerifyAll(),
+                () => _mapperMock.VerifyAll()
             );
         }
     }
