@@ -2,6 +2,9 @@
 using DevSkill.Core.Utilities;
 using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.UnitOfWorks;
+using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Security;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
 using ProductEntity = ECommerce.Infrastructure.Entities.Product;
 
@@ -52,6 +55,7 @@ namespace ECommerce.Infrastructure.Services
             {
                 products.Add(_mapper.Map<ProductBO>(entitiy));
             }
+
             return (result.total, result.totalDisplay, products);
         }
 
@@ -73,6 +77,9 @@ namespace ECommerce.Infrastructure.Services
         {
             var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.Name.Contains(searchText) && !x.DeleteQueue,
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
+
+            if (result.totalDisplay == 0 && result.total == 0 && result.data == null)
+                throw new InvalidOperationException("Product List is empty.");
 
             List<ProductBO> products = new List<ProductBO>();
             foreach (ProductEntity product in result.data)
@@ -107,19 +114,20 @@ namespace ECommerce.Infrastructure.Services
 
         public async Task UpdateProductAsync(ProductBO product)
         {
-            if (product is null)
-                throw new InvalidOperationException("Product must be provided to update item");
+            var count = await _ecommerceUnitOfWork.Products.GetCountAsync(x => x.Id != product.Id && x.Name == product.Name);
 
-            var count = await _ecommerceUnitOfWork.Products.IsProductAlreadyExists(product);
-
-            if (count != 0)
-                throw new InvalidOperationException("Product name already exists");
+            if (count > 0)
+                throw new InvalidOperationException("Product with same name already exists.");
 
             var productEntity = _ecommerceUnitOfWork.Products.Get(x => x.Id.Equals(product.Id),
                                     "ProductImages").FirstOrDefault();
 
+            if (productEntity is null)
+                throw new InvalidOperationException("Product with this id not found.");
+
             productEntity.ProductImages = null;
-            productEntity = _mapper.Map(product, productEntity);
+            //productEntity = _mapper.Map(product, productEntity);
+            _mapper.Map<ProductBO>(productEntity);
 
             productEntity.CreatedBy = await _currentUserService.GetUsername();
             productEntity.UpdatedBy = await _currentUserService.GetUsername();
@@ -161,7 +169,13 @@ namespace ECommerce.Infrastructure.Services
 
         public void ChangeVisibility(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Id must be provided to get an product.");
+
             var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            if (productEntity is null)
+                throw new InvalidParameterException("Product not found.");
 
             productEntity.ActiveStatus = (productEntity.ActiveStatus) ? false : true;
             _ecommerceUnitOfWork.Save();
@@ -169,7 +183,13 @@ namespace ECommerce.Infrastructure.Services
 
         public void ChangeFeatureProperty(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Id must be provided to get an product.");
+
             var productEntity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            if (productEntity is null)
+                throw new InvalidParameterException("Product not found.");
 
             productEntity.Featured = (productEntity.Featured) ? false : true;
             _ecommerceUnitOfWork.Save();
@@ -180,7 +200,6 @@ namespace ECommerce.Infrastructure.Services
         {
             var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.DeleteQueue,
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
-
 
             IList<ProductBO> trashedProducts = new List<ProductBO>();
             foreach (var product in result.data)
@@ -193,6 +212,11 @@ namespace ECommerce.Infrastructure.Services
 
         public void DeleteProduct(Guid id)
         {
+            var entity = _ecommerceUnitOfWork.Products.GetById(id);
+
+            if (entity is null)
+                throw new InvalidOperationException("Product with this id not found.");
+
             _ecommerceUnitOfWork.Products.Remove(id);
             _ecommerceUnitOfWork.Save();
         }
