@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.Common;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -66,11 +67,17 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public object? GetProducts(DataTablesAjaxRequestModel model)
         {
+            if (model == null)
+                throw new InvalidParameterException("DataTable Request Invalid.");
+
             var data = _productService!.GetActiveProducts(
                 model.PageIndex,
                 model.PageSize,
                 model.SearchText,
                 model.GetSortText(new string[] { "Name", "UnitPrice" }));
+
+            if (data.products == null)
+                throw new InvalidParameterException("Product Data Not Found.");
 
             return new
             {
@@ -103,14 +110,12 @@ namespace ECommerce.Web.Areas.Admin.Models
             };
         }
 
-        public async Task DeleteCategoryAsync(Guid id)
-        {
-            await _categoryService!.DeleteCategoryAsync(id);
-        }
-
         public void Delete(Guid id)
         {
-            _categoryService?.DeleteCategory(id);
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
+            _productService?.DeleteProduct(id);
         }
     }
 }
