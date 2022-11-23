@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Web.Areas.Admin.Models
@@ -60,7 +61,13 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task GetProduct(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
             var product = await _productService!.GetProductByIdAsync(id);
+
+            if (product == null)
+                throw new InvalidParameterException("Product cann't be null.");
 
             //MapProduct(product);
             _mapper!.Map(product, this);

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 using ECommerce.Infrastructure.Services;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -36,7 +37,14 @@ namespace ECommerce.Web.Areas.Admin.Models
         }
         public List<ProductImageModel> GetImagesByProductId(Guid productId)
         {
+            if (productId == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
             var product = _productService.GetProductImageById(productId);
+
+            if (product == null)
+                throw new InvalidParameterException("Product cann't be null.");
+
             var images = new List<ProductImageModel>();
             long size = 0;
             if (product.ProductImages.Count > 0)
@@ -56,7 +64,7 @@ namespace ECommerce.Web.Areas.Admin.Models
             }
             else
             {
-                images.Add(new ProductImageModel() { URL = "Not image Found", Size = 0 });
+                images.Add(new ProductImageModel() { URL = "No Image Found", Size = 0 });
             }
 
             return images;
