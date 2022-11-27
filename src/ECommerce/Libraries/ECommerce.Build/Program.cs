@@ -65,6 +65,6 @@ var githubPipeline = new GithubPipeline
 var adotNetClient = new ADotNetClient();
 adotNetClient.SerializeAndWriteToFile(
     githubPipeline,
-    path: "../../../../../.github/workflows/dotnet.yml");
+    path: "../../../../../../../.github/workflows/dotnet.yml");
 
 Console.WriteLine("Hello Lamia");
