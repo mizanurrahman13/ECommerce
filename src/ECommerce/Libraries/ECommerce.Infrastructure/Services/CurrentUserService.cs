@@ -10,9 +10,13 @@ namespace ECommerce.Infrastructure.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<string> GetUsername()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var currentUsername = !string.IsNullOrEmpty(userName)
                 ? userName
@@ -24,7 +28,9 @@ namespace ECommerce.Infrastructure.Services
 
         public string GetUsernames()
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var currentUsername = !string.IsNullOrEmpty(userName)
                 ? userName

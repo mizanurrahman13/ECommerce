@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Membership.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Infrastructure.Tests", "Tests\ECommerce.Infrastructure.Tests\ECommerce.Infrastructure.Tests.csproj", "{9C063D09-E4B2-4286-8A9A-E70D7A845766}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Build", "Libraries\ECommerce.Build\ECommerce.Build.csproj", "{D727F942-4143-4E14-B9F5-ECC1AF3FFA21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Build", "Libraries\ECommerce.Build\ECommerce.Build.csproj", "{D727F942-4143-4E14-B9F5-ECC1AF3FFA21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E9D2A10-2BE0-4929-B582-C130DE12D541}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,8 +12,8 @@ namespace ECommerce.Infrastructure.Repositories
         int IsProductAlreadyExist(ProductBO product);
         IList<ProductEntity> Get(Expression<Func<ProductEntity, bool>> filter, string includeProperties = "");
         (IList<ProductEntity> data, int total, int totalDisplay) GetDynamic(
-            Expression<Func<ProductEntity, bool>> filter = null,
-            string orderBy = null,
+            Expression<Func<ProductEntity, bool>> filter = null!,
+            string orderBy = null!,
             string includeProperties = "", int pageIndex = 1, int pageSize = 10, bool isTrackingOff = false);
         Task<IList<ProductEntity>> GetAsync(Expression<Func<ProductEntity, bool>> filter, string includeProperties = "");
     }

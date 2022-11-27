@@ -63,8 +63,8 @@ namespace ECommerce.Infrastructure.Repositories
         }
 
         public virtual (IList<Product> data, int total, int totalDisplay) GetDynamic(
-            Expression<Func<Product, bool>> filter = null,
-            string orderBy = null,
+            Expression<Func<Product, bool>> filter = null!,
+            string orderBy = null!,
             string includeProperties = "", int pageIndex = 1, int pageSize = 10, bool isTrackingOff = false)
         {
             IQueryable<Product> query = _dbSet;

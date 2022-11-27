@@ -22,7 +22,7 @@ namespace ECommerce.Infrastructure.Seeds
                 EmailConfirmed = true
             };
 
-            IdentityResult result = null;
+            IdentityResult result = null!;
             var password = "Admin@gmail1234";
 
             if (await _userManager.FindByEmailAsync(adminUser.Email) == null)

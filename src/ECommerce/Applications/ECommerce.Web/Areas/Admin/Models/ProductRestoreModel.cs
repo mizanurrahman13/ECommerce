@@ -34,7 +34,7 @@ namespace ECommerce.Web.Areas.Admin.Models
            : base(userManagerAdapter, httpContextAccessor, mapper)
         {
             _productService = productService;
-            _productRestoreService = productRestoreService;
+            _productRestoreService = productRestoreService!;
         }
 
         public override void Resolve(ILifetimeScope scope)
@@ -63,7 +63,7 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public void Restore(Guid productId)
         {
-            var product = _productService.GetProductById(productId);
+            var product = _productService!.GetProductById(productId);
             product.Featured = false;// reamin removed from feature after restore
             product.ActiveStatus = false;// reamin removed from feed after restore
             product.DeleteQueue = false;//moved from delete queue

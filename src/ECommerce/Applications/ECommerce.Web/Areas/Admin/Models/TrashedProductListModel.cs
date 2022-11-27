@@ -34,6 +34,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                     dataTableModel.GetSortText(
                         new string[] {"Name",
                                       "UnitPrice"}));
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             return new
             {
                 recordsTotal = data.total,
@@ -43,7 +44,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                         {
                         (productInfo.ProductImages!=null)?
                             productInfo.ProductImages.Select(x => x.Url).FirstOrDefault().ToString():string.Empty,
-                        productInfo.Name,
+                        productInfo.Name!,
                         (productInfo.ProductCategories!=null)?
                         String.Join(",", productInfo.ProductCategories.Select(x =>
                                         _categoryService.GetCategoryById(x.CategoryId).Name)):string.Empty,
@@ -55,6 +56,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                         productInfo.Id.ToString()
                         }).ToArray()
             };
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
     }
 }

@@ -16,7 +16,11 @@ namespace ECommerce.Membership.Services
 
         public string GenerateAbsoluteUrl(string controller, string action, object parameters)
         {
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8604 // Possible null reference argument.
             return _generator.GetUriByAction(_accessor.HttpContext, action, controller, parameters);
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

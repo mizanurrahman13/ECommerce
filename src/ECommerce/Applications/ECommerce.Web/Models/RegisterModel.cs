@@ -48,7 +48,9 @@ namespace ECommerce.Web.Models
 
         }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public RegisterModel(IUserManagerAdapter<ApplicationUser> userManagerAdapter,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
                                 ISignInManagerAdapter<ApplicationUser> signInManagerAdapter,
                                 IMailSenderService mailSenderService,
                                 IMapper mapper)

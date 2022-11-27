@@ -72,7 +72,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
         // Upload Image
         [HttpPost]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<dynamic> ImageUploader(IFormFile file)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 
             var folderName = "Files";
