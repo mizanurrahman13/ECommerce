@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Checking out Code
       uses: actions/checkout@v2
-    - name: Installing .NET 6
+    - name: Setup .NET 6
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
