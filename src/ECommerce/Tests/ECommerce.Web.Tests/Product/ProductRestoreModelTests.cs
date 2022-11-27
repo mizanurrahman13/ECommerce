@@ -118,8 +118,8 @@ namespace ECommerce.Web.Tests.Product
             _productServiceMock.Setup(p => p.UpdateProduct(product)).Verifiable();
             _productRestoreServiceMock.Setup(pd => pd.Add(productDelete)).Verifiable();
 
-            //_mapperMock.Setup(x => x.Map<Product>(productEntity))
-            //    .Returns(product).Verifiable();
+            //_mapperMock.Setup(x => x.Map<EO.ProductDelete>(product))
+            //    .Returns(productDeleteEntity).Verifiable();
 
             // Act
             _productRestoreModel!.MakeTrash(productId);
