@@ -8,11 +8,11 @@ on:
     - develop
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
     steps:
     - name: Checking out Code
       uses: actions/checkout@v2
-    - name: Installing .NET
+    - name: Installing .NET 6
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
