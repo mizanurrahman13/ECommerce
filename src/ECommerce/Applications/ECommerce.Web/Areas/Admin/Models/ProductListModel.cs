@@ -34,6 +34,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                 model.SearchText, model.GetSortText(new string[] { "Name", "UnitPrice" }));
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             return new
             {
                 recordsTotal = data.total,
@@ -63,6 +64,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                             productInfo.Id.ToString()//->9
                         }).ToArray()
             };
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 

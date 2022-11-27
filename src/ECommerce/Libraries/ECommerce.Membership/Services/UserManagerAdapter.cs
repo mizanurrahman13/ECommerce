@@ -138,7 +138,9 @@ namespace ECommerce.Membership.Services
             var user = await _userManager.FindByEmailAsync(userName);
 
             if (user == null)
+#pragma warning disable CS8603 // Possible null reference return.
                 return null;
+#pragma warning restore CS8603 // Possible null reference return.
             else
                 return _mapper.Map<ApplicationUser>(user);
         }
@@ -149,10 +151,14 @@ namespace ECommerce.Membership.Services
                 throw new InvalidOperationException("Application user must be provided to update dependent data");
 
             var userEntity = await _userManager.FindByIdAsync(user.Id.ToString());
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             userEntity.FirstName = user.FirstName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             userEntity.LastName = user.LastName;
             userEntity.Email = user.Email;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             userEntity.NormalizedEmail = user.Email.ToUpper();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var result = await _userManager.UpdateAsync(userEntity);
             if (!result.Succeeded)
