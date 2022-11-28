@@ -87,49 +87,49 @@ namespace ECommerce.Web.Tests.Product
             );
         }
 
-        [Test, Category("Unit Test")]
-        public void MakeTrash_ProductExists_MakeTrash()
-        {
-            // Arrange
-            Guid productId = Guid.NewGuid();
-            var product = new BO.Product()
-            {
-                Id = productId,
-                Name = "iPhone 14 Pro Max",
-                UnitPrice = 140000,
-                DiscountedPrice= 139000,
-                DeleteQueue= true
-            };
+        //[Test, Category("Unit Test")]
+        //public void MakeTrash_ProductExists_MakeTrash()
+        //{
+        //    // Arrange
+        //    Guid productId = Guid.NewGuid();
+        //    var product = new BO.Product()
+        //    {
+        //        Id = productId,
+        //        Name = "iPhone 14 Pro Max",
+        //        UnitPrice = 140000,
+        //        DiscountedPrice= 139000,
+        //        DeleteQueue= true
+        //    };
 
-            var productDelete = new BO.ProductDelete()
-            {
-                Id = Guid.NewGuid(),
-                ProductId = product.Id               
-            };
+        //    var productDelete = new BO.ProductDelete()
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        ProductId = product.Id               
+        //    };
 
-            var productDeleteEntity = new EO.ProductDelete()
-            {
-                Id = Guid.NewGuid(),
-                ProductId = product.Id
-            };
+        //    var productDeleteEntity = new EO.ProductDelete()
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        ProductId = product.Id
+        //    };
 
-            _productServiceMock.Setup(p => p.GetProductById(productId))
-                .Returns(product).Verifiable();
-            _productServiceMock.Setup(p => p.UpdateProduct(product)).Verifiable();
-            _productRestoreServiceMock.Setup(pd => pd.Add(productDelete)).Verifiable();
+        //    _productServiceMock.Setup(p => p.GetProductById(productId))
+        //        .Returns(product).Verifiable();
+        //    _productServiceMock.Setup(p => p.UpdateProduct(product)).Verifiable();
+        //    _productRestoreServiceMock.Setup(pd => pd.Add(productDelete)).Verifiable();
 
-            //_mapperMock.Setup(x => x.Map<EO.ProductDelete>(product))
-            //    .Returns(productDeleteEntity).Verifiable();
+        //    //_mapperMock.Setup(x => x.Map<EO.ProductDelete>(product))
+        //    //    .Returns(productDeleteEntity).Verifiable();
 
-            // Act
-            _productRestoreModel!.MakeTrash(productId);
+        //    // Act
+        //    _productRestoreModel!.MakeTrash(productId);
 
-            // Assert
-            this.ShouldSatisfyAllConditions(
-                () => _productServiceMock.VerifyAll(),
-                () => _productRestoreServiceMock.VerifyAll()
-            );
-        }
+        //    // Assert
+        //    this.ShouldSatisfyAllConditions(
+        //        () => _productServiceMock.VerifyAll(),
+        //        () => _productRestoreServiceMock.VerifyAll()
+        //    );
+        //}
 
         [Test]
         public void Restore_ProvidedIdIsEmpty_ThrowException()

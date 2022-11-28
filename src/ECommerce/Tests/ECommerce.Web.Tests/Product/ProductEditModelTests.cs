@@ -8,7 +8,6 @@ using Org.BouncyCastle.Security;
 using Shouldly;
 using System.Diagnostics.CodeAnalysis;
 using BO = ECommerce.Infrastructure.BusinessObjects;
-using EO = ECommerce.Infrastructure.Entities;
 
 namespace ECommerce.Web.Tests.Product
 {
@@ -51,7 +50,9 @@ namespace ECommerce.Web.Tests.Product
         }
 
         [Test]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task GetProduct_ProvidedIdIsEmpty_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var id = Guid.Empty;
 
@@ -62,7 +63,9 @@ namespace ECommerce.Web.Tests.Product
         }
 
         [Test, Category("Unit Test")]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task GetProduct_ProductEntityIsNull_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             //Arrange
             Guid productId = Guid.NewGuid();
@@ -91,7 +94,27 @@ namespace ECommerce.Web.Tests.Product
                 DeleteQueue = true
             };
 
-            var productEntity = new EO.Product()
+            _productServiceMock.Setup(p => p.GetProductByIdAsync(productId))
+                .ReturnsAsync(product).Verifiable();
+            _mapperMock.Setup(x => x.Map(product, _productEditModel))
+                .Verifiable();
+
+            // Act
+            await _productEditModel!.GetProduct(productId);
+
+            // Assert
+            this.ShouldSatisfyAllConditions(
+                () => _productServiceMock.VerifyAll(),
+                () => _mapperMock.VerifyAll()
+            );
+        }
+
+        [Test, Category("Unit Test")]
+        public async Task UpdateProductAsync_ProductExists_UpdateProductAsync()
+        {
+            // Arrange
+            Guid productId = Guid.NewGuid();
+            var product = new BO.Product()
             {
                 Id = productId,
                 Name = "iPhone 14 Pro Max",
@@ -100,28 +123,56 @@ namespace ECommerce.Web.Tests.Product
                 DeleteQueue = true
             };
 
-            var productModel = new ProductEditModel()
+            product.ProductImages = null!;
+
+            var imageUrls = new List<string>();
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
+
+            _productServiceMock.Setup(p => p.UpdateProductAndImageAsync(product))
+                .Returns(Task.CompletedTask).Verifiable();
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productEditModel))
+                .Returns(product).Verifiable();
+
+            // Act
+            await _productEditModel!.UpdateProductAsync(imageUrls);
+
+            // Assert
+            this.ShouldSatisfyAllConditions(
+                () => _productServiceMock.VerifyAll(),
+                () => _mapperMock.VerifyAll()
+            );
+        }
+
+        [Test, Category("Unit Test")]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task UpdateProductAsync_ProductEntityIsNull_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            // Arrange
+            Guid productId = Guid.NewGuid();
+            var product = new BO.Product()
             {
                 Id = productId,
                 Name = "iPhone 14 Pro Max",
                 UnitPrice = 140000,
-                DiscountedPrice = 139000
+                DiscountedPrice = 139000,
+                DeleteQueue = true
             };
+            product = null!;
 
-            _productServiceMock.Setup(p => p.GetProductByIdAsync(productId))
-                .ReturnsAsync(product).Verifiable();
+            var imageUrls = new List<string>();
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
 
-            // can't map this
-            //_mapperMock.Setup(x => x.Map<BO.Product>(productModel))
-            //    .Returns(product).Verifiable();
+            _productServiceMock.Setup(p => p.UpdateProductAndImageAsync(product))
+                .Returns(Task.CompletedTask).Verifiable();
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productEditModel))
+                .Returns(product).Verifiable();
 
-            // Act
-            await _productEditModel!.GetProduct(productId);
-
-            // Assert
-            this.ShouldSatisfyAllConditions(
-                () => _productServiceMock.VerifyAll()
-                //() => _mapperMock.VerifyAll()
+            // Act and Assert
+            Should.Throw<InvalidParameterException>(
+               async () => await _productEditModel!.UpdateProductAsync(imageUrls)
             );
         }
     }

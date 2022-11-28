@@ -133,6 +133,29 @@ namespace ECommerce.Infrastructure.Services
             await _ecommerceUnitOfWork.SaveAsync();
         }
 
+        public async Task UpdateProductAndImageAsync(ProductBO product)
+        {
+            var count = await _ecommerceUnitOfWork.Products.GetCountAsync(x => x.Id != product.Id && x.Name == product.Name);
+
+            if (count > 0)
+                throw new InvalidOperationException("Product with same name already exists.");
+
+            var productEntity = _ecommerceUnitOfWork.Products.Get(x => x.Id.Equals(product.Id),
+                                    "ProductImages").FirstOrDefault();
+
+            if (productEntity is null)
+                throw new InvalidOperationException("Product with this id not found.");
+
+            //productEntity.ProductImages = null;
+            productEntity = _mapper.Map(product, productEntity);
+            //_mapper.Map<ProductBO>(productEntity);
+
+            productEntity.CreatedBy = await _currentUserService.GetUsername();
+            productEntity.UpdatedBy = await _currentUserService.GetUsername();
+
+            await _ecommerceUnitOfWork.SaveAsync();
+        }
+
         public void UpdateProduct(ProductBO product)
         {
             if (product is null)

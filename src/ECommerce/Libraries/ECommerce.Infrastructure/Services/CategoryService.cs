@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevSkill.Core.Utilities;
 using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.UnitOfWorks;
 using CategoryBO = ECommerce.Infrastructure.BusinessObjects.Category;
@@ -27,6 +28,9 @@ namespace ECommerce.Infrastructure.Services
             if (count == 0)
             {
                 var categoryEntity = _mapper.Map<CategoryEntity>(category);
+
+                var id = IdentityGenerator.NewSequentialGuid();
+                categoryEntity.Id = id;
 
                 categoryEntity.CreatedBy = await _currentUserService.GetUsername();
                 categoryEntity.UpdatedBy = await _currentUserService.GetUsername();

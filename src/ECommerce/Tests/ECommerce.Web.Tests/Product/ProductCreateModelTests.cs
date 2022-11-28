@@ -4,10 +4,9 @@ using ECommerce.Infrastructure.Services;
 using ECommerce.Web.Areas.Admin.Models;
 using Moq;
 using Shouldly;
-using EO = ECommerce.Infrastructure.Entities;
 using BO = ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Web.Models;
-using ECommerce.Membership.DTOs;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Tests.Product
 {
@@ -49,18 +48,12 @@ namespace ECommerce.Web.Tests.Product
         }
 
         [Test, Category("Unit Test")]
-        public async Task CreateProductAsync_InvitationCodeNoteProvided_ThrowException()
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task CreateProductAsync_ProductImageIsNull_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // arrange
-            var product = new BO.Product {
-                Id = Guid.Parse("7E19EA51-993E-4745-9E7D-FF8B5813AF4E"),
-                Name = "iPhone 14 Pro Max",
-                ActiveStatus = true,
-                UnitPrice = 140000,
-                DiscountedPrice = 139000,
-            };
-
-            var productEntity = new EO.Product
+            var product = new BO.Product
             {
                 Id = Guid.Parse("7E19EA51-993E-4745-9E7D-FF8B5813AF4E"),
                 Name = "iPhone 14 Pro Max",
@@ -69,37 +62,147 @@ namespace ECommerce.Web.Tests.Product
                 DiscountedPrice = 139000,
             };
 
-            var userInfo = new UserBasicInfoDto
+            product.ProductImages = null!;
+
+            var imageUrls = new List<string>();
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
+
+            var categoryIdOne = Guid.NewGuid();
+            var cetegoryIdTwo = Guid.NewGuid();
+            string[] categoriesId = new string[2] { categoryIdOne.ToString(), cetegoryIdTwo.ToString() };
+
+            _productServiceMock.Setup(p => p.CreateProduct(product))
+               .Returns(Task.CompletedTask).Verifiable();
+
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productCreateModel))
+                .Returns(product).Verifiable();
+
+            //Act & Assert
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Should.ThrowAsync<InvalidParameterException>(async
+                () => await _productCreateModel.CreateProduct(imageUrls, categoriesId)
+            );
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        [Test, Category("Unit Test")]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task CreateProductAsync_ProductCategoryIsNull_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            // arrange
+            var product = new BO.Product
             {
-                FirstName = "Lamia",
-                LastName = "Ahmed",
-                Email = "lamia@gmail.com",
-                UserName = "lamia@gmail.com"
+                Id = Guid.Parse("7E19EA51-993E-4745-9E7D-FF8B5813AF4E"),
+                Name = "iPhone 14 Pro Max",
+                ActiveStatus = true,
+                UnitPrice = 140000,
+                DiscountedPrice = 139000,
+            };
+
+            product.ProductCategories = null!;
+
+            var imageUrls = new List<string>();
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
+
+            var categoryIdOne = Guid.NewGuid();
+            var cetegoryIdTwo = Guid.NewGuid();
+            string[] categoriesId = new string[2] { categoryIdOne.ToString(), cetegoryIdTwo.ToString() };
+
+            _productServiceMock.Setup(p => p.CreateProduct(product))
+               .Returns(Task.CompletedTask).Verifiable();
+
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productCreateModel))
+                .Returns(product).Verifiable();
+
+            //Act & Assert
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Should.ThrowAsync<InvalidParameterException>(async
+                () => await _productCreateModel.CreateProduct(imageUrls, categoriesId)
+            );
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        [Test, Category("Unit Test")]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task CreateProductAsync_ProductDiscountedPriceIsHigh_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            // arrange
+            var product = new BO.Product
+            {
+                Id = Guid.Parse("7E19EA51-993E-4745-9E7D-FF8B5813AF4E"),
+                Name = "iPhone 14 Pro Max",
+                ActiveStatus = true,
+                UnitPrice = 140000,
+                DiscountedPrice = 141000,
+            };
+
+            product.ProductCategories = null!;
+            product.ProductImages= null!;
+
+            var imageUrls = new List<string>();
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
+
+            var categoryIdOne = Guid.NewGuid();
+            var cetegoryIdTwo = Guid.NewGuid();
+            string[] categoriesId = new string[2] { categoryIdOne.ToString(), cetegoryIdTwo.ToString() };
+
+            _productServiceMock.Setup(p => p.CreateProduct(product))
+               .Returns(Task.CompletedTask).Verifiable();
+
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productCreateModel))
+                .Returns(product).Verifiable();
+
+            //Act & Assert
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Should.ThrowAsync<Exception>(async
+                () => await _productCreateModel.CreateProduct(imageUrls, categoriesId)
+            );
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        [Test, Category("Unit Test")]
+        public async Task CreateProductAsync_ProvidedDataIsFine_CreateProductAsync()
+        {
+            // arrange
+            var product = new BO.Product
+            {
+                Id = Guid.Parse("7E19EA51-993E-4745-9E7D-FF8B5813AF4E"),
+                Name = "iPhone 14 Pro Max",
+                ActiveStatus = true,
+                UnitPrice = 140000,
+                DiscountedPrice = 139000,
             };
 
             product.ProductImages = null!;
             product.ProductCategories = null!;
 
             var imageUrls = new List<string>();
-            imageUrls = null!;
-            string[] categoriesId = null!;
+            imageUrls.Add("Demo.png");
+            imageUrls.Add("User.png");
 
-            //mockDb.Setup(d => d.SaveItem(It.IsAny<object>())).Verifiable();
-            //_baseModelMock.Setup(u => u.GetUserInfoAsync()).Returns(Task.FromResult(0)).Verifiable();
-            //var basemodel = new BaseModel();
-            //_baseModel.Setup(_ => basemodel).Returns(_baseModel.Object).Verifiable();
+            var categoryIdOne = Guid.NewGuid();
+            var cetegoryIdTwo = Guid.NewGuid();
+            string[] categoriesId = new string[2] { categoryIdOne.ToString(), cetegoryIdTwo.ToString() };
 
-            _baseModel.Setup(u => u.GetUserInfoAsync()).Returns(Task.CompletedTask).Verifiable();
+            _productServiceMock.Setup(p => p.CreateProduct(product))
+               .Returns(Task.CompletedTask).Verifiable();
 
+            _mapperMock.Setup(x => x.Map<BO.Product>(_productCreateModel))
+                .Returns(product).Verifiable();
+
+            //Act
             await _productCreateModel.CreateProduct(imageUrls, categoriesId);
 
             //Act & Assert
             this.ShouldSatisfyAllConditions(
-                () => _baseModel.VerifyAll()
+                () => _productServiceMock.VerifyAll(),
+                () => _mapperMock.VerifyAll()
             );
-            //await Should.ThrowAsync<InvalidParameterException>(async
-            //    () => await _productCreateModel.CreateProduct(imageUrls, categoriesId)
-            //);
         }
     }
 }

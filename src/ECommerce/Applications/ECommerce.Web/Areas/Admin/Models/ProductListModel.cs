@@ -87,7 +87,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                         orderby productInfo.CreatedDate descending
                         select new string[]
                         {
-                            (productInfo.ProductImages!=null)?
+                            (productInfo.ProductImages.Count!=0)?
                                 productInfo.ProductImages.Select(x => x.Url).FirstOrDefault().ToString():string.Empty,//->0
                             productInfo.Name,//->1
                             (productInfo.ProductCategories!=null)?

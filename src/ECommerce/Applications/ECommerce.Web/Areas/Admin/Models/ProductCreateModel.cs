@@ -3,6 +3,7 @@ using AutoMapper;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 using System.ComponentModel.DataAnnotations;
 using ProductBO = ECommerce.Infrastructure.BusinessObjects.Product;
 using ProductCategoryBO = ECommerce.Infrastructure.BusinessObjects.ProductCategory;
@@ -66,7 +67,7 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task CreateProduct(IList<string> imageUrls, string[] categoriesId)
         {
-            await GetUserInfoAsync();
+            //await GetUserInfoAsync();
 
             var product = _mapper!.Map<ProductBO>(this);
             if (this.Status == "Active")
@@ -75,7 +76,15 @@ namespace ECommerce.Web.Areas.Admin.Models
                 product.ActiveStatus = false;
 
             product.ProductImages = new List<ProductImageBO>();
+
+            if (product.ProductImages == null!)
+                throw new InvalidParameterException("Product Image is null");
+
             product.ProductCategories = new List<ProductCategoryBO>();
+
+            if (product.ProductCategories == null!)
+                throw new InvalidParameterException("Proudct category is null");
+
             foreach (var images in imageUrls)
             {
                 product.ProductImages?.Add(new ProductImageBO

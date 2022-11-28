@@ -45,7 +45,7 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task CreateCategory()
         {
-            await GetUserInfoAsync();
+            //await GetUserInfoAsync();
             var categoryBO = _mapper!.Map<Category>(this);
             await _categoryService!.CreateCategory(categoryBO);
         }
