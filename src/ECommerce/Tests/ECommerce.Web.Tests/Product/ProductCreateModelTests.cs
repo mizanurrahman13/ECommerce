@@ -7,9 +7,11 @@ using Shouldly;
 using BO = ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Web.Models;
 using Org.BouncyCastle.Security;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ECommerce.Web.Tests.Product
 {
+    [ExcludeFromCodeCoverage]
     public class ProductCreateModelTests
     {
         private AutoMock _autoMock;

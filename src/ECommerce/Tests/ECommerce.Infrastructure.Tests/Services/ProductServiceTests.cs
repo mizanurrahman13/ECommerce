@@ -89,7 +89,9 @@ namespace ECommerce.Infrastructure.Tests.Services
         }
 
         [Test]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task CreateProductAsync_ProductExists_ThrowDuplicateException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Arrange
             var product = new Product { 
@@ -197,7 +199,9 @@ namespace ECommerce.Infrastructure.Tests.Services
         }
 
         [Test]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task UpdateProductAsync_SameNameExists_ThrowException()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Arrange
             var product = new Product

@@ -5,10 +5,12 @@ using ECommerce.Web.Areas.Admin.Models;
 using Moq;
 using Org.BouncyCastle.Security;
 using Shouldly;
+using System.Diagnostics.CodeAnalysis;
 using BO = ECommerce.Infrastructure.BusinessObjects;
 
 namespace ECommerce.Web.Tests.Category
 {
+    [ExcludeFromCodeCoverage]
     public class CategoryEditModelTests
     {
         private AutoMock _autoMock;
