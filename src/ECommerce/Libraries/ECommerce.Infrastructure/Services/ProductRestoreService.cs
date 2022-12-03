@@ -44,7 +44,7 @@ namespace ECommerce.Infrastructure.Services
         }
         public ProductDelete GetTrashByProductId(Guid productId)
         {
-            if (productId== Guid.Empty)
+            if (productId == Guid.Empty)
                 throw new InvalidParameterException("ProductDelete Id can't be null");
 
             var entity = _eCommerceUnitOfWork.ProductRestores

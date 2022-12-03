@@ -1,16 +1,15 @@
 ﻿using Autofac.Extras.Moq;
 using AutoMapper;
+using ECommerce.Infrastructure.Repositories;
 using ECommerce.Infrastructure.Services;
+using ECommerce.Infrastructure.UnitOfWorks;
 using ECommerce.Web.Areas.Admin.Models;
 using ECommerce.Web.Models;
 using Moq;
 using Org.BouncyCastle.Security;
 using Shouldly;
 using System.Diagnostics.CodeAnalysis;
-using EO = ECommerce.Infrastructure.Entities;
 using BO = ECommerce.Infrastructure.BusinessObjects;
-using ECommerce.Infrastructure.Repositories;
-using ECommerce.Infrastructure.UnitOfWorks;
 
 namespace ECommerce.Web.Tests.Product
 {
@@ -204,7 +203,7 @@ namespace ECommerce.Web.Tests.Product
             {
                 Id = Guid.NewGuid(),
                 ProductId = product.Id
-            };            
+            };
 
             _productServiceMock.Setup(e => e.GetProductById(productId))
                 .Returns(product).Verifiable();

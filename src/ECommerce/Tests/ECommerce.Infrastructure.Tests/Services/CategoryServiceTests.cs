@@ -154,7 +154,7 @@ namespace ECommerce.Infrastructure.Tests.Services
             _categoryRepositoryMock.Setup(c => c.GetDynamicAsync(It.Is<Expression<Func<EO.Category, bool>>>
                 (i => i.Compile()(categoryEntity)), orderBy, null, pageIndex, pageSize, true))
                 .ReturnsAsync((listOfCategoryEntity, total, totalDisplay)).Verifiable();
-            
+
             _mapperMock!.Setup(x => x.Map<BO.Category>(categoryEntity))
                 .Returns(category).Verifiable();
 

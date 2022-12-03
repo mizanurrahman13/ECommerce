@@ -1,21 +1,16 @@
 ﻿using Autofac.Extras.Moq;
+using AutoMapper;
+using ECommerce.Membership.BusinessObjects;
+using ECommerce.Membership.DTOs;
+using ECommerce.Membership.Services;
+using ECommerce.Web.Enums;
 using ECommerce.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using Shouldly;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text;
-using ECommerce.Web.Enums;
-using ECommerce.Membership.DTOs;
-using ECommerce.Membership.Services;
-using ECommerce.Membership.BusinessObjects;
-using ApplicationUserEntity = ECommerce.Infrastructure.Entities.Membership.ApplicationUser;
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Castle.Core.Internal;
-using System.Security.Claims;
-using Azure;
+using System.Text.Json;
 
 namespace ECommerce.Web.Tests
 {

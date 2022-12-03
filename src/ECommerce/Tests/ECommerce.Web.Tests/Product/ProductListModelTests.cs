@@ -1,6 +1,4 @@
-﻿using EO = ECommerce.Infrastructure.Entities;
-using BO = ECommerce.Infrastructure.BusinessObjects;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using AutoMapper;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Web.Areas.Admin.Models;
@@ -9,6 +7,7 @@ using Moq;
 using Org.BouncyCastle.Security;
 using Shouldly;
 using System.Diagnostics.CodeAnalysis;
+using BO = ECommerce.Infrastructure.BusinessObjects;
 
 namespace ECommerce.Web.Tests.Product
 {

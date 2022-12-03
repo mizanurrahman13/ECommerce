@@ -1,11 +1,8 @@
 ﻿using Autofac.Extras.Moq;
 using AutoMapper;
-using ECommerce.Infrastructure.Repositories;
 using ECommerce.Infrastructure.Services;
-using ECommerce.Infrastructure.UnitOfWorks;
 using ECommerce.Web.Areas.Admin.Models;
 using ECommerce.Web.Models;
-using Microsoft.AspNetCore.Hosting;
 using Moq;
 using Org.BouncyCastle.Security;
 using Shouldly;

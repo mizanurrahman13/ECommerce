@@ -2,12 +2,12 @@
 using AutoMapper;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Web.Areas.Admin.Models;
-using Moq;
-using Shouldly;
-using BO = ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Web.Models;
+using Moq;
 using Org.BouncyCastle.Security;
+using Shouldly;
 using System.Diagnostics.CodeAnalysis;
+using BO = ECommerce.Infrastructure.BusinessObjects;
 
 namespace ECommerce.Web.Tests.Product
 {
@@ -143,7 +143,7 @@ namespace ECommerce.Web.Tests.Product
             };
 
             product.ProductCategories = null!;
-            product.ProductImages= null!;
+            product.ProductImages = null!;
 
             var imageUrls = new List<string>();
             imageUrls.Add("Demo.png");

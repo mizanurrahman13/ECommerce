@@ -1,6 +1,5 @@
 ﻿using Autofac.Extras.Moq;
 using AutoMapper;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using ECommerce.Infrastructure.Repositories;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Infrastructure.UnitOfWorks;
@@ -191,7 +190,7 @@ namespace ECommerce.Infrastructure.Tests.Services
             var productDeleteList = new List<EO.ProductDelete>() { productDeleteEntity };
 
             _eCommerceUnitOfWorkMock.Setup(x => x.ProductRestores)
-                .Returns(_productRestoreRepositoryMock!.Object);            
+                .Returns(_productRestoreRepositoryMock!.Object);
 
             _productRestoreRepositoryMock.Setup(x => x.Get(It.Is<Expression<Func<EO.ProductDelete, bool>>>
                 (i => i.Compile()(productDeleteEntity)), string.Empty))

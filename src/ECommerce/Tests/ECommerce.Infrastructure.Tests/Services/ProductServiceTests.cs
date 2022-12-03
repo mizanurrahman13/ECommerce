@@ -5,7 +5,6 @@ using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.Repositories;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Infrastructure.UnitOfWorks;
-using MailKit.Search;
 using Moq;
 using Org.BouncyCastle.Security;
 using Shouldly;
@@ -57,10 +56,11 @@ namespace ECommerce.Infrastructure.Tests.Services
         public async Task CreateProductAsync_ProductDoesNotExists_CreateProduct()
         {
             // Arrange
-            var product = new Product { 
-                Name = "iPhone 14 Pro Max", 
-                ActiveStatus = true, 
-                UnitPrice = 140000, 
+            var product = new Product
+            {
+                Name = "iPhone 14 Pro Max",
+                ActiveStatus = true,
+                UnitPrice = 140000,
                 DiscountedPrice = 139500
             };
 
@@ -94,11 +94,12 @@ namespace ECommerce.Infrastructure.Tests.Services
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Arrange
-            var product = new Product { 
-                Name = "iPhone 14 Pro Max", 
-                ActiveStatus = true, 
-                UnitPrice = 140000, 
-                DiscountedPrice = 139500 
+            var product = new Product
+            {
+                Name = "iPhone 14 Pro Max",
+                ActiveStatus = true,
+                UnitPrice = 140000,
+                DiscountedPrice = 139500
             };
 
             _eCommerceUnitOfWorkMock.Setup(x => x.Products)
@@ -117,12 +118,13 @@ namespace ECommerce.Infrastructure.Tests.Services
         public void DeleteProduct_ProductDoesNotExists_ThrowError()
         {
             // Arrange
-            var product = new Product { 
-                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"), 
-                Name = "iPhone 12 Pro Max", 
-                ActiveStatus = false, 
-                UnitPrice = 120000, 
-                DiscountedPrice = 119000 
+            var product = new Product
+            {
+                Id = Guid.Parse("1F7D0046-288E-4887-A251-BA8937A6DCC6"),
+                Name = "iPhone 12 Pro Max",
+                ActiveStatus = false,
+                UnitPrice = 120000,
+                DiscountedPrice = 119000
             };
 
             ProductEntity productEntity = null!;
@@ -143,11 +145,12 @@ namespace ECommerce.Infrastructure.Tests.Services
         public async Task GetProductAsync_ProductExists_ReturnSize()
         {
             // Arrange
-            var product = new ProductEntity { 
-                Id = Guid.Parse("17A7DFF9-34FD-44E6-98C2-AA9DD60392EF"), 
-                Name = "Mango", 
-                ActiveStatus = false, 
-                UnitPrice = 3000, 
+            var product = new ProductEntity
+            {
+                Id = Guid.Parse("17A7DFF9-34FD-44E6-98C2-AA9DD60392EF"),
+                Name = "Mango",
+                ActiveStatus = false,
+                UnitPrice = 3000,
                 DiscountedPrice = 2500
             };
 
@@ -224,7 +227,7 @@ namespace ECommerce.Infrastructure.Tests.Services
             // Assert
             Should.Throw<InvalidOperationException>(
                 () => _productService.UpdateProductAsync(product).GetAwaiter().GetResult()
-            );            
+            );
         }
 
         [Test]
@@ -362,7 +365,7 @@ namespace ECommerce.Infrastructure.Tests.Services
             _productRepositoryMock.Setup(p => p.GetDynamic(It.Is<Expression<Func<ProductEntity, bool>>>
                 (i => i.Compile()(productEntity)), orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true))
                 .Returns((listOfProductEntity, total, totalDisplay)).Verifiable();
-            
+
             _mapperMock.Setup(x => x.Map<Product>(productEntity))
                 .Returns(product).Verifiable();
 
@@ -532,7 +535,7 @@ namespace ECommerce.Infrastructure.Tests.Services
 
             _productRepositoryMock.Setup(x => x.GetById(id))
                 .Returns(productEntity);
-            
+
             _eCommerceUnitOfWorkMock.Setup(x => x.Save()).Verifiable();
 
             //Act
@@ -761,7 +764,7 @@ namespace ECommerce.Infrastructure.Tests.Services
             };
 
             var listOfProductImage = new List<ProductImageEntity> { productImageEntity };
-            var listOfProduct = new List<ProductEntity>() { productEntity };            
+            var listOfProduct = new List<ProductEntity>() { productEntity };
 
             _eCommerceUnitOfWorkMock.Setup(x => x.Products)
                 .Returns(_productRepositoryMock.Object);
@@ -776,7 +779,7 @@ namespace ECommerce.Infrastructure.Tests.Services
 
             //Act 
             _productService.GetProductImageById(productEntity.Id);
-            
+
             //Assert 
             this.ShouldSatisfyAllConditions(
                 () => _eCommerceUnitOfWorkMock.VerifyAll(),

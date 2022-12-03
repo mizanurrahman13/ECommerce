@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using AutoMapper;
 using ECommerce.Infrastructure.Services;
-using ECommerce.Infrastructure.UnitOfWorks;
 using ECommerce.Web.Areas.Admin.Models;
 using ECommerce.Web.Models;
 using Moq;
