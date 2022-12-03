@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 using ECommerce.Infrastructure.Services;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -37,7 +38,14 @@ namespace ECommerce.Web.Areas.Admin.Models
         }
         public List<CategoryImageModel> GetImageByCategoryId(Guid categoryId)
         {
+            if (categoryId == Guid.Empty)
+                throw new InvalidParameterException("Category id can't be null");
+
             var category = _categoryService.GetCategoryImageById(categoryId);
+
+            if (category == null)
+                throw new InvalidParameterException("Category can't be null");
+
             var image = new List<CategoryImageModel>();
             long size = 0;
             if (category != null)

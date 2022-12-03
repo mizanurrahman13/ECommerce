@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -47,7 +48,14 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public void MakeTrash(Guid productId)
         {
+            if (productId == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
             var product = _productService!.GetProductById(productId);
+
+            if (product == null)
+                throw new InvalidParameterException("Product cann't be null.");
+
             product.Featured = false;//removed from feature
             product.ActiveStatus = false;//removed from feed
             product.DeleteQueue = true;//moved to delete queue
@@ -63,7 +71,14 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public void Restore(Guid productId)
         {
-            var product = _productService.GetProductById(productId);
+            if (productId == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
+            var product = _productService!.GetProductById(productId);
+
+            if (product == null)
+                throw new InvalidParameterException("Product cann't be null.");
+
             product.Featured = false;// reamin removed from feature after restore
             product.ActiveStatus = false;// reamin removed from feed after restore
             product.DeleteQueue = false;//moved from delete queue
@@ -72,13 +87,27 @@ namespace ECommerce.Web.Areas.Admin.Models
             _productService.UpdateProduct(product);
 
             var trashedProduct = _productRestoreService.GetTrashByProductId(productId);
+
+            if (trashedProduct == null)
+                throw new InvalidParameterException("TrashedProduct cann't be null.");
+
             _productRestoreService.Remove(trashedProduct.Id);//removed from trash table
         }
 
         public void ForceDelete(Guid productId)
         {
+            if (productId == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
             var product = _productService!.GetProductById(productId);
+
+            if (product == null)
+                throw new InvalidParameterException("Product cann't be null.");
+
             var trashedProduct = _productRestoreService.GetTrashByProductId(productId);
+
+            if (trashedProduct == null)
+                throw new InvalidParameterException("TrashedProduct cann't be null.");
 
             _productService!.DeleteProduct(product.Id);
             _productRestoreService.Remove(trashedProduct.Id);

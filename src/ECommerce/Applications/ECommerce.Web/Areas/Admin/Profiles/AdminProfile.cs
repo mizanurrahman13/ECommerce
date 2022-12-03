@@ -12,6 +12,7 @@ namespace ECommerce.Web.Areas.Admin.Profiles
             CreateMap<ProductCreateModel, Product>().ReverseMap();
             CreateMap<ProductEditModel, Product>().ReverseMap();
             CreateMap<ProductRestoreModel, ProductDelete>().ReverseMap();
+            CreateMap<CategoryEditModel, Category>().ReverseMap();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using DevSkill.Core.Utilities;
-
-namespace ECommerce.Infrastructure.BusinessObjects
+﻿namespace ECommerce.Infrastructure.BusinessObjects
 {
     public class Category
     {
@@ -15,9 +13,9 @@ namespace ECommerce.Infrastructure.BusinessObjects
 
         public IList<ProductCategory>? ProductCategories { get; set; }
 
-        public Category()
-        {
-            Id = (Id == Guid.Empty) ? IdentityGenerator.NewSequentialGuid() : Id;
-        }
+        //public Category()
+        //{
+        //    Id = (Id == Guid.Empty) ? IdentityGenerator.NewSequentialGuid() : Id;
+        //}
     }
 }

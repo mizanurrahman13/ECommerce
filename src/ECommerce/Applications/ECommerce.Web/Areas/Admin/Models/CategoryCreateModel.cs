@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Web.Areas.Admin.Models
@@ -45,8 +46,12 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task CreateCategory()
         {
-            await GetUserInfoAsync();
+            //await GetUserInfoAsync();
             var categoryBO = _mapper!.Map<Category>(this);
+
+            if (categoryBO == null!)
+                throw new InvalidParameterException("Category can't be null");
+
             await _categoryService!.CreateCategory(categoryBO);
         }
     }
