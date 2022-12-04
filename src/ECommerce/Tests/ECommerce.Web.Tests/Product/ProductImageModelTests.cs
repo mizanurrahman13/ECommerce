@@ -19,7 +19,6 @@ namespace ECommerce.Web.Tests.Product
         private Mock<IProductService> _productServiceMock;
         private Mock<IMapper> _mapperMock;
         private ProductImageModel? _productImageModel;
-        private Mock<BaseModel> _baseModel;
 
         [OneTimeSetUp]
         public void ClassOneTimeSetUp()
@@ -39,7 +38,6 @@ namespace ECommerce.Web.Tests.Product
             _productServiceMock = _autoMock.Mock<IProductService>();
             _mapperMock = _autoMock.Mock<IMapper>();
             _productImageModel = _autoMock.Create<ProductImageModel>();
-            _baseModel = _autoMock.Mock<BaseModel>();
         }
 
         [TearDown]
@@ -47,7 +45,6 @@ namespace ECommerce.Web.Tests.Product
         {
             _productServiceMock?.Reset();
             _mapperMock?.Reset();
-            _baseModel?.Reset();
         }
 
         [Test]
@@ -72,7 +69,7 @@ namespace ECommerce.Web.Tests.Product
 
             //Act & Assert
             Should.Throw<InvalidParameterException>(
-               () => _productImageModel.GetImagesByProductId(productId)
+               () => _productImageModel!.GetImagesByProductId(productId)
             );
         }
 
