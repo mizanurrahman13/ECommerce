@@ -14,6 +14,7 @@ namespace ECommerce.Membership.Services
         Task<IdentityResult> ConfirmEmailAsync(string userName, string token);
         Task EmailConfirmationTokenAsync(T appUser);
         Task<IList<string>> GetUserRolesAsync(string userName);
+        Task<ApplicationUser> FindByUsernameAsync(string userName);
         Task<bool> UpdateAccountAsync(ApplicationUser user);
         Task SignInAsync(Guid id);
         Task SignInAsync(string userName);

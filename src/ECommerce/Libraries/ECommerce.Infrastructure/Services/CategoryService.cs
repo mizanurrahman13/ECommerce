@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DevSkill.Core.Utilities;
 using ECommerce.Infrastructure.Exceptions;
 using ECommerce.Infrastructure.UnitOfWorks;
+using Org.BouncyCastle.Security;
 using CategoryBO = ECommerce.Infrastructure.BusinessObjects.Category;
 using CategoryEntity = ECommerce.Infrastructure.Entities.Category;
 
@@ -28,6 +30,9 @@ namespace ECommerce.Infrastructure.Services
             {
                 var categoryEntity = _mapper.Map<CategoryEntity>(category);
 
+                var id = IdentityGenerator.NewSequentialGuid();
+                categoryEntity.Id = id;
+
                 categoryEntity.CreatedBy = await _currentUserService.GetUsername();
                 categoryEntity.UpdatedBy = await _currentUserService.GetUsername();
 
@@ -54,6 +59,9 @@ namespace ECommerce.Infrastructure.Services
 
         public async Task<CategoryBO> GetCategoryByIdAsync(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Category id can't be null");
+
             var categoryEntity = await _ecommerceUnitOfWork.Categories.GetByIdAsync(id);
 
             if (categoryEntity is null)
@@ -66,6 +74,9 @@ namespace ECommerce.Infrastructure.Services
 
         public CategoryBO GetCategoryById(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Category id can't be null");
+
             var categoryEntity = _ecommerceUnitOfWork.Categories.GetById(id);
 
             if (categoryEntity is null)
@@ -78,15 +89,17 @@ namespace ECommerce.Infrastructure.Services
 
         public async Task UpdateCategoryAsync(CategoryBO category)
         {
-            if (category is null)
-                throw new InvalidOperationException("Category must be provided to update item");
-
-            var count = await _ecommerceUnitOfWork.Categories.IsCategoryAlreadyExists(category);
+            //var count = await _ecommerceUnitOfWork.Categories.IsCategoryAlreadyExists(category);
+            var count = await _ecommerceUnitOfWork.Categories.GetCountAsync(x => x.Id != category.Id && x.Name == category.Name);
 
             if (count != 0)
                 throw new InvalidOperationException("Category name already exists");
 
             var categoryEntity = await _ecommerceUnitOfWork.Categories.GetByIdAsync(category.Id);
+
+            if (categoryEntity is null)
+                throw new InvalidOperationException("Category with this id not found.");
+
             categoryEntity = _mapper.Map(category, categoryEntity);
 
             categoryEntity.CreatedBy = await _currentUserService.GetUsername();
@@ -97,6 +110,9 @@ namespace ECommerce.Infrastructure.Services
 
         public async Task DeleteCategoryAsync(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Category id can't be null");
+
             await _ecommerceUnitOfWork.Categories.RemoveAsync(id);
             await _ecommerceUnitOfWork.SaveAsync();
         }
@@ -111,12 +127,18 @@ namespace ECommerce.Infrastructure.Services
 
         public void DeleteCategory(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Category id can't be null");
+
             _ecommerceUnitOfWork.Categories.Remove(id);
             _ecommerceUnitOfWork.Save();
         }
 
         public CategoryBO GetCategoryImageById(Guid Id)
         {
+            if (Id == Guid.Empty)
+                throw new InvalidParameterException("Id can't be empty");
+
             var result = _ecommerceUnitOfWork.
                  Categories.Get(x => x.Id.Equals(Id),
                  string.Empty).FirstOrDefault();

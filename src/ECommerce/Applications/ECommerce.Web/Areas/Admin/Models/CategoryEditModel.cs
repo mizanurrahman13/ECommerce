@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.BusinessObjects;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Web.Areas.Admin.Models
@@ -44,41 +45,25 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task GetCategory(Guid id)
         {
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Category id can not be empty.");
+
             var category = await _categoryService!.GetCategoryByIdAsync(id);
-            MapCategory(category);
+
+            if (category == null)
+                throw new InvalidParameterException("Category cann't be null.");
+
+            _mapper!.Map(category, this);
         }
 
         public async Task UpdateCategoryAsync()
         {
-            var category = MapCategory();
+            var category = _mapper!.Map<Category>(this);
+
+            if (category == null!)
+                throw new InvalidParameterException("Category cann't be null.");
+
             await _categoryService!.UpdateCategoryAsync(category);
-        }
-
-        public void MapCategory(Category category)
-        {
-            Id = category.Id;
-            Name = category.Name;
-            Description = category.Description;
-            ImageUrl = category.ImageUrl;
-            CreatedBy = category.CreatedBy;
-            CreatedDate = category.CreatedDate;
-            UpdatedBy = category.UpdatedBy;
-            UpdatedDate = category.UpdatedDate;
-        }
-
-        public Category MapCategory()
-        {
-            var category = new Category();
-            category.Id = Id;
-            category.Name = Name;
-            category.Description = Description;
-            category.ImageUrl = ImageUrl;
-            category.CreatedBy = CreatedBy;
-            category.CreatedDate = CreatedDate;
-            category.UpdatedBy = UpdatedBy;
-            category.UpdatedDate = UpdatedDate;
-
-            return category;
         }
     }
 }

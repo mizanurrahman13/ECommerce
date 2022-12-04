@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.Common;
 using ECommerce.Infrastructure.Services;
 using ECommerce.Membership.BusinessObjects;
 using ECommerce.Membership.Services;
+using Org.BouncyCastle.Security;
 
 namespace ECommerce.Web.Areas.Admin.Models
 {
@@ -70,6 +71,9 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public object? GetProducts(DataTablesAjaxRequestModel model)
         {
+            if (model == null)
+                throw new InvalidParameterException("DataTable Request Invalid.");
+
             var data = _productService!.GetActiveProducts(
                 model.PageIndex,
                 model.PageSize,
@@ -78,6 +82,9 @@ namespace ECommerce.Web.Areas.Admin.Models
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8601 // Possible null reference assignment.
+            if (data.products == null)
+                throw new InvalidParameterException("Product Data Not Found.");
+
             return new
             {
                 recordsTotal = data.total,
@@ -86,7 +93,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                         orderby productInfo.CreatedDate descending
                         select new string[]
                         {
-                            (productInfo.ProductImages!=null)?
+                            (productInfo.ProductImages.Count!=0)?
                                 productInfo.ProductImages.Select(x => x.Url).FirstOrDefault().ToString():string.Empty,//->0
                             productInfo.Name,//->1
                             (productInfo.ProductCategories!=null)?
@@ -111,14 +118,12 @@ namespace ECommerce.Web.Areas.Admin.Models
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
-        public async Task DeleteCategoryAsync(Guid id)
-        {
-            await _categoryService!.DeleteCategoryAsync(id);
-        }
-
         public void Delete(Guid id)
         {
-            _categoryService?.DeleteCategory(id);
+            if (id == Guid.Empty)
+                throw new InvalidParameterException("Product id can not be empty.");
+
+            _productService?.DeleteProduct(id);
         }
     }
 }

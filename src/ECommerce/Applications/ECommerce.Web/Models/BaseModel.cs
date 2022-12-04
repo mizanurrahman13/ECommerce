@@ -8,7 +8,7 @@ using ECommerce.Web.Enums;
 
 namespace ECommerce.Web.Models
 {
-    public abstract class BaseModel
+    public class BaseModel : IBaseModel
     {
         protected IUserManagerAdapter<ApplicationUser>? _userManagerAdapter;
         protected IHttpContextAccessor? _httpContextAccessor;
@@ -94,7 +94,7 @@ namespace ECommerce.Web.Models
             _mapper!.Map(userInfo, UserInfo);
         }
 
-        public async Task GetUserInfoAsync()
+        public virtual async Task GetUserInfoAsync()
         {
             if (!_httpContextAccessor!.HttpContext!.User!.Identity!.IsAuthenticated)
                 throw new InvalidOperationException("Authenticated user required to access user information");

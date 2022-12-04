@@ -15,6 +15,7 @@ namespace ECommerce.Infrastructure.Services
         Task<Product> GetProductByIdAsync(Guid id);
         Product GetProductById(Guid id);
         Task UpdateProductAsync(Product product);
+        Task UpdateProductAndImageAsync(Product product);
         void UpdateProduct(Product product);
         Product GetProductImageById(Guid Id);
         void ChangeVisibility(Guid id);
