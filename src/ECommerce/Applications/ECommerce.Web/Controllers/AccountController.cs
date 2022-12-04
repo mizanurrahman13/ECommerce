@@ -16,7 +16,7 @@ namespace ECommerce.Web.Controllers
             _lifetimeScope = lifetimeScope;
         }
 
-        public async Task<IActionResult> Register(string returnUrl = null)
+        public async Task<IActionResult> Register(string returnUrl = null!)
         {
             var model = _lifetimeScope.Resolve<RegisterModel>();
             model.ReturnUrl = returnUrl;
@@ -93,7 +93,7 @@ namespace ECommerce.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl = null!)
         {
             var model = _lifetimeScope.Resolve<LoginModel>();
             var registerModel = _lifetimeScope.Resolve<RegisterModel>();
@@ -153,7 +153,7 @@ namespace ECommerce.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout(string returnUrl = null)
+        public async Task<IActionResult> Logout(string returnUrl = null!)
         {
             var model = _lifetimeScope.Resolve<LoginModel>();
             await model.SignOutAsync();

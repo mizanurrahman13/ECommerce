@@ -35,7 +35,7 @@ namespace ECommerce.Web.Areas.Admin.Models
            : base(userManagerAdapter, httpContextAccessor, mapper)
         {
             _productService = productService;
-            _productRestoreService = productRestoreService;
+            _productRestoreService = productRestoreService!;
         }
 
         public override void Resolve(ILifetimeScope scope)

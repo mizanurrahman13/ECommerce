@@ -42,7 +42,7 @@ namespace ECommerce.Membership.Services
 
         public async Task<SignInResult> PasswordSignInAsync(ApplicationUser user)
         {
-            return await _signInManager.PasswordSignInAsync(user.Email, user.Password, user.RememberMe,
+            return await _signInManager.PasswordSignInAsync(user.Email!, user.Password!, user.RememberMe,
                 lockoutOnFailure: false);
         }
     }

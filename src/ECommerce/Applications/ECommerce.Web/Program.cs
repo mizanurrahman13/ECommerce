@@ -41,9 +41,9 @@ var webHostEnvironment = builder.Environment;
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule(new WebModule());
-    containerBuilder.RegisterModule(new InfrastructureModule(connectionString, assemblyName, webHostEnvironment));
-    containerBuilder.RegisterModule(new MembershipModule(connectionString, assemblyName));
-    containerBuilder.RegisterModule(new EmailMessagingModule(connectionString, assemblyName));
+    containerBuilder.RegisterModule(new InfrastructureModule(connectionString!, assemblyName!, webHostEnvironment));
+    containerBuilder.RegisterModule(new MembershipModule(connectionString!, assemblyName!));
+    containerBuilder.RegisterModule(new EmailMessagingModule(connectionString!, assemblyName!));
 });
 
 // Configuring AutoMapper
@@ -58,9 +58,9 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddSingleton<AdminDataSeed>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
+    options.UseSqlServer(connectionString!, m => m.MigrationsAssembly(assemblyName)));
 builder.Services.AddDbContext<EmailMessagingContext>(options =>
-    options.UseSqlServer(connectionString, m => m.MigrationsAssembly(assemblyName)));
+    options.UseSqlServer(connectionString!, m => m.MigrationsAssembly(assemblyName)));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

@@ -119,7 +119,7 @@ namespace ECommerce.Infrastructure.Services
 
         public async Task<List<CategoryBO>> GetCategoriesAsync(Guid? id)
         {
-            var categoriesEO = await _ecommerceUnitOfWork.Categories.GetAsync(x => x.Id == id, null);
+            var categoriesEO = await _ecommerceUnitOfWork.Categories.GetAsync(x => x.Id == id, null!);
             var categoriesBO = _mapper.Map<List<CategoryBO>>(categoriesEO);
 
             return categoriesBO;

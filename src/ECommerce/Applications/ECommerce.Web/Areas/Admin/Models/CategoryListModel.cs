@@ -58,12 +58,12 @@ namespace ECommerce.Web.Areas.Admin.Models
 
         public async Task<IList<Category>> GetAllAsync()
         {
-            return await _categoryService.GetAllAsync();
+            return await _categoryService!.GetAllAsync();
         }
 
         public IList<Category> GetAll()
         {
-            return _categoryService.GetAll();
+            return _categoryService!.GetAll();
         }
     }
 }

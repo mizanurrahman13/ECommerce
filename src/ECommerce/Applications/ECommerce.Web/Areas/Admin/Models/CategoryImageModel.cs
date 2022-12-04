@@ -58,7 +58,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                     size = fi.Length;
                 }
 
-                image.Add(new CategoryImageModel() { URL = category.ImageUrl, Size = size });
+                image.Add(new CategoryImageModel() { URL = category.ImageUrl!, Size = size });
             }
             else
             {

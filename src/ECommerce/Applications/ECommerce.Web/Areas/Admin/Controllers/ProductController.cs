@@ -73,9 +73,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                         }
                     }
                     if (categoriesId == null)
-                        await model?.CreateProduct(validImages, new string[] { "default" });
+                        await model?.CreateProduct(validImages, new string[] { "default" })!;
                     else
-                        await model?.CreateProduct(validImages, categoriesId);
+                        await model?.CreateProduct(validImages, categoriesId)!;
 
                     TempData["message"] = $"{model?.Name} is successfully added.";
 
@@ -147,7 +147,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                                 validImages.Add(validPath);
                         }
                     }
-                    await model?.UpdateProductAsync(validImages);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    await  model?.UpdateProductAsync(validImages);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     TempData["message"] = $"{model?.Name} is successfully updated ";
 
                     return RedirectToAction("Index");

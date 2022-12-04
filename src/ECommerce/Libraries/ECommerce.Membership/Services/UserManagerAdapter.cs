@@ -63,7 +63,9 @@ namespace ECommerce.Membership.Services
         {
             var user = await _userManager.FindByEmailAsync(userName);
 
+#pragma warning disable CS8604 // Possible null reference argument.
             await _signInManager.SignInAsync(user, isPersistent: false);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         public async Task EmailConfirmationTokenAsync(ApplicationUser appUser)
@@ -84,7 +86,9 @@ namespace ECommerce.Membership.Services
             var user = await _userManager.FindByEmailAsync(userName);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
 
+#pragma warning disable CS8604 // Possible null reference argument.
             return await _userManager.ConfirmEmailAsync(user, code);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         public bool ConfirmedAccount()
@@ -97,7 +101,9 @@ namespace ECommerce.Membership.Services
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
+#pragma warning disable CS8603 // Possible null reference return.
                 return null;
+#pragma warning restore CS8603 // Possible null reference return.
             else
                 return _mapper.Map<ApplicationUser>(user);
         }
@@ -132,7 +138,9 @@ namespace ECommerce.Membership.Services
             var user = await _userManager.FindByEmailAsync(userName);
 
             if (user == null)
+#pragma warning disable CS8603 // Possible null reference return.
                 return null;
+#pragma warning restore CS8603 // Possible null reference return.
             else
                 return _mapper.Map<ApplicationUser>(user);
         }
@@ -143,10 +151,14 @@ namespace ECommerce.Membership.Services
                 throw new InvalidOperationException("Application user must be provided to update dependent data");
 
             var userEntity = await _userManager.FindByIdAsync(user.Id.ToString());
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             userEntity.FirstName = user.FirstName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             userEntity.LastName = user.LastName;
             userEntity.Email = user.Email;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             userEntity.NormalizedEmail = user.Email.ToUpper();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var result = await _userManager.UpdateAsync(userEntity);
             if (!result.Succeeded)
@@ -173,7 +185,7 @@ namespace ECommerce.Membership.Services
         private async Task<ApplicationUserEO> FindUserIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            return user;
+            return user!;
         }
 
         public async Task<IdentityResult> ChangePassword(string userId,

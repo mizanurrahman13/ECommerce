@@ -58,8 +58,10 @@ namespace ECommerce.Web.Tests.Product
             var id = Guid.Empty;
 
             //Act & Assert
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Should.Throw<InvalidParameterException>(
                () => _productListModel.Delete(id));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         [Test, Category("Unit Test")]

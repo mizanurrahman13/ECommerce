@@ -34,6 +34,8 @@ namespace ECommerce.Web.Areas.Admin.Models
             var data = await _productService!.GetActiveProductsAsync(model.PageIndex, model.PageSize,
                 model.SearchText, model.GetSortText(new string[] { "Name", "UnitPrice" }));
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             return new
             {
                 recordsTotal = data.total,
@@ -44,11 +46,11 @@ namespace ECommerce.Web.Areas.Admin.Models
                         {
                             (productInfo.ProductImages!=null)?
                                 productInfo.ProductImages.Select(x => x.Url).FirstOrDefault().ToString():string.Empty,//->0
-                            productInfo.Name,//->1
+                            productInfo.Name!,//->1
                             (productInfo.ProductCategories!=null)?
                             String.Join(",", productInfo.ProductCategories.Select(async x =>
                             {
-                                var res = _categoryService.GetCategoryById(x.CategoryId);
+                                var res = _categoryService!.GetCategoryById(x.CategoryId);
                                 return "[{"+res.Id+"}^{"+res.Name+"}]";
                             }
                             )):string.Empty,//->2
@@ -63,6 +65,8 @@ namespace ECommerce.Web.Areas.Admin.Models
                             productInfo.Id.ToString()//->9
                         }).ToArray()
             };
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         public object? GetProducts(DataTablesAjaxRequestModel model)
@@ -76,6 +80,8 @@ namespace ECommerce.Web.Areas.Admin.Models
                 model.SearchText,
                 model.GetSortText(new string[] { "Name", "UnitPrice" }));
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8601 // Possible null reference assignment.
             if (data.products == null)
                 throw new InvalidParameterException("Product Data Not Found.");
 
@@ -93,7 +99,7 @@ namespace ECommerce.Web.Areas.Admin.Models
                             (productInfo.ProductCategories!=null)?
                             String.Join(",", productInfo.ProductCategories.Select(x =>
                             {
-                                var res = _categoryService.GetCategoryById(x.CategoryId);
+                                var res = _categoryService!.GetCategoryById(x.CategoryId);
                                 return "[{"+res.Id+"}^{"+res.Name+"}]";
                             }
                             )):string.Empty,//->2
@@ -108,6 +114,8 @@ namespace ECommerce.Web.Areas.Admin.Models
                             productInfo.Id.ToString()//->9
                         }).ToArray()
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         public void Delete(Guid id)

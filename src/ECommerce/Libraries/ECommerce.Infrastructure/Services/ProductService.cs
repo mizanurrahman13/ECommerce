@@ -57,10 +57,14 @@ namespace ECommerce.Infrastructure.Services
             return (result.total, result.totalDisplay, products);
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<(int total, int totalDisplay, IList<ProductBO> products)> GetActiveProductsAsync(int pageIndex, int pageSize, string searchText, string orderBy)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.Name.Contains(searchText) && !x.DeleteQueue,
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             List<ProductBO> products = new List<ProductBO>();
             foreach (ProductEntity product in result.data)
@@ -73,8 +77,10 @@ namespace ECommerce.Infrastructure.Services
 
         public (int total, int totalDisplay, IList<ProductBO> products) GetActiveProducts(int pageIndex, int pageSize, string searchText, string orderBy)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var result = _ecommerceUnitOfWork.Products.GetDynamic(x => x.Name.Contains(searchText) && !x.DeleteQueue,
                 orderBy, "ProductImages,ProductCategories,ProductInventory", pageIndex, pageSize, true);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             if (result.totalDisplay == 0 && result.total == 0 && result.data == null)
                 throw new NullReferenceException("Check filter property.");
@@ -120,6 +126,7 @@ namespace ECommerce.Infrastructure.Services
             var productEntity = _ecommerceUnitOfWork.Products.Get(x => x.Id.Equals(product.Id),
                                     "ProductImages").FirstOrDefault();
 
+            productEntity!.ProductImages = null;
             if (productEntity is null)
                 throw new InvalidOperationException("Product with this id not found.");
 
@@ -171,8 +178,8 @@ namespace ECommerce.Infrastructure.Services
 
             productEntity = _mapper.Map(product, productEntity);
 
-            productEntity.CreatedBy = _currentUserService.GetUsernames();
-            productEntity.UpdatedBy = _currentUserService.GetUsernames();
+            productEntity!.CreatedBy = _currentUserService.GetUsernames();
+            productEntity!.UpdatedBy = _currentUserService.GetUsernames();
 
             _ecommerceUnitOfWork.Save();
         }

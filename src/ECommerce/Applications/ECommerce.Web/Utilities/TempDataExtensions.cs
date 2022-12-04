@@ -10,16 +10,16 @@ namespace ECommerce.Web.Utilities
             tempData[key] = JsonSerializer.Serialize(value);
         }
 
-        public static T Get<T>(this ITempDataDictionary tempData, string key) where T : class
+        public static T? Get<T>(this ITempDataDictionary tempData, string key) where T : class
         {
-            object o;
+            object? o;
             tempData.TryGetValue(key, out o);
-            return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
+            return o == null! ? null! : JsonSerializer.Deserialize<T>((string)o);
         }
 
-        public static T Peek<T>(this ITempDataDictionary tempData, string key) where T : class
+        public static T? Peek<T>(this ITempDataDictionary tempData, string key) where T : class
         {
-            object o = tempData.Peek(key);
+            object o = tempData.Peek(key)!;
             return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
         }
     }

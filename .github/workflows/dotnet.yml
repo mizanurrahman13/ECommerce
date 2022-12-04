@@ -1,0 +1,25 @@
+name: ECommerce Build
+on:
+  push:
+    branches:
+    - develop
+  pull_request:
+    branches:
+    - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking out Code
+      uses: actions/checkout@v2
+    - name: Setup .NET 7
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.0.100
+        include-prerelease: false
+    - name: Restoring Packages
+      run: dotnet restore "src/ECommerce/ECommerce.sln"
+    - name: Building Project(s)
+      run: dotnet build "src/ECommerce/ECommerce.sln" --no-restore
+    - name: Running Tests
+      run: dotnet test "src/ECommerce/ECommerce.sln" --no-build --verbosity normal

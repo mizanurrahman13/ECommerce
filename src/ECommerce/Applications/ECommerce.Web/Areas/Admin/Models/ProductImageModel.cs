@@ -47,6 +47,7 @@ namespace ECommerce.Web.Areas.Admin.Models
 
             var images = new List<ProductImageModel>();
             long size = 0;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (product.ProductImages.Count > 0)
             {
                 foreach (var image in product.ProductImages)
@@ -59,13 +60,14 @@ namespace ECommerce.Web.Areas.Admin.Models
                         size = fi.Length;
                     }
 
-                    images.Add(new ProductImageModel() { URL = image.Url, Size = size });
+                    images.Add(new ProductImageModel() { URL = image.Url!, Size = size });
                 }
             }
             else
             {
                 images.Add(new ProductImageModel() { URL = "No Image Found", Size = 0 });
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             return images;
         }

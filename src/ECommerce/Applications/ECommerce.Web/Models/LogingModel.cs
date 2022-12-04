@@ -10,7 +10,9 @@ namespace ECommerce.Web.Models
     public class LoginModel : PublicLayoutModel
     {
         private ISignInManagerAdapter<ApplicationUser> _signInManagerAdapter;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         private IUserManagerAdapter<ApplicationUser> _userManagerAdapter;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         private ILifetimeScope _lifetimeScope;
 
         [Required(ErrorMessage = "Please enter your email")]
@@ -28,19 +30,25 @@ namespace ECommerce.Web.Models
         public string? ReturnUrl { get; set; }
         public string? ErrorMessage { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public LoginModel()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
 
         }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public LoginModel(ISignInManagerAdapter<ApplicationUser> signInManagerAdapter,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
                             IUserManagerAdapter<ApplicationUser> userManagerAdapter)
         {
             _signInManagerAdapter = signInManagerAdapter;
             _userManagerAdapter = userManagerAdapter;
         }
 
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         internal void Resolve(ILifetimeScope lifetimeScope)
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
         {
             _lifetimeScope = lifetimeScope;
             _signInManagerAdapter = _lifetimeScope.Resolve<ISignInManagerAdapter<ApplicationUser>>();
@@ -61,7 +69,7 @@ namespace ECommerce.Web.Models
 
         public async Task RedirectByUserRole()
         {
-            var roles = await _userManagerAdapter.GetUserRolesAsync(Email);
+            var roles = await _userManagerAdapter!.GetUserRolesAsync(Email);
             if (roles.Contains("Admin"))
             {
                 this.ReturnUrl = "~/admin/dashboard";

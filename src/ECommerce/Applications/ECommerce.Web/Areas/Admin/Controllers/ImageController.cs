@@ -15,7 +15,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         }
 
         //On the fly image delivery
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<IActionResult> Index(string url, int w = 0, int h = 0)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             string filePath = Path.Combine(_webHostEnvironment.WebRootPath,
                                            url);
@@ -26,6 +28,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
                 if (sourceImage != null)
                 {
+#pragma warning disable CS0168 // Variable is declared but never used
                     try
                     {
                         var imageSize = DynamicSize.GetImageSize(sourceImage.Width, sourceImage.Height, w, h);
@@ -43,6 +46,7 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                     {
                         //throw;
                     }
+#pragma warning restore CS0168 // Variable is declared but never used
                 }
             }
 
@@ -51,7 +55,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
         //Delete Image
         [HttpPost]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<dynamic> DeleteImage(string path)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             if (path != null)
             {
@@ -72,7 +78,9 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
         // Upload Image
         [HttpPost]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<dynamic> ImageUploader(IFormFile file)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 
             var folderName = "Files";

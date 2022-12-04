@@ -53,6 +53,7 @@ namespace ECommerce.Web.Models
         }
         public ResponseModel GetResponse()
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (_httpContextAccessor.HttpContext.Session.IsAvailable
                 && _httpContextAccessor.HttpContext.Session.Keys.Contains(nameof(_responseModel)))
             {
@@ -62,14 +63,19 @@ namespace ECommerce.Web.Models
             }
             else
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 return null;
+#pragma warning restore CS8603 // Possible null reference return.
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         public void SetResponse(string message, ResponseTypes responseType, string area)
         {
             var response = new ResponseModel(message, responseType, area);
-            _httpContextAccessor!.HttpContext!.Session.Set<ResponseModel>(nameof(_responseModel), response);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            _httpContextAccessor.HttpContext.Session.Set<ResponseModel>(nameof(_responseModel), response);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         public void StatusMessage(string message, ResponseTypes response, string area)
