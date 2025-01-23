@@ -34,7 +34,7 @@ To get a local copy up and running, follow these simple steps.
    dotnet restore
    ```
 4. Migrations:
-   Follow ECommerce_Migration_Runner file.
+   Follow ECommerce_Migration_Runner file in docs folder.
 
 ## Architecture Overview
 
