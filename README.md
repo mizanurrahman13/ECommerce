@@ -1,6 +1,6 @@
 # ECommerce
 
-# ECommerce MVC Project with .NET 7, Repository and UnitOfWork, MSSQL and NUnit Testing
+# ECommerce MVC Project with .NET 7, Repository and UnitOfWork, MSSQL, Autofac, AutoMapper, Serilog, MailTrap and NUnit Testing
 
 This repository showcases a sample MVC Project built with .NET 7 that demonstrates a simple E-Commerce presentation. The application utilizes Repository, UnitOfWork Design Pattern. Together, these components provide a robust foundation for structured web Project.
 
