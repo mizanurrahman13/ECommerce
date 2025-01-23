@@ -1,4 +1,3 @@
-# ECommerce
 
 # ECommerce MVC Project with .NET 7, Repository and UnitOfWork, MSSQL, Autofac, AutoMapper, Serilog, MailTrap and NUnit Testing
 
